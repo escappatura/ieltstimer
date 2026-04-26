@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IELTS Timer</title>
+
+  <!-- Open Graph / Social sharing -->
+  <meta property="og:title" content="IELTS Timer" />
+  <meta property="og:description" content="Free tool for IELTS Speaking. Time Part 2, prep, long turn and Part 3 with one click." />
+  <meta property="og:image" content="https://www.ieltstimer.com/og-image.png" />
+  <meta property="og:url" content="https://www.ieltstimer.com" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="IELTS Timer" />
+  <meta name="twitter:description" content="Free tool for IELTS Speaking. Time Part 2, prep, long turn and Part 3 with one click." />
+  <meta name="twitter:image" content="https://www.ieltstimer.com/og-image.png" />
+
+  <!-- Favicon: navy + gold headset SVG embedded as base64 -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%231e3a5f'/%3E%3Cpath d='M14 38 Q14 12 32 12 Q50 12 50 38' fill='none' stroke='%23f59e0b' stroke-width='5' stroke-linecap='round'/%3E%3Ccircle cx='14' cy='43' r='10' fill='%231e3a5f' stroke='%23f59e0b' stroke-width='3'/%3E%3Ccircle cx='50' cy='43' r='10' fill='%231e3a5f' stroke='%23f59e0b' stroke-width='3'/%3E%3Cline x1='50' y1='43' x2='50' y2='34' stroke='%23f59e0b' stroke-width='2.5' stroke-linecap='round'/%3E%3Cline x1='50' y1='43' x2='56' y2='47' stroke='%23f59e0b' stroke-width='2' stroke-linecap='round'/%3E%3Ccircle cx='50' cy='43' r='2.5' fill='%23f59e0b'/%3E%3Cpath d='M14 52 Q14 60 24 62' fill='none' stroke='%23f59e0b' stroke-width='3.5' stroke-linecap='round'/%3E%3Cellipse cx='27' cy='62' rx='5' ry='3.5' fill='%23f59e0b'/%3E%3C/svg%3E" />
+
+  <!-- PWA / install as app -->
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="IELTS Timer" />
+  <meta name="theme-color" content="#111827" />
+
+  <script defer src="https://cloud.umami.is/script.js" data-website-id="ba79e1f3-3398-4e5b-9604-ce9b1ad3abbd"></script>
+
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 4px 6px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #111827;
+      color: #f1f5f9;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    body.light { background: #f8fafc; color: #1e2937; }
+
+    /* --- Desktop note on mobile --- */
+    .desktop-note {
+      display: none;
+      text-align: center;
+      font-size: 0.72rem;
+      color: #64748b;
+      margin: 4px 0 0 0;
+    }
+
+    /* --- Timer row --- */
+    .timer-row {
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      margin: 10px 0 12px 0;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .master-timer {
+      font-size: clamp(2rem, 14.5vw, 4.2rem);
+      font-weight: 700;
+      color: #67e0ff;
+      text-align: center;
+      line-height: 1;
+      letter-spacing: 6px;
+      position: relative;
+      top: 0.25px;
+    }
+    body.light .master-timer { color: #1e40af; }
+    .timer-row .start-btn,
+    .timer-row .reset-btn {
+      width: 108px;
+      height: 50px;
+      margin: 0;
+      position: relative;
+      transform: translateY(-3px);
+    }
+    .timer-row .reset-btn { left: -6px; }
+
+    /* --- Phase buttons --- */
+    .buttons {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 5px;
+    }
+    button {
+      width: 108px;
+      height: 48px;
+      padding: 7px 8px;
+      font-size: 0.84rem;
+      font-weight: 600;
+      border: none;
+      border-radius: 9px;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      transition: all 0.2s;
+      background: #1f2937;
+      color: #e2e8f0;
+    }
+    body.light button { background: #e2e8f0; color: #1e2937; }
+    button:hover { filter: brightness(1.1); }
+    .start-btn { background: #3b82f6; color: white; }
+    body.light .start-btn { background: #60a5fa; }
+    .reset-btn { background: #ef4444; color: white; }
+    body.light .reset-btn { background: #f87171; }
+    button.clicked { filter: brightness(1.48); }
+    body.light button.clicked { filter: brightness(0.9); }
+    button small { font-size: 0.76rem; margin-top: 2px; opacity: 0.88; }
+
+    /* --- Footer --- */
+    .footer {
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      gap: 10px;
+      font-size: 0.9rem;
+      color: #94a3b8;
+      margin-top: auto;
+      padding: 9px 0 5px 0;
+      font-weight: 500;
+      border-top: 1px solid #334155;
+      flex-wrap: wrap;
+    }
+    body.light .footer { color: #334155; border-top-color: #94a3b8; }
+    .footer-link { color: #67e0ff; text-decoration: none; font-weight: 600; }
+    body.light .footer-link { color: #d97706; }
+    .footer-text { white-space: nowrap; }
+
+    /* --- Footer icon buttons --- */
+    .theme-btn, .email-btn, .teacher-btn, .criteria-btn, .tips-btn {
+      background: #475569;
+      color: white;
+      width: 28px;
+      height: 28px;
+      font-size: 0.9rem;
+      padding: 0;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    body.light .theme-btn, body.light .email-btn,
+    body.light .teacher-btn, body.light .criteria-btn,
+    body.light .tips-btn { background: #64748b; }
+    .teacher-btn.active { background: #7c3aed; }
+    .tips-btn.active { background: #0891b2; }
+
+    /* --- Footer icons row (mobile) --- */
+    .footer-icons {
+      display: flex;
+      gap: 8px;
+      align-items: flex-end;
+    }
+
+    /* --- Teacher mode notepad --- */
+    .teacher-panel {
+      display: none;
+      flex-direction: column;
+      gap: 4px;
+      margin: 8px 0 4px 0;
+      padding: 8px;
+      background: #1f2937;
+      border-radius: 9px;
+      border: 1px solid #374151;
+    }
+    body.light .teacher-panel { background: #e2e8f0; border-color: #cbd5e1; }
+    .teacher-panel.visible { display: flex; }
+    .teacher-panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+    .teacher-panel label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: #a78bfa;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .copy-notes-btn {
+      font-size: 0.68rem;
+      padding: 2px 8px;
+      height: auto;
+      width: auto;
+      background: #374151;
+      color: #94a3b8;
+      border-radius: 4px;
+    }
+    body.light .copy-notes-btn { background: #cbd5e1; color: #475569; }
+    .teacher-panel textarea {
+      width: 100%;
+      background: #111827;
+      color: #f1f5f9;
+      border: none;
+      border-radius: 6px;
+      padding: 8px;
+      font-size: 0.82rem;
+      resize: none;
+      font-family: inherit;
+      line-height: 1.5;
+    }
+    body.light .teacher-panel textarea { background: #f8fafc; color: #1e2937; }
+
+    /* --- Tips / VCS Guide Modal --- */
+    .tips-modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.92);
+      align-items: flex-start;
+      justify-content: center;
+      z-index: 1000;
+      overflow-y: auto;
+      padding: 12px;
+    }
+    .tips-inner {
+      background: #1f2937;
+      border-radius: 12px;
+      width: 100%;
+      max-width: 500px;
+      padding: 20px 18px;
+      margin: auto;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+    body.light .tips-inner { background: #f1f5f9; color: #1e2937; }
+    .tips-inner h3 {
+      margin: 0 0 4px 0;
+      text-align: center;
+      font-size: 0.95rem;
+      color: #67e0ff;
+      letter-spacing: 0;
+    }
+    body.light .tips-inner h3 { color: #1e40af; }
+    .tips-subtitle {
+      text-align: center;
+      font-size: 0.7rem;
+      color: #64748b;
+      margin: 0 0 16px 0;
+    }
+    .tip-section {
+      margin-bottom: 16px;
+    }
+    .tip-section h4 {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #f59e0b;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin: 0 0 6px 0;
+    }
+    .tip-section p {
+      font-size: 0.78rem;
+      color: #cbd5e1;
+      line-height: 1.6;
+      margin: 0 0 6px 0;
+    }
+    body.light .tip-section p { color: #334155; }
+    .tip-section a {
+      color: #67e0ff;
+      font-size: 0.78rem;
+    }
+    body.light .tip-section a { color: #1e40af; }
+    .tip-divider {
+      border: none;
+      border-top: 1px solid #374151;
+      margin: 14px 0;
+    }
+    body.light .tip-divider { border-top-color: #cbd5e1; }
+    .tips-close {
+      margin-top: 14px;
+      display: flex;
+      justify-content: center;
+    }
+
+    /* --- Criteria Modal --- */
+    .criteria-modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.92);
+      align-items: flex-start;
+      justify-content: center;
+      z-index: 1000;
+      overflow-y: auto;
+      padding: 12px;
+    }
+    .criteria-inner {
+      background: #1f2937;
+      border-radius: 12px;
+      width: 100%;
+      max-width: 540px;
+      padding: 18px 16px;
+      margin: auto;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+    body.light .criteria-inner { background: #f1f5f9; }
+    .criteria-inner h3 {
+      margin: 0 0 4px 0;
+      text-align: center;
+      font-size: 0.95rem;
+      color: #67e0ff;
+      letter-spacing: 0.04em;
+    }
+    body.light .criteria-inner h3 { color: #1e40af; }
+    .criteria-subtitle {
+      text-align: center;
+      font-size: 0.7rem;
+      color: #64748b;
+      margin: 0 0 12px 0;
+    }
+    .criteria-grid {
+      display: grid;
+      grid-template-columns: 30px 1fr 1fr 1fr 1fr;
+      gap: 3px;
+      font-size: 0.68rem;
+    }
+    .criteria-grid .ch {
+      font-weight: 700;
+      font-size: 0.62rem;
+      color: #94a3b8;
+      text-align: center;
+      padding: 3px 2px 5px 2px;
+      letter-spacing: 0.04em;
+    }
+    .criteria-grid .band {
+      font-weight: 700;
+      color: #67e0ff;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      font-size: 0.9rem;
+    }
+    body.light .criteria-grid .band { color: #1e40af; }
+    .criteria-grid .cell {
+      background: #111827;
+      border-radius: 4px;
+      padding: 5px;
+      color: #cbd5e1;
+      line-height: 1.45;
+    }
+    body.light .criteria-grid .cell { background: #e2e8f0; color: #1e2937; }
+    .criteria-close {
+      margin-top: 14px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      gap: 16px;
+    }
+
+    .feedback-textarea {
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      border: none;
+      resize: vertical;
+      font-size: 1rem;
+      background: #111827;
+      color: #f1f5f9;
+      font-family: inherit;
+    }
+    body.light .feedback-textarea { background: #f8fafc; color: #1e2937; }
+
+    /* --- Toast --- */
+    .toast {
+      position: fixed;
+      bottom: 48px;
+      left: 50%;
+      transform: translateX(-50%) translateY(10px);
+      background: #334155;
+      color: #f1f5f9;
+      padding: 8px 18px;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      font-weight: 500;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s, transform 0.2s;
+      white-space: nowrap;
+      z-index: 2000;
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    /* --- Mobile --- */
+    @media (max-width: 480px) {
+      body { padding: 8px 10px; overflow-y: auto; height: auto; min-height: 100vh; display: flex; flex-direction: column; align-items: flex-end; }
+      .desktop-note { display: block; width: 100%; text-align: center; }
+      .timer-row { gap: 8px; margin: 12px 0 14px 0; width: 100%; justify-content: center; }
+      .timer-row .start-btn,
+      .timer-row .reset-btn { width: 84px; height: 44px; font-size: 0.8rem; transform: none; }
+      .master-timer { font-size: clamp(2.4rem, 20vw, 3.2rem); letter-spacing: 4px; }
+      .buttons { gap: 8px; width: 100%; }
+      .buttons button { width: calc(50% - 4px); height: 52px; font-size: 0.85rem; }
+      .footer {
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 10px 8px 10px;
+        width: calc(100% + 20px);
+        margin-left: -10px;
+        margin-right: -10px;
+      }
+      .footer-text {
+        text-align: center;
+        white-space: normal;
+        word-break: break-word;
+        font-size: 0.78rem;
+        width: 100%;
+      }
+      .footer-text svg { display: none; }
+      .footer-icons { gap: 10px; width: 100%; justify-content: center; }
+      .theme-btn, .email-btn, .teacher-btn, .criteria-btn, .tips-btn { width: 34px; height: 34px; font-size: 1rem; }
+      .criteria-grid { font-size: 0.62rem; }
+      .teacher-panel { width: 100%; }
+      .teacher-panel textarea { font-size: 0.85rem; }
+    }
+
+    /* --- Landscape mobile --- */
+    @media (max-height: 480px) and (orientation: landscape) {
+      body { height: auto; min-height: 100vh; overflow-y: auto; padding: 6px 12px; }
+      .timer-row { margin: 6px 0 8px 0; }
+      .master-timer { font-size: clamp(1.8rem, 10vw, 2.8rem); }
+      .footer { margin-top: 12px; }
+    }
+  </style>
+</head>
+<body class="dark">
+
+  <p class="desktop-note">Best experienced on desktop</p>
+
+  <div class="timer-row">
+    <button class="start-btn" onclick="startMainTimer()" title="Start timer">Start</button>
+    <div class="master-timer" id="masterTimer">00:00</div>
+    <button class="reset-btn" onclick="resetTimer()" title="Reset timer">Reset</button>
+  </div>
+
+  <div class="buttons">
+    <button class="phase-btn" id="btn-part2" onclick="recordFixed('Part 2', 4)">Part 2</button>
+    <button class="phase-btn" id="btn-prep" onclick="recordFixed('1 min Prep', 1)">1 min Prep</button>
+    <button class="phase-btn" id="btn-long" onclick="recordFixed('Long Turn', 2)">Long Turn</button>
+    <button class="phase-btn" id="btn-part3" onclick="recordFixed('Part 3', 5)">Part 3</button>
+  </div>
+
+  <!-- Teacher Mode Notepad -->
+  <div class="teacher-panel" id="teacherPanel">
+    <div class="teacher-panel-header">
+      <label>✏️ Teacher Notes</label>
+      <div style="display:flex; align-items:center; gap:8px;">
+        <span id="notesSaved" style="font-size:0.65rem; color:#16a34a; opacity:0; transition:opacity 0.4s;">Saved ✓</span>
+        <button class="copy-notes-btn" onclick="copyNotes()">Copy notes</button>
+      </div>
+    </div>
+    <textarea id="teacherNotes" rows="4" placeholder="Student notes, band score, timestamps…"></textarea>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <div class="footer">
+    <span class="footer-text">
+      <svg width="32" height="32" viewBox="0 0 64 64" style="vertical-align:middle; margin-right:6px;" xmlns="http://www.w3.org/2000/svg">
+        <rect width="64" height="64" rx="12" fill="#1e3a5f"/>
+        <path d="M14 38 Q14 12 32 12 Q50 12 50 38" fill="none" stroke="#f59e0b" stroke-width="5" stroke-linecap="round"/>
+        <circle cx="14" cy="43" r="10" fill="#1e3a5f" stroke="#f59e0b" stroke-width="3"/>
+        <circle cx="50" cy="43" r="10" fill="#1e3a5f" stroke="#f59e0b" stroke-width="3"/>
+        <line x1="50" y1="43" x2="50" y2="34" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="50" y1="43" x2="56" y2="47" stroke="#f59e0b" stroke-width="2" stroke-linecap="round"/>
+        <circle cx="50" cy="43" r="2.5" fill="#f59e0b"/>
+        <path d="M14 52 Q14 60 24 62" fill="none" stroke="#f59e0b" stroke-width="3.5" stroke-linecap="round"/>
+        <ellipse cx="27" cy="62" rx="5" ry="3.5" fill="#f59e0b"/>
+      </svg>Free tool for IELTS Speaking - <a href="https://www.linkedin.com/in/emosscappaturaproust" target="_blank" class="footer-link">Emos Scappatura Proust</a></span>
+    <div class="footer-icons">
+      <button class="criteria-btn" onclick="showCriteria()" title="Marking Criteria">📋</button>
+      <button class="teacher-btn" id="teacherBtn" onclick="toggleTeacherMode()" title="Teacher Mode">✏️</button>
+      <button class="tips-btn" id="tipsBtn" onclick="showTips()" title="Tips">💡</button>
+      <button class="theme-btn" onclick="toggleTheme()" title="Toggle theme">☀️</button>
+      <button class="email-btn" onclick="showFeedbackModal()" title="Send feedback">✉️</button>
+    </div>
+  </div>
+
+  <!-- Restart / Reset Confirmation Modal -->
+  <div id="restartModal" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.85); align-items:center; justify-content:center; z-index:1000;">
+    <div style="background:#1f2937; padding:24px; border-radius:12px; width:90%; max-width:360px; text-align:center;">
+      <p id="restartMsg" style="margin:0 0 20px 0; font-size:1rem; color:#f1f5f9;"></p>
+      <div style="display:flex; gap:10px; justify-content:center;">
+        <button id="restartConfirmBtn" style="background:#3b82f6; color:white; padding:9px 24px; width:auto; height:auto;">Restart</button>
+        <button onclick="closeRestartModal()" style="background:#475569; padding:9px 24px; width:auto; height:auto; color:white;">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Feedback Modal -->
+  <div id="feedbackModal" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.85); align-items:center; justify-content:center; z-index:1000;">
+    <div style="background:#1f2937; padding:24px; border-radius:12px; width:90%; max-width:420px;">
+      <h3 style="margin:0 0 16px 0; text-align:center; color:#f1f5f9;">Feedback</h3>
+      <textarea id="feedbackText" class="feedback-textarea" rows="6" placeholder="Share your thoughts, suggestions, or bug reports…"></textarea>
+      <div style="margin-top:16px; display:flex; gap:10px; justify-content:center;">
+        <button onclick="sendFeedback()" style="background:#3b82f6; color:white; padding:9px 24px; width:auto; height:auto;">Send</button>
+        <button onclick="closeModal()" style="background:#475569; color:white; padding:9px 24px; width:auto; height:auto;">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- VCS Tips Modal -->
+  <div class="tips-modal" id="tipsModal">
+    <div class="tips-inner">
+      <h3>💡 Tips</h3>
+      <p class="tips-subtitle">Get the most out of this tool</p>
+
+      <div class="tip-section">
+        <h4>🖥️ Install as a Desktop App</h4>
+        <p>In Chrome, click the menu (three dots) then "Save and share" and "Install page as app." The timer opens in its own compact window with no browser toolbar, easy to resize and position alongside your video call.</p>
+      </div>
+
+      <hr class="tip-divider"/>
+
+      <div class="tip-section">
+        <h4>📌 Keep the Timer on Top</h4>
+        <p>To stop the timer disappearing behind other windows, use <strong>Microsoft PowerToys</strong> (free, from Microsoft).</p>
+        <p>1. Download from the <a href="https://learn.microsoft.com/en-us/windows/powertoys/install" target="_blank">official Microsoft page ↗</a></p>
+        <p>2. Enable "Always on Top" in PowerToys settings.</p>
+        <p>3. Click the timer window, then press <strong>Win + Ctrl + T</strong> to pin it. A blue border confirms it is pinned.</p>
+      </div>
+
+      <hr class="tip-divider"/>
+
+      <div class="tip-section">
+        <h4>🎧 Suggested Screen Layout</h4>
+        <p>Video call on your main screen, timer pinned as a small window in the corner. Use Teacher Mode (✏️) for notes. Notes save automatically.</p>
+      </div>
+
+      <div class="tips-close">
+        <button onclick="closeTips()" style="background:#475569; color:white; padding:9px 28px; width:auto; height:auto;">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Criteria Modal -->
+  <div class="criteria-modal" id="criteriaModal">
+    <div class="criteria-inner">
+      <h3>IELTS Speaking - Band Descriptors</h3>
+      <p class="criteria-subtitle">Official public descriptors (bands 4–9) · Scroll to view all</p>
+      <div class="criteria-grid">
+        <div class="ch">Band</div>
+        <div class="ch">Fluency &amp; Coherence</div>
+        <div class="ch">Lexical Resource</div>
+        <div class="ch">Grammatical Range &amp; Accuracy</div>
+        <div class="ch">Pronunciation</div>
+
+        <div class="band">9</div>
+        <div class="cell">Speaks fluently with only rare repetition or self-correction; any hesitation is content-related rather than to find words or grammar. Speaks coherently with fully coherent discourse with only occasional inappropriacies.</div>
+        <div class="cell">Uses vocabulary with full flexibility and precision in all topics. Uses idiomatic language naturally and accurately.</div>
+        <div class="cell">Uses a full range of structures naturally and appropriately. Produces consistently accurate structures apart from 'slips' characteristic of native speaker speech.</div>
+        <div class="cell">Uses a full range of phonological features with precision and subtlety. Effortless to understand.</div>
+
+        <div class="band">8</div>
+        <div class="cell">Speaks fluently with only occasional repetition or self-correction; hesitation is usually content-related and only rarely to search for language. Develops topics coherently and appropriately.</div>
+        <div class="cell">Uses a wide vocabulary resource readily and flexibly to convey precise meaning. Uses less common and idiomatic vocabulary skillfully, with occasional inaccuracies. Uses paraphrase effectively as required.</div>
+        <div class="cell">Uses a wide range of structures flexibly. Produces a majority of error-free sentences with only very occasional inappropriacies or basic/non-systematic errors.</div>
+        <div class="cell">Uses a wide range of phonological features effectively. Mispronunciations are rare and have minimal impact on understanding.</div>
+
+        <div class="band">7</div>
+        <div class="cell">Speaks at length without noticeable effort or loss of coherence. May demonstrate language-related hesitation at times, or some repetition and/or self-correction. Uses a range of connectives and discourse markers with some flexibility.</div>
+        <div class="cell">Uses vocabulary resource flexibly to discuss a variety of topics. Uses some less common and idiomatic vocabulary and shows some awareness of style and collocation, with some inappropriate choices. Uses paraphrase effectively.</div>
+        <div class="cell">Uses a range of complex structures with some flexibility. Frequently produces error-free sentences, though some grammatical mistakes persist.</div>
+        <div class="cell">Shows all the positive features of Band 6 and some, but not all, of the positive features of Band 8.</div>
+
+        <div class="band">6</div>
+        <div class="cell">Is willing to speak at length, though may lose coherence at times due to occasional repetition, self-correction or hesitation. Uses a range of connectives and discourse markers but not always appropriately.</div>
+        <div class="cell">Has a wide enough vocabulary to discuss topics at length and make meaning clear in spite of inappropriacies; generally paraphrases successfully.</div>
+        <div class="cell">Uses a mix of simple and complex structures, but with limited flexibility. May make frequent mistakes with complex structures, though these rarely cause comprehension problems.</div>
+        <div class="cell">Uses a range of phonological features with mixed control. Shows some effective use of features but this is not sustained. Can generally be understood throughout, though mispronunciation of individual words or sounds reduces clarity at times.</div>
+
+        <div class="band">5</div>
+        <div class="cell">Usually maintains flow of speech but uses repetition, self-correction and/or slow speech to keep going. May over-use certain connectives and discourse markers. Produces simple speech fluently, but more complex communication causes fluency problems.</div>
+        <div class="cell">Manages to talk about familiar and unfamiliar topics but uses vocabulary with limited flexibility. Attempts to use paraphrase but with mixed results.</div>
+        <div class="cell">Produces basic sentence forms with reasonable accuracy. Uses a limited range of more complex structures, but these usually contain errors and may cause some comprehension problems.</div>
+        <div class="cell">Shows all the positive features of Band 4 and some, but not all, of the positive features of Band 6.</div>
+
+        <div class="band">4</div>
+        <div class="cell">Cannot respond without noticeable pauses and may speak slowly, with frequent repetition and self-correction. Links basic sentences but with repetitious use of simple connectives and some breakdowns in coherence.</div>
+        <div class="cell">Is able to talk about familiar topics but can only convey basic meaning on unfamiliar topics and makes frequent errors in word choice. Rarely attempts paraphrase.</div>
+        <div class="cell">Produces basic sentence forms and some correct simple sentences but subordinate structures are rare. Errors are frequent and may lead to misunderstanding.</div>
+        <div class="cell">Uses a limited range of phonological features and attempts to use some features with mixed results. Frequently mispronounces words, causing some difficulty for the listener.</div>
+      </div>
+      <div class="criteria-close">
+        <a href="https://assets.cambridgeenglish.org/webinars/ielts-speaking-band-descriptors.pdf" target="_blank" style="font-size:0.72rem; color:#67e0ff; text-decoration:none;">Official PDF ↗</a>
+        <button onclick="closeCriteria()" style="background:#475569; color:white; padding:9px 28px; width:auto; height:auto;">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let mainStartTime = null;
+    let timerInterval = null;
+    let isDark = true;
+    let teacherMode = false;
+    let toastTimer = null;
+
+    const masterEl = document.getElementById("masterTimer");
+    const body = document.body;
+
+    function toast(msg, duration = 2200) {
+      const el = document.getElementById("toast");
+      el.textContent = msg;
+      el.classList.add("show");
+      if (toastTimer) clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => el.classList.remove("show"), duration);
+    }
+
+    function formatTime(seconds) {
+      const m = Math.floor(seconds / 60);
+      const s = seconds % 60;
+      return `${m}:${s.toString().padStart(2, "0")}`;
+    }
+
+    function updateMaster() {
+      if (!mainStartTime) return;
+      masterEl.textContent = formatTime(Math.floor((Date.now() - mainStartTime) / 1000));
+    }
+
+    function startMainTimer() {
+      if (mainStartTime) return;
+      mainStartTime = Date.now();
+      timerInterval = setInterval(updateMaster, 200);
+    }
+
+    function recordFixed(name, minutes) {
+      if (!mainStartTime) { toast("Click Start first"); return; }
+      const btnId =
+        name === "Part 2" ? "btn-part2" :
+        name === "1 min Prep" ? "btn-prep" :
+        name === "Long Turn" ? "btn-long" : "btn-part3";
+      const button = document.getElementById(btnId);
+      if (!button) return;
+      if (button.classList.contains("clicked")) {
+        document.getElementById("restartMsg").textContent = `Restart "${name}"? This will overwrite the recorded time.`;
+        document.getElementById("restartConfirmBtn").textContent = "Restart";
+        document.getElementById("restartConfirmBtn").onclick = () => { stampButton(button, name, minutes); closeRestartModal(); };
+        document.getElementById("restartModal").style.display = "flex";
+        return;
+      }
+      stampButton(button, name, minutes);
+    }
+
+    function stampButton(button, name, minutes) {
+      const elapsed = Math.floor((Date.now() - mainStartTime) / 1000);
+      const startStr = formatTime(elapsed);
+      const endStr = formatTime(elapsed + minutes * 60);
+      button.innerHTML = `${name}<br><small>${startStr} - ${endStr}</small>`;
+      button.classList.add("clicked");
+    }
+
+    function closeRestartModal() {
+      document.getElementById("restartModal").style.display = "none";
+    }
+
+    function resetTimer() {
+      document.getElementById("restartMsg").textContent = "Reset everything? This will clear all recorded times.";
+      document.getElementById("restartConfirmBtn").textContent = "Reset";
+      document.getElementById("restartConfirmBtn").onclick = () => {
+        if (timerInterval) clearInterval(timerInterval);
+        mainStartTime = null;
+        masterEl.textContent = "00:00";
+        document.querySelectorAll(".phase-btn").forEach(b => {
+          b.innerHTML = b.id.includes("part2") ? "Part 2" :
+                        b.id.includes("prep") ? "1 min Prep" :
+                        b.id.includes("long") ? "Long Turn" : "Part 3";
+          b.classList.remove("clicked");
+        });
+        closeRestartModal();
+      };
+      document.getElementById("restartModal").style.display = "flex";
+    }
+
+    function toggleTheme() {
+      isDark = !isDark;
+      body.classList.toggle("light", !isDark);
+      document.querySelector(".theme-btn").textContent = isDark ? "☀️" : "🌙";
+    }
+
+    function toggleTeacherMode() {
+      teacherMode = !teacherMode;
+      document.getElementById("teacherPanel").classList.toggle("visible", teacherMode);
+      document.getElementById("teacherBtn").classList.toggle("active", teacherMode);
+      if (teacherMode) document.getElementById("teacherNotes").focus();
+    }
+
+    function copyNotes() {
+      const text = document.getElementById("teacherNotes").value.trim();
+      if (!text) { toast("No notes to copy"); return; }
+      navigator.clipboard.writeText(text).then(() => toast("Notes copied to clipboard!")).catch(() => toast("Copy failed. Please select and copy manually"));
+    }
+
+    // Persist teacher notes in localStorage
+    const notesEl = document.getElementById("teacherNotes");
+    const notesSaved = document.getElementById("notesSaved");
+    let saveTimer = null;
+    notesEl.value = localStorage.getItem("ielts-notes") || "";
+    notesEl.addEventListener("input", () => {
+      localStorage.setItem("ielts-notes", notesEl.value);
+      notesSaved.style.opacity = "1";
+      if (saveTimer) clearTimeout(saveTimer);
+      saveTimer = setTimeout(() => notesSaved.style.opacity = "0", 1500);
+    });
+
+    function showTips() {
+      document.getElementById("tipsModal").style.display = "flex";
+      document.getElementById("tipsBtn").classList.add("active");
+    }
+
+    function closeTips() {
+      document.getElementById("tipsModal").style.display = "none";
+      document.getElementById("tipsBtn").classList.remove("active");
+    }
+
+    document.getElementById("tipsModal").addEventListener("click", e => {
+      if (e.target === document.getElementById("tipsModal")) closeTips();
+    });
+
+    function showCriteria() {
+      document.getElementById("criteriaModal").style.display = "flex";
+    }
+
+    function closeCriteria() {
+      document.getElementById("criteriaModal").style.display = "none";
+    }
+
+    document.getElementById("criteriaModal").addEventListener("click", e => {
+      if (e.target === document.getElementById("criteriaModal")) closeCriteria();
+    });
+
+    function showFeedbackModal() {
+      document.getElementById("feedbackModal").style.display = "flex";
+      document.getElementById("feedbackText").focus();
+    }
+
+    function closeModal() {
+      document.getElementById("feedbackModal").style.display = "none";
+    }
+
+    async function sendFeedback() {
+      const text = document.getElementById("feedbackText").value.trim();
+      if (!text) { toast("Please write something first"); return; }
+      try {
+        const res = await fetch("https://formspree.io/f/xdayjgnd", {
+          method: "POST",
+          headers: { "Content-Type": "application/json", "Accept": "application/json" },
+          body: JSON.stringify({ message: text })
+        });
+        if (res.ok) {
+          document.getElementById("feedbackText").value = "";
+          closeModal();
+          toast("Thank you for your feedback!");
+        } else {
+          toast("Something went wrong — please try again.");
+        }
+      } catch {
+        toast("No connection — please try again.");
+      }
+    }
+
+    document.getElementById("feedbackModal").addEventListener("click", e => {
+      if (e.target === document.getElementById("feedbackModal")) closeModal();
+    });
+  </script>
+</body>
+</html>
