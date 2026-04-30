@@ -450,7 +450,7 @@
     @media (max-width: 480px) {
       body { padding: 8px 10px; overflow-y: auto; height: auto; min-height: 100vh; display: flex; flex-direction: column; align-items: center; min-width: unset; }
       .desktop-note { display: block; width: 100%; text-align: center; }
-      .timer-row { gap: 8px; margin: 12px 0 14px 0; width: 100%; justify-content: center; flex-wrap: nowrap; padding: 0 4px; }
+      .timer-row { gap: 8px; margin: 12px 0 14px 0; width: calc(100% - 8px); justify-content: space-between; flex-wrap: nowrap; padding: 0; }
       .timer-row .start-btn,
       .timer-row .reset-btn { width: 84px; height: 44px; font-size: 0.8rem; transform: none; flex-shrink: 0; }
       .master-timer { font-size: clamp(1.8rem, 14vw, 2.8rem); letter-spacing: 3px; min-width: 4.5em; }
