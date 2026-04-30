@@ -250,9 +250,11 @@
     .tips-subtitle {
       text-align: center;
       font-size: 0.7rem;
-      color: #64748b;
+      font-weight: 700;
+      color: #f59e0b;
       margin: 0 0 16px 0;
     }
+    body.light .tips-subtitle { color: #1e40af; }
     .tip-section {
       margin-bottom: 16px;
     }
@@ -350,9 +352,11 @@
     .criteria-subtitle {
       text-align: center;
       font-size: 0.7rem;
+      font-weight: 700;
       color: #64748b;
       margin: 0 0 12px 0;
     }
+    body.light .criteria-subtitle { color: #64748b; }
     .criteria-grid {
       display: grid;
       grid-template-columns: 30px 1fr 1fr 1fr 1fr;
@@ -399,14 +403,16 @@
       font-weight: 700;
       color: #67e0ff;
       letter-spacing: 4px;
-      margin-bottom: 4px;
+      margin-bottom: 8px;
+      padding-bottom: 8px;
       font-family: inherit;
+      border-bottom: 1px solid #f1f5f9;
     }
-    body.light .criteria-timer-display { color: #1e40af; }
+    body.light .criteria-timer-display { color: #1e40af; border-bottom-color: #1e2937; }
     .criteria-pdf-link {
       font-size: 0.72rem;
       color: #67e0ff;
-      text-decoration: none;
+      text-decoration: underline;
       display: block;
       text-align: center;
       margin-bottom: 10px;
