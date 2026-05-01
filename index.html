@@ -54,11 +54,10 @@
     /* --- Timer row --- */
     .timer-row {
       display: flex;
-      align-items: flex-end;
+      align-items: center;
       justify-content: center;
       margin: 10px 0 12px 0;
-      flex-wrap: wrap;
-      gap: 10px;
+      gap: 16px;
     }
     .master-timer {
       font-size: clamp(2rem, 14.5vw, 4.2rem);
@@ -67,19 +66,26 @@
       text-align: center;
       line-height: 1;
       letter-spacing: 6px;
+      padding-left: 6px;
       position: relative;
       top: 0.25px;
     }
     body.light .master-timer { color: #1e40af; }
-    .timer-row .start-btn,
-    .timer-row .reset-btn {
-      width: 108px;
-      height: 50px;
-      margin: 0;
-      position: relative;
-      transform: translateY(-3px);
+    .icon-btn {
+      width: 44px;
+      height: 44px;
+      padding: 0;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.2s, transform 0.15s;
+      flex-shrink: 0;
     }
-    .timer-row .reset-btn { left: -6px; }
+    .icon-btn:hover { opacity: 0.75; transform: scale(1.1); }
+    .icon-btn:active { transform: scale(0.95); }
 
     /* --- Phase buttons --- */
     .buttons {
@@ -111,6 +117,13 @@
     body.light .start-btn { background: #60a5fa; }
     .reset-btn { background: #ef4444; color: white; }
     body.light .reset-btn { background: #f87171; }
+    .icon-btn.start-btn, .icon-btn.reset-btn {
+      background: transparent !important;
+      color: transparent;
+    }
+    body.light .icon-btn.start-btn, body.light .icon-btn.reset-btn {
+      background: transparent !important;
+    }
     button.clicked { filter: brightness(1.48); }
     body.light button.clicked { filter: brightness(0.9); }
     button small { font-size: 0.76rem; margin-top: 2px; opacity: 0.88; }
@@ -456,9 +469,9 @@
     @media (max-width: 480px) {
       body { padding: 8px 10px; overflow-y: auto; height: auto; min-height: 100vh; display: flex; flex-direction: column; align-items: center; min-width: unset; }
       .desktop-note { display: block; width: 100%; text-align: center; }
-      .timer-row { gap: 8px; margin: 12px 0 14px 0; width: 100%; align-self: stretch; justify-content: center; flex-wrap: nowrap; padding: 0 10px; box-sizing: border-box; }
-      .timer-row .start-btn,
-      .timer-row .reset-btn { width: 84px; height: 44px; font-size: 0.8rem; transform: none; flex-shrink: 0; }
+      .timer-row { gap: 12px; margin: 12px 0 14px 0; width: 100%; align-self: stretch; justify-content: center; flex-wrap: nowrap; padding: 0 10px; box-sizing: border-box; }
+      .icon-btn { width: 36px; height: 36px; }
+      .icon-btn svg { width: 18px; height: 18px; }
       .master-timer { font-size: clamp(1.8rem, 14vw, 2.8rem); letter-spacing: 3px; min-width: 4.5em; }
       .buttons { gap: 8px; width: 100%; }
       .buttons button { width: calc(50% - 4px); height: 52px; font-size: 0.85rem; }
@@ -503,9 +516,17 @@
   <p class="desktop-note">Best experienced on desktop</p>
 
   <div class="timer-row">
-    <button class="start-btn" onclick="startMainTimer()" title="Start timer">Start</button>
+    <button class="icon-btn start-btn" onclick="startMainTimer()" title="Start timer">
+      <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <polygon points="4,2 4,20 20,11" fill="#3b82f6"/>
+      </svg>
+    </button>
     <div class="master-timer" id="masterTimer">00:00</div>
-    <button class="reset-btn" onclick="resetTimer()" title="Reset timer">Reset</button>
+    <button class="icon-btn reset-btn" onclick="resetTimer()" title="Reset timer">
+      <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="11" cy="11" r="10" fill="#ef4444"/>
+      </svg>
+    </button>
   </div>
 
   <div class="buttons">
