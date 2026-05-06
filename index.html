@@ -41,6 +41,53 @@
       overflow: hidden;
     }
     body.light { background: #f8fafc; color: #1e2937; }
+    body.exam { background: #000000; color: #ffffff; }
+    body.exam .master-timer { color: #ffffff; }
+    body.exam button { background: #000000; color: #ffffff; border: 1.5px solid #ffffff; }
+    body.exam button:hover { filter: brightness(1.3); }
+    body.exam button.clicked { filter: brightness(1.5); border-color: #ffffff; }
+    body.exam .start-btn, body.exam .reset-btn { border: none; }
+    body.exam .icon-btn { background: transparent !important; border: none !important; }
+    body.exam .footer { border-top-color: #333333; color: #666666; }
+    body.exam .footer-link { color: #ffffff; }
+    body.exam .teacher-panel { background: #111111; border-color: #333333; }
+    body.exam .teacher-panel textarea { background: #000000; color: #ffffff; }
+    body.exam .teacher-panel label { color: #ffffff; }
+    body.exam .theme-btn, body.exam .email-btn,
+    body.exam .teacher-btn, body.exam .criteria-btn,
+    body.exam .tips-btn { background: #222222; }
+    /* Criteria modal */
+    body.exam .criteria-inner { background: #000000; }
+    body.exam .criteria-header { background: #000000; }
+    body.exam .criteria-footer { background: #000000; }
+    body.exam .criteria-grid .cell { background: #111111; color: #ffffff; }
+    body.exam .criteria-grid .band { color: #ffffff; }
+    body.exam .criteria-grid .ch { color: #888888; }
+    body.exam .criteria-inner h3 { color: #ffffff; }
+    body.exam .criteria-subtitle { color: #888888; }
+    body.exam .criteria-timer-display { color: #ffffff; border-bottom-color: #ffffff; }
+    body.exam .criteria-pdf-link { color: #ffffff; }
+    /* Tips modal */
+    body.exam .tips-inner { background: #000000; color: #ffffff; }
+    body.exam .tips-inner h3 { color: #ffffff; }
+    body.exam .tips-subtitle { color: #888888; }
+    body.exam .tip-section h4 { color: #ffffff; }
+    body.exam .tip-section p { color: #cccccc; }
+    body.exam .tip-section a { color: #ffffff; }
+    body.exam .tip-divider { border-top-color: #333333; }
+    /* Feedback modal */
+    .feedback-inner { background: #1f2937; }
+    .feedback-title { color: #f1f5f9; }
+    body.light .feedback-inner { background: #f1f5f9; }
+    body.light .feedback-title { color: #1e2937; }
+    body.exam .feedback-inner { background: #000000; border: 1px solid #ffffff; }
+    body.exam .feedback-title { color: #ffffff; }
+    body.exam #feedbackModal > div { background: #000000; }
+    body.exam .feedback-textarea { background: #111111; color: #ffffff; }
+    /* Restart/reset modal */
+    body.exam #restartModal > div { background: #000000; }
+    body.exam #restartMsg { color: #ffffff; }
+    body.exam .desktop-note { color: #444444; }
 
     /* --- Desktop note on mobile --- */
     .desktop-note {
@@ -166,9 +213,13 @@
       justify-content: center;
       flex-shrink: 0;
     }
-    body.light .theme-btn, body.light .email-btn,
+    body.light .teacher-btn.active { background: #7c3aed; }
+    body.light .tips-btn.active { background: #0891b2; }
+    body.exam .teacher-btn.active { background: #444444; }
+    body.exam .tips-btn.active { background: #444444; }
     body.light .teacher-btn, body.light .criteria-btn,
-    body.light .tips-btn { background: #64748b; }
+    body.light .tips-btn, body.light .theme-btn,
+    body.light .email-btn { background: #64748b; }
     .teacher-btn.active { background: #7c3aed; }
     .tips-btn.active { background: #0891b2; }
 
@@ -542,7 +593,8 @@
       <label>✏️ Teacher Notes</label>
       <div style="display:flex; align-items:center; gap:8px;">
         <span id="notesSaved" style="font-size:0.65rem; color:#16a34a; opacity:0; transition:opacity 0.4s;">Saved ✓</span>
-        <button class="copy-notes-btn" onclick="copyNotes()">Copy notes</button>
+        <button class="copy-notes-btn" onclick="copyNotes()">Copy</button>
+        <button class="copy-notes-btn" onclick="exportNotes()">Export</button>
       </div>
     </div>
     <textarea id="teacherNotes" rows="4" placeholder="Student notes, band score, timestamps…"></textarea>
@@ -585,8 +637,8 @@
 
   <!-- Feedback Modal -->
   <div id="feedbackModal" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.85); align-items:center; justify-content:center; z-index:1000;">
-    <div style="background:#1f2937; padding:24px; border-radius:12px; width:90%; max-width:420px;">
-      <h3 style="margin:0 0 16px 0; text-align:center; color:#f1f5f9;">Feedback</h3>
+    <div class="feedback-inner" style="padding:24px; border-radius:12px; width:90%; max-width:420px;">
+      <h3 class="feedback-title" style="margin:0 0 16px 0; text-align:center;">Feedback</h3>
       <textarea id="feedbackText" class="feedback-textarea" rows="6" placeholder="Share your thoughts, suggestions, or bug reports…"></textarea>
       <div style="margin-top:16px; display:flex; gap:10px; justify-content:center;">
         <button onclick="sendFeedback()" style="background:#3b82f6; color:white; padding:9px 24px; width:auto; height:auto;">Send</button>
@@ -783,10 +835,22 @@
       document.getElementById("restartModal").style.display = "flex";
     }
 
+    let themeMode = 'dark'; // dark, light, exam
+
     function toggleTheme() {
-      isDark = !isDark;
-      body.classList.toggle("light", !isDark);
-      document.querySelector(".theme-btn").textContent = isDark ? "☀️" : "🌙";
+      body.classList.remove('light', 'exam');
+      if (themeMode === 'dark') {
+        themeMode = 'light';
+        body.classList.add('light');
+        document.querySelector(".theme-btn").textContent = "⚡";
+      } else if (themeMode === 'light') {
+        themeMode = 'exam';
+        body.classList.add('exam');
+        document.querySelector(".theme-btn").textContent = "🌙";
+      } else {
+        themeMode = 'dark';
+        document.querySelector(".theme-btn").textContent = "☀️";
+      }
     }
 
     function toggleTeacherMode() {
@@ -796,22 +860,38 @@
       if (teacherMode) document.getElementById("teacherNotes").focus();
     }
 
+    function exportNotes() {
+      const text = document.getElementById("teacherNotes").value.trim();
+      if (!text) { toast("No notes to export"); return; }
+      const blob = new Blob([text], { type: "text/plain" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "ielts-notes.txt";
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
     function copyNotes() {
       const text = document.getElementById("teacherNotes").value.trim();
       if (!text) { toast("No notes to copy"); return; }
       navigator.clipboard.writeText(text).then(() => toast("Notes copied to clipboard!")).catch(() => toast("Copy failed. Please select and copy manually"));
     }
 
-    // Persist teacher notes in localStorage
+    // Persist teacher notes in localStorage with debounced save indicator
     const notesEl = document.getElementById("teacherNotes");
     const notesSaved = document.getElementById("notesSaved");
     let saveTimer = null;
+    let saveIndicatorTimer = null;
     notesEl.value = localStorage.getItem("ielts-notes") || "";
     notesEl.addEventListener("input", () => {
       localStorage.setItem("ielts-notes", notesEl.value);
-      notesSaved.style.opacity = "1";
       if (saveTimer) clearTimeout(saveTimer);
-      saveTimer = setTimeout(() => notesSaved.style.opacity = "0", 1500);
+      if (saveIndicatorTimer) clearTimeout(saveIndicatorTimer);
+      saveTimer = setTimeout(() => {
+        notesSaved.style.opacity = "1";
+        saveIndicatorTimer = setTimeout(() => notesSaved.style.opacity = "0", 1500);
+      }, 800);
     });
 
     function showTips() {
