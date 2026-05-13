@@ -55,7 +55,7 @@
     body.exam .teacher-panel label { color: #ffffff; }
     body.exam .theme-btn, body.exam .email-btn,
     body.exam .teacher-btn, body.exam .criteria-btn,
-    body.exam .tips-btn { background: #222222; }
+    body.exam .tips-btn, body.exam .about-btn { background: #222222; }
     /* Criteria modal */
     body.exam .criteria-inner { background: #000000; }
     body.exam .criteria-header { background: #000000; }
@@ -200,7 +200,7 @@
     }
 
     /* --- Footer icon buttons --- */
-    .theme-btn, .email-btn, .teacher-btn, .criteria-btn, .tips-btn {
+    .theme-btn, .email-btn, .teacher-btn, .criteria-btn, .tips-btn, .about-btn {
       background: #475569;
       color: white;
       width: 28px;
@@ -219,7 +219,7 @@
     body.exam .tips-btn.active { background: #444444; }
     body.light .teacher-btn, body.light .criteria-btn,
     body.light .tips-btn, body.light .theme-btn,
-    body.light .email-btn { background: #64748b; }
+    body.light .email-btn, body.light .about-btn { background: #64748b; }
     .teacher-btn.active { background: #7c3aed; }
     .tips-btn.active { background: #0891b2; }
 
@@ -350,6 +350,101 @@
     }
     body.light .tip-divider { border-top-color: #cbd5e1; }
     .tips-close {
+      margin-top: 14px;
+      display: flex;
+      justify-content: center;
+    }
+
+    /* --- About Modal --- */
+    .about-modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.92);
+      align-items: flex-start;
+      justify-content: center;
+      z-index: 1000;
+      overflow-y: auto;
+      padding: 12px;
+    }
+    .about-inner {
+      background: #1f2937;
+      border-radius: 12px;
+      width: 100%;
+      max-width: 500px;
+      padding: 20px 18px;
+      margin: auto;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+    body.light .about-inner { background: #f1f5f9; color: #1e2937; }
+    body.exam .about-inner { background: #000000; color: #ffffff; border: 1px solid #ffffff; }
+    .about-inner h3 {
+      margin: 0 0 4px 0;
+      text-align: center;
+      font-size: 0.95rem;
+      color: #67e0ff;
+      letter-spacing: 0.04em;
+    }
+    body.light .about-inner h3 { color: #1e40af; }
+    body.exam .about-inner h3 { color: #ffffff; }
+    .about-subtitle {
+      text-align: center;
+      font-size: 0.7rem;
+      color: #94a3b8;
+      margin: 0 0 14px 0;
+    }
+    body.light .about-subtitle { color: #64748b; }
+    body.exam .about-subtitle { color: #aaaaaa; }
+    .about-section h4 {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #f59e0b;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin: 0 0 8px 0;
+    }
+    body.light .about-section h4 { color: #1e40af; }
+    body.exam .about-section h4 { color: #ffffff; }
+    .about-section p {
+      font-size: 0.78rem;
+      color: #cbd5e1;
+      line-height: 1.6;
+      margin: 0 0 6px 0;
+    }
+    body.light .about-section p { color: #334155; }
+    body.exam .about-section p { color: #cccccc; }
+    .about-part-title {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: #67e0ff;
+      margin: 8px 0 3px 0;
+    }
+    body.light .about-part-title { color: #1e40af; }
+    body.exam .about-part-title { color: #ffffff; }
+    .about-divider {
+      border: none;
+      border-top: 1px solid #374151;
+      margin: 12px 0;
+    }
+    body.light .about-divider { border-top-color: #cbd5e1; }
+    body.exam .about-divider { border-top-color: #333333; }
+    .about-free {
+      color: #94a3b8 !important;
+    }
+    body.light .about-free { color: #64748b !important; }
+    body.exam .about-free { color: #aaaaaa !important; }
+    .about-version {
+      text-align: center;
+      font-size: 0.68rem;
+      color: #94a3b8 !important;
+      margin-top: 6px;
+    }
+    body.light .about-version { color: #64748b !important; }
+    body.exam .about-version { color: #aaaaaa !important; }
+    .about-close-btn { background: #475569; color: white; }
+    body.exam .about-close-btn { background: #333333; color: #aaaaaa; }
+    .about-close {
       margin-top: 14px;
       display: flex;
       justify-content: center;
@@ -547,7 +642,7 @@
       }
       .footer-text svg { display: none; }
       .footer-icons { gap: 10px; width: 100%; justify-content: center; }
-      .theme-btn, .email-btn, .teacher-btn, .criteria-btn, .tips-btn { width: 34px; height: 34px; font-size: 1rem; }
+      .theme-btn, .email-btn, .teacher-btn, .criteria-btn, .tips-btn, .about-btn { width: 34px; height: 34px; font-size: 1rem; }
       .criteria-grid { font-size: 0.62rem; }
       .teacher-panel { width: 100%; }
       .teacher-panel textarea { font-size: 0.85rem; }
@@ -614,8 +709,14 @@
         <circle cx="50" cy="38" r="2.5" fill="#f59e0b"/>
         <path d="M14 46 Q14 54 23 56" fill="none" stroke="#f59e0b" stroke-width="3" stroke-linecap="round"/>
         <ellipse cx="27" cy="56" rx="5" ry="3" fill="#f59e0b"/>
-      </svg>Free tool for IELTS Speaking - <a href="https://www.linkedin.com/in/emosscappaturaproust" target="_blank" class="footer-link">Emos Scappatura Proust</a></span>
+      </svg>Free tool for IELTS Speaking - <a href="https://www.linkedin.com/in/emosscappaturaproust" target="_blank" class="footer-link" style="vertical-align:middle;">Emos Scappatura Proust</a></span>
     <div class="footer-icons">
+      <button class="about-btn" onclick="showAbout()" title="About" style="display:flex;align-items:center;justify-content:center;">
+        <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="8" cy="8" r="7.5" fill="#3b82f6"/>
+          <text x="8" y="11.5" font-family="-apple-system, sans-serif" font-size="11" font-weight="700" fill="white" text-anchor="middle">i</text>
+        </svg>
+      </button>
       <!-- criteria button hidden pending IDP approval -->
       <button class="teacher-btn" id="teacherBtn" onclick="toggleTeacherMode()" title="Teacher Mode">✏️</button>
       <button class="tips-btn" id="tipsBtn" onclick="showTips()" title="Tips">💡</button>
@@ -643,6 +744,54 @@
       <div style="margin-top:16px; display:flex; gap:10px; justify-content:center;">
         <button onclick="sendFeedback()" style="background:#3b82f6; color:white; padding:9px 24px; width:auto; height:auto;">Send</button>
         <button onclick="closeModal()" style="background:#475569; color:white; padding:9px 24px; width:auto; height:auto;">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- About Modal -->
+  <div class="about-modal" id="aboutModal">
+    <div class="about-inner">
+      <h3>
+        <svg width="22" height="22" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" style="vertical-align:middle;">
+          <circle cx="8" cy="8" r="7.5" fill="#3b82f6"/>
+          <text x="8" y="8" font-family="-apple-system, sans-serif" font-size="10" font-weight="700" fill="white" text-anchor="middle" dominant-baseline="central">i</text>
+        </svg>
+      </h3>
+      <p class="about-subtitle">Free browser-based tool for IELTS Speaking</p>
+
+      <div class="about-section">
+        <h4>How it works</h4>
+        <p>Click Start to begin. Part 1 starts immediately. The running timer is Part 1. When ready to move on, click the phase buttons to record the start and end times for each section.</p>
+      </div>
+
+      <hr class="about-divider"/>
+
+      <div class="about-section">
+        <h4>The three parts</h4>
+        <p class="about-part-title">Part 1 - Introduction and interview (4-5 min)</p>
+        <p>General questions on familiar topics such as home, family, work or interests.</p>
+        <p class="about-part-title">Part 2 - Long turn (3-4 min including prep)</p>
+        <p>1 minute preparation followed by 1-2 minutes speaking on a given topic.</p>
+        <p class="about-part-title">Part 3 - Discussion (4-5 min)</p>
+        <p>A more in-depth discussion of issues related to the Part 2 topic.</p>
+      </div>
+
+      <hr class="about-divider"/>
+
+      <div class="about-section">
+        <h4>Features</h4>
+        <p>✏️ Teacher Mode - notes that save automatically</p>
+        <p>💡 Tips - recommended setup for remote sessions</p>
+        <p>☀️ Three display modes - dark, light and exam</p>
+      </div>
+
+      <hr class="about-divider"/>
+
+      <p class="about-free" style="text-align:center; font-size:0.72rem;">Free to use. No login. No download.</p>
+      <p class="about-version">Version 1.0 - Last updated: May 2026</p>
+
+      <div class="about-close">
+        <button onclick="closeAbout()" class="about-close-btn" style="padding:9px 28px; width:auto; height:auto;">Close</button>
       </div>
     </div>
   </div>
@@ -892,6 +1041,18 @@
         notesSaved.style.opacity = "1";
         saveIndicatorTimer = setTimeout(() => notesSaved.style.opacity = "0", 1500);
       }, 800);
+    });
+
+    function showAbout() {
+      document.getElementById("aboutModal").style.display = "flex";
+    }
+
+    function closeAbout() {
+      document.getElementById("aboutModal").style.display = "none";
+    }
+
+    document.getElementById("aboutModal").addEventListener("click", e => {
+      if (e.target === document.getElementById("aboutModal")) closeAbout();
     });
 
     function showTips() {
