@@ -611,7 +611,10 @@
     }
     .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
-    /* --- Mobile --- */
+    .footer-hyphen { }
+    @media (max-width: 480px) {
+      .footer-hyphen { display: none; }
+    }
     @media (max-width: 480px) {
       body { padding: 8px 10px; overflow-y: auto; height: auto; min-height: 100vh; display: flex; flex-direction: column; align-items: center; min-width: unset; }
       .desktop-note { display: block; width: 100%; text-align: center; }
@@ -632,15 +635,17 @@
       }
       .footer-text {
         text-align: center;
-        white-space: normal;
-        word-break: break-word;
         font-size: 0.78rem;
         width: 100%;
         display: flex;
-        justify-content: center;
+        flex-direction: column;
         align-items: center;
+        gap: 4px;
       }
-      .footer-text svg { display: none; }
+      .footer-text svg { display: block; margin: 0 auto 4px auto; }
+      .footer-line1 { text-align: center; }
+      .footer-line2 { display: block; text-align: center; }
+      .footer-hyphen { display: none; }
       .footer-icons { gap: 10px; width: 100%; justify-content: center; }
       .theme-btn, .email-btn, .teacher-btn, .criteria-btn, .tips-btn, .about-btn { width: 34px; height: 34px; font-size: 1rem; }
       .criteria-grid { font-size: 0.62rem; }
@@ -709,7 +714,10 @@
         <circle cx="50" cy="38" r="2.5" fill="#f59e0b"/>
         <path d="M14 46 Q14 54 23 56" fill="none" stroke="#f59e0b" stroke-width="3" stroke-linecap="round"/>
         <ellipse cx="27" cy="56" rx="5" ry="3" fill="#f59e0b"/>
-      </svg>Free tool for IELTS Speaking - <a href="https://www.linkedin.com/in/emosscappaturaproust" target="_blank" class="footer-link" style="vertical-align:middle;">Emos Scappatura Proust</a></span>
+      </svg>
+      <span class="footer-line1">Free tool for IELTS Speaking <span class="footer-hyphen">-</span></span>
+      <a href="https://www.linkedin.com/in/emosscappaturaproust" target="_blank" class="footer-link footer-line2">Emos Scappatura Proust</a>
+    </span>
     <div class="footer-icons">
       <button class="about-btn" onclick="showAbout()" title="About" style="display:flex;align-items:center;justify-content:center;">
         <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
