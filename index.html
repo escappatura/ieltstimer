@@ -269,6 +269,9 @@
       border: 1px solid #374151;
     }
     body.light .teacher-panel { background: #e2e8f0; border-color: #cbd5e1; }
+    #candidateName { background: #111827; color: #f1f5f9; }
+    body.light #candidateName { background: #f8fafc; color: #1e2937; border: 1px solid #cbd5e1; }
+    body.exam #candidateName { background: #000000; color: #ffffff; border: 1px solid #333333; }
     .teacher-panel.visible { display: flex; }
     .teacher-panel-header {
       display: flex;
@@ -722,8 +725,11 @@
         <span id="notesSaved" style="font-size:0.65rem; color:#16a34a; opacity:0; transition:opacity 0.4s;">Saved ✓</span>
         <button class="copy-notes-btn" onclick="copyNotes()">Copy</button>
         <button class="copy-notes-btn" onclick="exportNotes()">Export</button>
+        <button class="copy-notes-btn" onclick="generatePDF()">PDF</button>
       </div>
     </div>
+    <!-- Candidate name -->
+    <input type="text" id="candidateName" placeholder="Candidate name…" style="width:100%; padding:6px 10px; border-radius:6px; border:none; font-size:0.82rem; margin-bottom:6px; outline:none;"/>
     <!-- Tab buttons -->
     <div class="notes-tabs">
       <button class="notes-tab active" id="tab-1" onclick="switchTab(1)">Part 1</button>
@@ -829,7 +835,7 @@
 
       <div class="about-section">
         <h4>Features</h4>
-        <p>✏️ Teacher Mode - notes that save automatically</p>
+        <p>✏️ Teacher Mode - per-part notes, candidate name, export and PDF report</p>
         <p>💡 Tips - recommended setup for remote sessions</p>
         <p>☀️ Three display modes - dark, light and exam</p>
       </div>
@@ -1018,8 +1024,32 @@
       document.getElementById("restartModal").style.display = "none";
     }
 
+    function hasNotes() {
+      const name = document.getElementById("candidateName").value.trim();
+      const p1 = document.getElementById("teacherNotes1").value.trim();
+      const p2 = document.getElementById("teacherNotes2").value.trim();
+      const p3 = document.getElementById("teacherNotes3").value.trim();
+      return teacherMode || name || p1 || p2 || p3;
+    }
+
+    function clearNotes() {
+      document.getElementById("candidateName").value = "";
+      document.getElementById("teacherNotes1").value = "";
+      document.getElementById("teacherNotes2").value = "";
+      document.getElementById("teacherNotes3").value = "";
+      localStorage.removeItem("ielts-candidate");
+      localStorage.removeItem("ielts-notes-1");
+      localStorage.removeItem("ielts-notes-2");
+      localStorage.removeItem("ielts-notes-3");
+      switchTab(1);
+    }
+
     function resetTimer() {
-      document.getElementById("restartMsg").textContent = "Reset everything? This will clear all recorded times.";
+      const hasNotesData = hasNotes();
+      const msg = hasNotesData
+        ? "Reset everything? This will clear all recorded times and notes."
+        : "Reset everything? This will clear all recorded times.";
+      document.getElementById("restartMsg").textContent = msg;
       document.getElementById("restartConfirmBtn").textContent = "Reset";
       document.getElementById("restartConfirmBtn").onclick = () => {
         if (timerInterval) clearInterval(timerInterval);
@@ -1031,6 +1061,7 @@
                         b.id.includes("long") ? "Long Turn" : "Part 3";
           b.classList.remove("clicked");
         });
+        if (hasNotesData) clearNotes();
         closeRestartModal();
       };
       document.getElementById("restartModal").style.display = "flex";
@@ -1069,25 +1100,146 @@
     }
 
     function exportNotes() {
+      const name = document.getElementById("candidateName").value.trim();
       const p1 = document.getElementById("teacherNotes1").value.trim();
       const p2 = document.getElementById("teacherNotes2").value.trim();
       const p3 = document.getElementById("teacherNotes3").value.trim();
-      const text = [p1 && "Part 1:\n" + p1, p2 && "Part 2:\n" + p2, p3 && "Part 3:\n" + p3].filter(Boolean).join("\n\n");
+      const text = [
+        name && "Candidate: " + name,
+        p1 && "Part 1:\n" + p1,
+        p2 && "Part 2:\n" + p2,
+        p3 && "Part 3:\n" + p3
+      ].filter(Boolean).join("\n\n");
       if (!text) { toast("No notes to export"); return; }
       const blob = new Blob([text], { type: "text/plain" });
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = "ielts-notes.txt";
+      const filename = name ? name.toLowerCase().replace(/\s+/g, "-") + "-ielts-notes.txt" : "ielts-notes.txt";
+      a.download = filename;
       a.click();
       URL.revokeObjectURL(url);
     }
 
+    function generatePDF() {
+      const name = document.getElementById("candidateName").value.trim() || "Unknown Candidate";
+      const p1 = document.getElementById("teacherNotes1").value.trim() || "—";
+      const p2 = document.getElementById("teacherNotes2").value.trim() || "—";
+      const p3 = document.getElementById("teacherNotes3").value.trim() || "—";
+
+      // Get stamped times from phase buttons
+      function getTime(id) {
+        const btn = document.getElementById(id);
+        const lines = btn ? btn.innerHTML.replace(/<br>/g, "\n").replace(/<[^>]+>/g, "") : "";
+        const match = lines.match(/[\d]+:[\d]+\s*[-–]\s*[\d]+:[\d]+/);
+        return match ? match[0] : "—";
+      }
+
+      const now = new Date();
+      const dateStr = now.toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
+      const timeStr = now.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" });
+
+      const html = `<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>IELTS Session Report - ${name}</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #fff; color: #334155; padding: 40px; }
+  .header { background: #1e3a5f; color: white; padding: 20px 24px; border-radius: 8px 8px 0 0; display: flex; justify-content: space-between; align-items: center; }
+  .header-left h1 { font-size: 18px; font-weight: 700; }
+  .header-left p { font-size: 11px; color: #94a3b8; margin-top: 2px; }
+  .header-right { font-size: 11px; color: #94a3b8; text-align: right; }
+  .gold-bar { height: 3px; background: #f59e0b; margin-bottom: 24px; }
+  .candidate { margin-bottom: 20px; }
+  .label { font-size: 9px; font-weight: 700; color: #94a3b8; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 4px; }
+  .candidate-name { font-size: 20px; font-weight: 700; color: #1e3a5f; }
+  .divider { border: none; border-top: 1px solid #e2e8f0; margin: 16px 0; }
+  .timing-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 20px; }
+  .timing-box { background: #f8fafc; border-radius: 6px; padding: 10px; text-align: center; }
+  .timing-box .t-label { font-size: 9px; color: #94a3b8; font-weight: 600; text-transform: uppercase; }
+  .timing-box .t-time { font-size: 13px; font-weight: 700; color: #1e3a5f; margin-top: 4px; }
+  .notes-section { margin-bottom: 16px; }
+  .notes-section p { font-size: 11px; line-height: 1.6; color: #334155; }
+  .footer { margin-top: 24px; padding-top: 12px; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-between; }
+  .footer p { font-size: 9px; color: #94a3b8; }
+  .gold-bar-bottom { height: 3px; background: #f59e0b; margin-top: 8px; border-radius: 0 0 8px 8px; }
+  @media print { body { padding: 0; } }
+</style>
+</head>
+<body>
+  <div class="header">
+    <div class="header-left">
+      <h1>IELTS Speaking</h1>
+      <p>Session Report — ieltstimer.com</p>
+    </div>
+    <div class="header-right">
+      <div>${dateStr}</div>
+      <div>${timeStr}</div>
+    </div>
+  </div>
+  <div class="gold-bar"></div>
+
+  <div class="candidate">
+    <div class="label">Candidate</div>
+    <div class="candidate-name">${name}</div>
+  </div>
+
+  <hr class="divider"/>
+
+  <div class="label" style="margin-bottom:10px;">Session Timing</div>
+  <div class="timing-grid">
+    <div class="timing-box"><div class="t-label">Part 1</div><div class="t-time">${getTime("btn-part2").split("–")[0] || "—"}</div></div>
+    <div class="timing-box"><div class="t-label">1 min Prep</div><div class="t-time">${getTime("btn-prep")}</div></div>
+    <div class="timing-box"><div class="t-label">Long Turn</div><div class="t-time">${getTime("btn-long")}</div></div>
+    <div class="timing-box"><div class="t-label">Part 3</div><div class="t-time">${getTime("btn-part3")}</div></div>
+  </div>
+
+  <hr class="divider"/>
+
+  <div class="notes-section">
+    <div class="label" style="margin-bottom:6px;">Part 1 Notes</div>
+    <p>${p1.replace(/\n/g, "<br>")}</p>
+  </div>
+  <hr class="divider"/>
+  <div class="notes-section">
+    <div class="label" style="margin-bottom:6px;">Part 2 Notes</div>
+    <p>${p2.replace(/\n/g, "<br>")}</p>
+  </div>
+  <hr class="divider"/>
+  <div class="notes-section">
+    <div class="label" style="margin-bottom:6px;">Part 3 Notes</div>
+    <p>${p3.replace(/\n/g, "<br>")}</p>
+  </div>
+
+  <div class="footer">
+    <p>Generated by ieltstimer.com — Free tool for IELTS Speaking</p>
+    <p>Emos Scappatura Proust</p>
+  </div>
+  <div class="gold-bar-bottom"></div>
+
+  <script>window.onload = () => window.print();<\/script>
+</body>
+</html>`;
+
+      const blob = new Blob([html], { type: "text/html" });
+      const url = URL.createObjectURL(blob);
+      const win = window.open(url, "_blank");
+      setTimeout(() => URL.revokeObjectURL(url), 10000);
+    }
+
     function copyNotes() {
+      const name = document.getElementById("candidateName").value.trim();
       const p1 = document.getElementById("teacherNotes1").value.trim();
       const p2 = document.getElementById("teacherNotes2").value.trim();
       const p3 = document.getElementById("teacherNotes3").value.trim();
-      const text = [p1 && "Part 1:\n" + p1, p2 && "Part 2:\n" + p2, p3 && "Part 3:\n" + p3].filter(Boolean).join("\n\n");
+      const text = [
+        name && "Candidate: " + name,
+        p1 && "Part 1:\n" + p1,
+        p2 && "Part 2:\n" + p2,
+        p3 && "Part 3:\n" + p3
+      ].filter(Boolean).join("\n\n");
       if (!text) { toast("No notes to copy"); return; }
       navigator.clipboard.writeText(text).then(() => toast("Notes copied to clipboard!")).catch(() => toast("Copy failed. Please select and copy manually"));
     }
@@ -1130,6 +1282,13 @@
     setupNotes("teacherNotes1", "ielts-notes-1");
     setupNotes("teacherNotes2", "ielts-notes-2");
     setupNotes("teacherNotes3", "ielts-notes-3");
+
+    // Candidate name persistence
+    const candidateEl = document.getElementById("candidateName");
+    candidateEl.value = localStorage.getItem("ielts-candidate") || "";
+    candidateEl.addEventListener("input", () => {
+      localStorage.setItem("ielts-candidate", candidateEl.value);
+    });
 
     function showAbout() {
       document.getElementById("aboutModal").style.display = "flex";
