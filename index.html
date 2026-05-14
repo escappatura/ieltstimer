@@ -230,6 +230,33 @@
       align-items: flex-end;
     }
 
+    /* --- Notes tabs --- */
+    .notes-tabs {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 8px;
+    }
+    .notes-tab {
+      flex: 1;
+      height: 28px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      border-radius: 6px;
+      background: #374151;
+      color: #94a3b8;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s;
+      padding: 0;
+      width: auto;
+    }
+    .notes-tab.active { background: #3b82f6; color: white; }
+    .notes-tab:hover { filter: brightness(1.15); }
+    body.light .notes-tab { background: #cbd5e1; color: #475569; }
+    body.light .notes-tab.active { background: #1e40af; color: white; }
+    body.exam .notes-tab { background: #222222; color: #888888; border: 1px solid #333333; }
+    body.exam .notes-tab.active { background: #333333; color: #ffffff; }
+
     /* --- Teacher mode notepad --- */
     .teacher-panel {
       display: none;
@@ -697,7 +724,15 @@
         <button class="copy-notes-btn" onclick="exportNotes()">Export</button>
       </div>
     </div>
-    <textarea id="teacherNotes" rows="4" placeholder="Student notes, band score, timestamps…"></textarea>
+    <!-- Tab buttons -->
+    <div class="notes-tabs">
+      <button class="notes-tab active" id="tab-1" onclick="switchTab(1)">Part 1</button>
+      <button class="notes-tab" id="tab-2" onclick="switchTab(2)">Part 2</button>
+      <button class="notes-tab" id="tab-3" onclick="switchTab(3)">Part 3</button>
+    </div>
+    <textarea id="teacherNotes1" class="notes-area active-area" rows="4" placeholder="Part 1 notes…"></textarea>
+    <textarea id="teacherNotes2" class="notes-area" rows="4" placeholder="Part 2 notes…" style="display:none;"></textarea>
+    <textarea id="teacherNotes3" class="notes-area" rows="4" placeholder="Part 3 notes…" style="display:none;"></textarea>
   </div>
 
   <div class="toast" id="toast"></div>
@@ -952,6 +987,9 @@
 
     function recordFixed(name, minutes) {
       if (!mainStartTime) { toast("Click Start first"); return; }
+      // Auto-switch notes tab
+      if (name === "Part 2" && teacherMode) switchTab(2);
+      if (name === "Part 3" && teacherMode) switchTab(3);
       const btnId =
         name === "Part 2" ? "btn-part2" :
         name === "1 min Prep" ? "btn-prep" :
@@ -1020,11 +1058,21 @@
       teacherMode = !teacherMode;
       document.getElementById("teacherPanel").classList.toggle("visible", teacherMode);
       document.getElementById("teacherBtn").classList.toggle("active", teacherMode);
-      if (teacherMode) document.getElementById("teacherNotes").focus();
+      if (teacherMode) {
+        const part3Clicked = document.getElementById("btn-part3").classList.contains("clicked");
+        const part2Clicked = document.getElementById("btn-part2").classList.contains("clicked");
+        if (part3Clicked) switchTab(3);
+        else if (part2Clicked) switchTab(2);
+        else switchTab(1);
+        document.getElementById("teacherNotes" + activeTab).focus();
+      }
     }
 
     function exportNotes() {
-      const text = document.getElementById("teacherNotes").value.trim();
+      const p1 = document.getElementById("teacherNotes1").value.trim();
+      const p2 = document.getElementById("teacherNotes2").value.trim();
+      const p3 = document.getElementById("teacherNotes3").value.trim();
+      const text = [p1 && "Part 1:\n" + p1, p2 && "Part 2:\n" + p2, p3 && "Part 3:\n" + p3].filter(Boolean).join("\n\n");
       if (!text) { toast("No notes to export"); return; }
       const blob = new Blob([text], { type: "text/plain" });
       const url = URL.createObjectURL(blob);
@@ -1036,26 +1084,52 @@
     }
 
     function copyNotes() {
-      const text = document.getElementById("teacherNotes").value.trim();
+      const p1 = document.getElementById("teacherNotes1").value.trim();
+      const p2 = document.getElementById("teacherNotes2").value.trim();
+      const p3 = document.getElementById("teacherNotes3").value.trim();
+      const text = [p1 && "Part 1:\n" + p1, p2 && "Part 2:\n" + p2, p3 && "Part 3:\n" + p3].filter(Boolean).join("\n\n");
       if (!text) { toast("No notes to copy"); return; }
       navigator.clipboard.writeText(text).then(() => toast("Notes copied to clipboard!")).catch(() => toast("Copy failed. Please select and copy manually"));
     }
 
-    // Persist teacher notes in localStorage with debounced save indicator
-    const notesEl = document.getElementById("teacherNotes");
+    // Tab switching
+    let activeTab = 1;
+    function switchTab(num) {
+      activeTab = num;
+      [1,2,3].forEach(n => {
+        document.getElementById("tab-" + n).classList.toggle("active", n === num);
+        document.getElementById("teacherNotes" + n).style.display = n === num ? "block" : "none";
+      });
+    }
+
+    // Auto-switch tab when phase button clicked
+    function autoSwitchTab(part) {
+      if (part === 2 || part === 'prep') switchTab(2);
+      if (part === 3) switchTab(3);
+    }
+
+    // Persist notes in localStorage with debounced save indicator
     const notesSaved = document.getElementById("notesSaved");
     let saveTimer = null;
     let saveIndicatorTimer = null;
-    notesEl.value = localStorage.getItem("ielts-notes") || "";
-    notesEl.addEventListener("input", () => {
-      localStorage.setItem("ielts-notes", notesEl.value);
-      if (saveTimer) clearTimeout(saveTimer);
-      if (saveIndicatorTimer) clearTimeout(saveIndicatorTimer);
-      saveTimer = setTimeout(() => {
-        notesSaved.style.opacity = "1";
-        saveIndicatorTimer = setTimeout(() => notesSaved.style.opacity = "0", 1500);
-      }, 800);
-    });
+
+    function setupNotes(id, key) {
+      const el = document.getElementById(id);
+      el.value = localStorage.getItem(key) || "";
+      el.addEventListener("input", () => {
+        localStorage.setItem(key, el.value);
+        if (saveTimer) clearTimeout(saveTimer);
+        if (saveIndicatorTimer) clearTimeout(saveIndicatorTimer);
+        saveTimer = setTimeout(() => {
+          notesSaved.style.opacity = "1";
+          saveIndicatorTimer = setTimeout(() => notesSaved.style.opacity = "0", 1500);
+        }, 800);
+      });
+    }
+
+    setupNotes("teacherNotes1", "ielts-notes-1");
+    setupNotes("teacherNotes2", "ielts-notes-2");
+    setupNotes("teacherNotes3", "ielts-notes-3");
 
     function showAbout() {
       document.getElementById("aboutModal").style.display = "flex";
