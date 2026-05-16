@@ -1135,6 +1135,20 @@
         return match ? match[0] : "—";
       }
 
+      // Calculate duration from stamped time
+      function getDuration(id) {
+        const time = getTime(id);
+        if (time === "—") return "";
+        const parts = time.split(/[-–]/);
+        if (parts.length < 2) return "";
+        const toSecs = t => { const [m,s] = t.trim().split(":").map(Number); return m*60+s; };
+        const diff = toSecs(parts[1]) - toSecs(parts[0]);
+        if (isNaN(diff) || diff <= 0) return "";
+        const m = Math.floor(diff/60);
+        const s = diff%60;
+        return "Duration: " + m + ":" + s.toString().padStart(2,"0");
+      }
+
       const now = new Date();
       const dateStr = now.toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
       const timeStr = now.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" });
@@ -1156,10 +1170,13 @@
   .label { font-size: 9px; font-weight: 700; color: #94a3b8; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 4px; }
   .candidate-name { font-size: 20px; font-weight: 700; color: #1e3a5f; }
   .divider { border: none; border-top: 1px solid #e2e8f0; margin: 16px 0; }
-  .timing-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 20px; }
+  .timing-row1 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 10px; }
+  .timing-row2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 8px; }
   .timing-box { background: #f8fafc; border-radius: 6px; padding: 10px; text-align: center; }
   .timing-box .t-label { font-size: 9px; color: #94a3b8; font-weight: 600; text-transform: uppercase; }
   .timing-box .t-time { font-size: 13px; font-weight: 700; color: #1e3a5f; margin-top: 4px; }
+  .timing-box .t-duration { font-size: 11px; font-weight: 600; color: #16a34a; margin-top: 3px; }
+  .breakdown-label { font-size: 8px; font-weight: 700; color: #94a3b8; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 6px; margin-top: 4px; }
   .notes-section { margin-bottom: 16px; }
   .notes-section p { font-size: 11px; line-height: 1.6; color: #334155; }
   .footer { margin-top: 24px; padding-top: 12px; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-between; }
@@ -1189,11 +1206,15 @@
   <hr class="divider"/>
 
   <div class="label" style="margin-bottom:10px;">Session Timing</div>
-  <div class="timing-grid">
-    <div class="timing-box"><div class="t-label">Part 1</div><div class="t-time">${getTime("btn-part2").split("–")[0] || "—"}</div></div>
-    <div class="timing-box"><div class="t-label">1 min Prep</div><div class="t-time">${getTime("btn-prep")}</div></div>
-    <div class="timing-box"><div class="t-label">Long Turn</div><div class="t-time">${getTime("btn-long")}</div></div>
+  <div class="timing-row1">
+    <div class="timing-box"><div class="t-label">Part 1</div><div class="t-time">${getTime("btn-part2").split(/[-–]/)[0].trim() || "—"}</div></div>
+    <div class="timing-box"><div class="t-label">Part 2</div><div class="t-time">${getTime("btn-part2").split(/[-–]/)[0].trim() || "—"} - ${getTime("btn-part3").split(/[-–]/)[0].trim() || "—"}</div></div>
     <div class="timing-box"><div class="t-label">Part 3</div><div class="t-time">${getTime("btn-part3")}</div></div>
+  </div>
+  <div class="breakdown-label">Part 2 Breakdown</div>
+  <div class="timing-row2">
+    <div class="timing-box"><div class="t-label">1 min Prep</div><div class="t-time">${getTime("btn-prep")}</div></div>
+    <div class="timing-box"><div class="t-label">Long Turn</div><div class="t-time">${getTime("btn-long")}</div><div class="t-duration">${getDuration("btn-long")}</div></div>
   </div>
 
   <hr class="divider"/>
@@ -1219,7 +1240,7 @@
   </div>
   <div class="gold-bar-bottom"></div>
 
-  <script>window.onload = () => window.print();<\/script>
+  <script>window.onload = () => {};<\/script>
 </body>
 </html>`;
 
