@@ -1149,6 +1149,32 @@
         return "Duration: " + m + ":" + s.toString().padStart(2,"0");
       }
 
+      // Part 1 duration = from 0 to Part 2 start
+      function getDuration2(id) {
+        const time = getTime(id);
+        if (time === "—") return "";
+        const start = time.split(/[-–]/)[0].trim();
+        const toSecs = t => { const [m,s] = t.trim().split(":").map(Number); return m*60+s; };
+        const diff = toSecs(start);
+        if (isNaN(diff) || diff <= 0) return "";
+        const m = Math.floor(diff/60);
+        const s = diff%60;
+        return "Duration: " + m + ":" + s.toString().padStart(2,"0");
+      }
+
+      // Part 2 duration = from Part 2 start to Part 3 start
+      function getPart2Duration() {
+        const p2start = getTime("btn-part2").split(/[-–]/)[0].trim();
+        const p3start = getTime("btn-part3").split(/[-–]/)[0].trim();
+        if (p2start === "—" || p3start === "—") return "";
+        const toSecs = t => { const [m,s] = t.trim().split(":").map(Number); return m*60+s; };
+        const diff = toSecs(p3start) - toSecs(p2start);
+        if (isNaN(diff) || diff <= 0) return "";
+        const m = Math.floor(diff/60);
+        const s = diff%60;
+        return "Duration: " + m + ":" + s.toString().padStart(2,"0");
+      }
+
       const now = new Date();
       const dateStr = now.toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
       const timeStr = now.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" });
@@ -1161,27 +1187,29 @@
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #fff; color: #334155; padding: 40px; }
-  .header { background: #1e3a5f; color: white; padding: 20px 24px; border-radius: 8px 8px 0 0; display: flex; justify-content: space-between; align-items: center; }
-  .header-left h1 { font-size: 18px; font-weight: 700; }
-  .header-left p { font-size: 11px; color: #94a3b8; margin-top: 2px; }
-  .header-right { font-size: 11px; color: #94a3b8; text-align: right; }
+  .header { background: #1e3a5f; color: white; padding: 16px 24px; border-radius: 8px 8px 0 0; display: grid; grid-template-columns: 40px 1fr 40px; align-items: center; }
+  .header-logo { width: 32px; height: 32px; }
+  .header-center { text-align: center; }
+  .header-center h1 { font-size: 16px; font-weight: 700; }
+  .header-center p { font-size: 10px; color: #94a3b8; margin-top: 2px; }
+  .header-right { font-size: 10px; color: #94a3b8; text-align: right; white-space: nowrap; }
   .gold-bar { height: 3px; background: #f59e0b; margin-bottom: 24px; }
-  .candidate { margin-bottom: 20px; text-align: center; }
+  .candidate { margin-bottom: 16px; text-align: center; }
   .label { font-size: 9px; font-weight: 700; color: #94a3b8; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 4px; }
   .candidate-name { font-size: 20px; font-weight: 700; color: #1e3a5f; }
-  .divider { border: none; border-top: 1px solid #e2e8f0; margin: 16px 0; }
+  .divider { border: none; border-top: 1px solid #e2e8f0; margin: 14px 0; }
   .timing-section { text-align: center; }
-  .timing-row1 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 8px; }
-  .timing-row2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 8px; }
-  .timing-box { background: #f1f5f9; border-radius: 6px; padding: 7px 10px; text-align: center; }
-  .timing-box .t-label { font-size: 8px; color: #94a3b8; font-weight: 600; text-transform: uppercase; }
-  .timing-box .t-time { font-size: 11px; font-weight: 700; color: #1e3a5f; margin-top: 3px; }
-  .timing-box .t-duration { font-size: 10px; font-weight: 600; color: #16a34a; margin-top: 2px; }
-  .breakdown-label { font-size: 8px; font-weight: 700; color: #94a3b8; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 6px; margin-top: 4px; text-align: center; }
-  .notes-section { margin-bottom: 16px; }
-  .notes-section .label { text-align: left; }
+  .timing-row1 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 8px; max-width: 380px; margin-left: auto; margin-right: auto; }
+  .timing-row2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 8px; max-width: 260px; margin-left: auto; margin-right: auto; }
+  .timing-box { background: #f1f5f9; border-radius: 5px; padding: 6px 8px; text-align: center; }
+  .timing-box .t-label { font-size: 7px; color: #94a3b8; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+  .timing-box .t-time { font-size: 10px; font-weight: 700; color: #1e3a5f; margin-top: 3px; }
+  .timing-box .t-duration { font-size: 8px; font-weight: 600; color: #16a34a; margin-top: 2px; }
+  .breakdown-label { font-size: 7px; font-weight: 700; color: #94a3b8; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 6px; margin-top: 4px; text-align: center; }
+  .notes-section { margin-bottom: 14px; }
+  .notes-section .n-label { font-size: 9px; font-weight: 700; color: #94a3b8; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 4px; }
   .notes-section p { font-size: 11px; line-height: 1.6; color: #334155; text-align: left; }
-  .footer { margin-top: 24px; padding-top: 12px; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-between; }
+  .footer { margin-top: 20px; padding-top: 10px; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-between; }
   .footer p { font-size: 9px; color: #94a3b8; }
   .gold-bar-bottom { height: 3px; background: #f59e0b; margin-top: 8px; border-radius: 0 0 8px 8px; }
   @media print { body { padding: 0; } }
@@ -1189,7 +1217,18 @@
 </head>
 <body>
   <div class="header">
-    <div class="header-left">
+    <svg class="header-logo" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+      <rect width="64" height="64" rx="10" fill="#1e3a5f"/>
+      <path d="M14 32 Q14 8 32 8 Q50 8 50 32" fill="none" stroke="#f59e0b" stroke-width="5" stroke-linecap="round"/>
+      <circle cx="14" cy="38" r="9" fill="#1e3a5f" stroke="#f59e0b" stroke-width="3"/>
+      <circle cx="50" cy="38" r="9" fill="#1e3a5f" stroke="#f59e0b" stroke-width="3"/>
+      <line x1="50" y1="38" x2="50" y2="30" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round"/>
+      <line x1="50" y1="38" x2="56" y2="42" stroke="#f59e0b" stroke-width="2" stroke-linecap="round"/>
+      <circle cx="50" cy="38" r="2.5" fill="#f59e0b"/>
+      <path d="M14 46 Q14 54 23 56" fill="none" stroke="#f59e0b" stroke-width="3" stroke-linecap="round"/>
+      <ellipse cx="27" cy="56" rx="5" ry="3" fill="#f59e0b"/>
+    </svg>
+    <div class="header-center">
       <h1>IELTS Speaking</h1>
       <p>Session Report - ieltstimer.com</p>
     </div>
@@ -1208,15 +1247,15 @@
   <hr class="divider"/>
 
   <div class="timing-section">
-  <div class="label" style="margin-bottom:10px;">Session Timing</div>
+  <div class="label" style="margin-bottom:8px;">Session Timing</div>
   <div class="timing-row1">
-    <div class="timing-box"><div class="t-label">Part 1</div><div class="t-time">${getTime("btn-part2").split(/[-–]/)[0].trim() || "—"}</div></div>
-    <div class="timing-box"><div class="t-label">Part 2</div><div class="t-time">${getTime("btn-part2").split(/[-–]/)[0].trim() || "—"} - ${getTime("btn-part3").split(/[-–]/)[0].trim() || "—"}</div></div>
-    <div class="timing-box"><div class="t-label">Part 3</div><div class="t-time">${getTime("btn-part3")}</div></div>
+    <div class="timing-box"><div class="t-label">Part 1</div><div class="t-time">${getTime("btn-part2").split(/[-–]/)[0].trim() || "—"}</div><div class="t-duration">${getDuration2("btn-part2")}</div></div>
+    <div class="timing-box"><div class="t-label">Part 2</div><div class="t-time">${getTime("btn-part2").split(/[-–]/)[0].trim() || "—"} - ${getTime("btn-part3").split(/[-–]/)[0].trim() || "—"}</div><div class="t-duration">${getPart2Duration()}</div></div>
+    <div class="timing-box"><div class="t-label">Part 3</div><div class="t-time">${getTime("btn-part3")}</div><div class="t-duration">${getDuration("btn-part3")}</div></div>
   </div>
   <div class="breakdown-label">Part 2 Breakdown</div>
   <div class="timing-row2">
-    <div class="timing-box"><div class="t-label">1 min Prep</div><div class="t-time">${getTime("btn-prep")}</div></div>
+    <div class="timing-box"><div class="t-label">1 min Prep</div><div class="t-time">${getTime("btn-prep")}</div><div class="t-duration">${getDuration("btn-prep")}</div></div>
     <div class="timing-box"><div class="t-label">Long Turn</div><div class="t-time">${getTime("btn-long")}</div><div class="t-duration">${getDuration("btn-long")}</div></div>
   </div>
   </div>
@@ -1224,17 +1263,17 @@
   <hr class="divider"/>
 
   <div class="notes-section">
-    <div class="label" style="margin-bottom:6px;">Part 1 Notes</div>
+    <div class="n-label">Part 1 Notes</div>
     <p>${p1.replace(/\n/g, "<br>")}</p>
   </div>
   <hr class="divider"/>
   <div class="notes-section">
-    <div class="label" style="margin-bottom:6px;">Part 2 Notes</div>
+    <div class="n-label">Part 2 Notes</div>
     <p>${p2.replace(/\n/g, "<br>")}</p>
   </div>
   <hr class="divider"/>
   <div class="notes-section">
-    <div class="label" style="margin-bottom:6px;">Part 3 Notes</div>
+    <div class="n-label">Part 3 Notes</div>
     <p>${p3.replace(/\n/g, "<br>")}</p>
   </div>
 
