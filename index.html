@@ -227,7 +227,9 @@
     .footer-icons {
       display: flex;
       gap: 8px;
-      align-items: flex-end;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
     }
 
     /* --- Notes tabs --- */
@@ -694,11 +696,11 @@
     body.exam .results-feedback { background: #111111; }
     body.exam .student-notes { background: #000000; color: #ffffff; border: 1px solid #333333; }
     body.exam .student-btn-secondary { background: #222222; color: #888888; }
-    body.exam .cue-card { background: #111111; }
+    body.exam .cue-card { background: #ffffff; }
     body.exam .cue-card-header { background: #1e3a5f; }
-    body.exam .cue-card-topic { color: #ffffff; }
-    body.exam .cue-card-points { color: #cccccc; }
-    body.exam .cue-card-instruction { color: #888888; }
+    body.exam .cue-card-topic { color: #1e3a5f; }
+    body.exam .cue-card-points { color: #475569; }
+    body.exam .cue-card-instruction { color: #94a3b8; }
 
     .generate-test-btn {
       width: 100%;
@@ -728,6 +730,56 @@
     body.light .regenerate-btn { border-color: #94a3b8; color: #64748b; }
     body.exam .generate-test-btn { border-color: #444444; color: #888888; }
     body.exam .regenerate-btn { border-color: #444444; color: #888888; }
+
+
+    .feedback-panel-inner {
+      background: #1f2937;
+      border-radius: 9px;
+      border: 1px solid #475569;
+      padding: 14px;
+      margin: 8px 0 4px 0;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    body.light .feedback-panel-inner { background: #e2e8f0; border-color: #cbd5e1; }
+    body.exam .feedback-panel-inner { background: #111111; border: 1px solid #333333; }
+
+    .feedback-panel-title {
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: #f59e0b;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+    body.light .feedback-panel-title { color: #1e40af; }
+    body.exam .feedback-panel-title { color: #ffffff; }
+
+    .feedback-send-btn {
+      flex: 1;
+      background: #3b82f6;
+      color: white;
+      padding: 8px;
+      border: none;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      cursor: pointer;
+    }
+    body.light .feedback-send-btn { background: #1e40af; color: white; }
+    body.exam .feedback-send-btn { background: #000000; border: 1px solid #444444; }
+
+    .feedback-cancel-btn {
+      flex: 1;
+      background: #475569;
+      color: white;
+      padding: 8px;
+      border: none;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      cursor: pointer;
+    }
+    body.light .feedback-cancel-btn { background: #cbd5e1; color: #475569; }
+    body.exam .feedback-cancel-btn { background: #222222; color: #888888; border: 1px solid #333333; }
 
     /* --- Teacher Test Content --- */
     .teacher-test-label {
@@ -1111,6 +1163,7 @@
       .criteria-grid { font-size: 0.62rem; }
       .teacher-panel { width: 100%; }
       .teacher-panel textarea { font-size: 0.85rem; }
+      .feedback-panel-inner { width: 100%; }
     }
 
     /* --- Landscape mobile --- */
@@ -1145,6 +1198,34 @@
     <button class="phase-btn" id="btn-prep" onclick="recordFixed('1 min Prep', 1)">1 min Prep</button>
     <button class="phase-btn" id="btn-long" onclick="recordFixed('Long Turn', 2)">Long Turn</button>
     <button class="phase-btn" id="btn-part3" onclick="recordFixed('Part 3', 5)">Part 3</button>
+  </div>
+
+  <!-- Toolbar -->
+  <div class="footer-icons" style="margin:12px 0; padding:8px 0; border-top:1px solid rgba(255,255,255,0.06); border-bottom:1px solid rgba(255,255,255,0.06); display:flex; justify-content:center; align-items:center;">
+    <button class="about-btn" onclick="showAbout()" title="About" style="display:flex;align-items:center;justify-content:center;">
+      <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="8" cy="8" r="7.5" fill="#3b82f6"/>
+        <circle cx="8" cy="4.5" r="1" fill="white"/>
+        <rect x="7.1" y="6.5" width="1.8" height="5" rx="0.5" fill="white"/>
+      </svg>
+    </button>
+    <button class="teacher-btn" id="teacherBtn" onclick="toggleTeacherMode()" title="Teacher Mode">✏️</button>
+    <button class="student-btn" onclick="showStudentMode()" title="Student Practice">🎓</button>
+    <button class="tips-btn" id="tipsBtn" onclick="showTips()" title="Tips">💡</button>
+    <button class="theme-btn" onclick="toggleTheme()" title="Toggle theme">☀️</button>
+    <button class="email-btn" onclick="toggleFeedbackPanel()" title="Send feedback">✉️</button>
+  </div>
+
+  <!-- Inline Feedback Panel -->
+  <div id="feedbackPanel" style="display:none;">
+    <div class="feedback-panel-inner">
+      <div class="feedback-panel-title">✉️ Feedback</div>
+      <textarea id="feedbackText" class="feedback-textarea" rows="4" placeholder="Share your thoughts, suggestions, or bug reports…"></textarea>
+      <div style="display:flex; gap:8px; margin-top:8px;">
+        <button onclick="sendFeedback()" class="feedback-send-btn">Send</button>
+        <button onclick="closeFeedbackPanel()" class="feedback-cancel-btn">Cancel</button>
+      </div>
+    </div>
   </div>
 
   <!-- Teacher Mode Notepad -->
@@ -1229,21 +1310,6 @@
       <span class="footer-line1">Free platform for IELTS Speaking <span class="footer-hyphen">-</span></span>
       <a href="https://www.linkedin.com/in/emosscappaturaproust" target="_blank" class="footer-link footer-line2">Emos Scappatura Proust</a>
     </span>
-    <div class="footer-icons">
-      <button class="about-btn" onclick="showAbout()" title="About" style="display:flex;align-items:center;justify-content:center;">
-        <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="8" cy="8" r="7.5" fill="#3b82f6"/>
-          <circle cx="8" cy="4.5" r="1" fill="white"/>
-          <rect x="7.1" y="6.5" width="1.8" height="5" rx="0.5" fill="white"/>
-        </svg>
-      </button>
-      <!-- criteria button hidden pending IDP approval -->
-      <button class="teacher-btn" id="teacherBtn" onclick="toggleTeacherMode()" title="Teacher Mode">✏️</button>
-      <button class="student-btn" onclick="showStudentMode()" title="Student Practice">🎓</button>
-      <button class="tips-btn" id="tipsBtn" onclick="showTips()" title="Tips">💡</button>
-      <button class="theme-btn" onclick="toggleTheme()" title="Toggle theme">☀️</button>
-      <button class="email-btn" onclick="showFeedbackModal()" title="Send feedback">✉️</button>
-    </div>
   </div>
 
   <!-- Restart / Reset Confirmation Modal -->
@@ -1257,17 +1323,7 @@
     </div>
   </div>
 
-  <!-- Feedback Modal -->
-  <div id="feedbackModal" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.85); align-items:center; justify-content:center; z-index:1000;">
-    <div class="feedback-inner" style="padding:24px; border-radius:12px; width:90%; max-width:420px;">
-      <h3 class="feedback-title" style="margin:0 0 16px 0; text-align:center;">Feedback</h3>
-      <textarea id="feedbackText" class="feedback-textarea" rows="6" placeholder="Share your thoughts, suggestions, or bug reports…"></textarea>
-      <div style="margin-top:16px; display:flex; gap:10px; justify-content:center;">
-        <button onclick="sendFeedback()" style="background:#3b82f6; color:white; padding:9px 24px; width:auto; height:auto;">Send</button>
-        <button onclick="closeModal()" style="background:#475569; color:white; padding:9px 24px; width:auto; height:auto;">Cancel</button>
-      </div>
-    </div>
-  </div>
+
 
   <!-- Student Practice Modal -->
   <div class="student-modal" id="studentModal">
@@ -1750,6 +1806,10 @@
     }
 
     function toggleTeacherMode() {
+      // Close feedback panel if open
+      if (document.getElementById("feedbackPanel").style.display !== "none") {
+        closeFeedbackPanel();
+      }
       teacherMode = !teacherMode;
       document.getElementById("teacherPanel").classList.toggle("visible", teacherMode);
       document.getElementById("teacherBtn").classList.toggle("active", teacherMode);
@@ -3125,14 +3185,25 @@
       if (e.target === document.getElementById("criteriaModal")) closeCriteria();
     });
 
-    function showFeedbackModal() {
-      document.getElementById("feedbackModal").style.display = "flex";
-      document.getElementById("feedbackText").focus();
+    function toggleFeedbackPanel() {
+      const panel = document.getElementById("feedbackPanel");
+      const isVisible = panel.style.display !== "none";
+      if (!isVisible) {
+        // Close teacher mode if open
+        if (teacherMode) toggleTeacherMode();
+      }
+      panel.style.display = isVisible ? "none" : "block";
+      document.querySelector(".email-btn").classList.toggle("active", !isVisible);
+      if (!isVisible) document.getElementById("feedbackText").focus();
     }
 
-    function closeModal() {
-      document.getElementById("feedbackModal").style.display = "none";
+    function closeFeedbackPanel() {
+      document.getElementById("feedbackPanel").style.display = "none";
+      document.querySelector(".email-btn").classList.remove("active");
     }
+
+    function showFeedbackModal() { toggleFeedbackPanel(); }
+    function closeModal() { closeFeedbackPanel(); }
 
     async function sendFeedback() {
       const text = document.getElementById("feedbackText").value.trim();
@@ -3155,9 +3226,6 @@
       }
     }
 
-    document.getElementById("feedbackModal").addEventListener("click", e => {
-      if (e.target === document.getElementById("feedbackModal")) closeModal();
-    });
   </script>
 </body>
 </html>
