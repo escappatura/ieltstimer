@@ -200,7 +200,7 @@
     }
 
     /* --- Footer icon buttons --- */
-    .theme-btn, .email-btn, .teacher-btn, .criteria-btn, .tips-btn, .about-btn {
+    .theme-btn, .email-btn, .teacher-btn, .criteria-btn, .tips-btn, .about-btn, .student-btn {
       background: #475569;
       color: white;
       width: 28px;
@@ -219,7 +219,7 @@
     body.exam .tips-btn.active { background: #444444; }
     body.light .teacher-btn, body.light .criteria-btn,
     body.light .tips-btn, body.light .theme-btn,
-    body.light .email-btn, body.light .about-btn { background: #64748b; }
+    body.light .email-btn, body.light .about-btn, body.light .student-btn { background: #64748b; }
     .teacher-btn.active { background: #7c3aed; }
     .tips-btn.active { background: #0891b2; }
 
@@ -266,7 +266,7 @@
       padding: 8px;
       background: #1f2937;
       border-radius: 9px;
-      border: 1px solid #374151;
+      border: 1px solid #475569;
     }
     body.light .teacher-panel { background: #e2e8f0; border-color: #cbd5e1; }
     #candidateName { background: #111827; color: #f1f5f9; }
@@ -384,6 +384,436 @@
       display: flex;
       justify-content: center;
     }
+
+    /* --- Student Mode --- */
+    .student-modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.95);
+      align-items: flex-start;
+      justify-content: center;
+      z-index: 1000;
+      overflow-y: auto;
+      padding: 12px;
+    }
+    .student-inner {
+      background: #111827;
+      border-radius: 14px;
+      width: 100%;
+      max-width: 520px;
+      padding: 16px 20px;
+      margin: auto;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    }
+    .student-header {
+      text-align: center;
+      margin-bottom: 20px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid #1f2937;
+    }
+    .student-header h3 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #67e0ff;
+      margin-bottom: 4px;
+      letter-spacing: 0.02em;
+    }
+    .student-header p {
+      font-size: 0.75rem;
+      color: #64748b;
+    }
+    .student-screen { display: none; }
+    .student-screen.active { display: block; }
+    .student-timer {
+      font-size: 2.8rem;
+      font-weight: 700;
+      color: #67e0ff;
+      text-align: center;
+      letter-spacing: 4px;
+      margin: 6px 0 2px 0;
+      font-variant-numeric: tabular-nums;
+    }
+    .student-timer.prep { color: #f59e0b; }
+    .student-phase-label {
+      text-align: center;
+      font-size: 0.72rem;
+      color: #64748b;
+      margin-bottom: 16px;
+      letter-spacing: 0.02em;
+    }
+    .student-question-card {
+      background: #1e2937;
+      border-radius: 12px;
+      padding: 16px 18px;
+      margin-bottom: 14px;
+      border: 1px solid #2d3f50;
+    }
+    .student-question-label {
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: #f59e0b;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+    .student-question-text {
+      font-size: 1rem;
+      color: #f1f5f9;
+      line-height: 1.5;
+      font-weight: 500;
+    }
+    .cue-card {
+      background: #ffffff;
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 14px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+    .cue-card-header {
+      background: #1e3a5f;
+      padding: 10px 16px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: white;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+    .cue-card-body {
+      padding: 14px 16px;
+      background: #fafafa;
+    }
+    .cue-card-topic {
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: #1e3a5f;
+      margin-bottom: 10px;
+      line-height: 1.4;
+    }
+    .cue-card-points {
+      font-size: 0.82rem;
+      color: #475569;
+      line-height: 2;
+    }
+    .cue-card-instruction {
+      font-size: 0.78rem;
+      color: #94a3b8;
+      font-style: italic;
+      margin-top: 10px;
+      padding-top: 8px;
+      border-top: 1px solid #e2e8f0;
+    }
+    .student-notes {
+      width: 100%;
+      background: #1e2937;
+      border: 1px solid #2d3f50;
+      border-radius: 10px;
+      padding: 10px 14px;
+      color: #e2e8f0;
+      font-size: 0.84rem;
+      resize: none;
+      margin-bottom: 12px;
+      font-family: inherit;
+      line-height: 1.5;
+    }
+    .student-notes:focus { outline: none; border-color: #3b82f6; }
+    textarea:focus, input:focus { outline: none; box-shadow: none; }
+    .recording-indicator {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+    .rec-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #ef4444;
+      animation: pulse 1s infinite;
+    }
+    @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
+    .rec-label { font-size: 0.75rem; color: #ef4444; }
+    .progress-dots {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+    .progress-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #374151;
+    }
+    .progress-dot.active { background: #3b82f6; }
+    .student-btn-row {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+    }
+    .student-btn-primary {
+      flex: 1;
+      padding: 10px;
+      background: #3b82f6;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-align: center;
+    }
+    .student-btn-secondary {
+      padding: 10px 16px;
+      background: #1f2937;
+      color: #94a3b8;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      text-align: center;
+    }
+    .student-btn-gold {
+      flex: 1;
+      padding: 10px;
+      background: #f59e0b;
+      color: #1e3a5f;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+      text-align: center;
+    }
+    .test-preview {
+      background: #1f2937;
+      border-radius: 8px;
+      padding: 12px 14px;
+      margin-bottom: 14px;
+    }
+    .test-preview-label {
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: #94a3b8;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .test-preview-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 5px 0;
+      border-bottom: 1px solid #374151;
+      font-size: 0.78rem;
+    }
+    .test-preview-item:last-child { border-bottom: none; }
+    .test-preview-part { color: #67e0ff; font-weight: 600; }
+    .results-timing {
+      background: #1f2937;
+      border-radius: 10px;
+      padding: 14px 16px;
+      margin-bottom: 12px;
+      border: 1px solid #2d3f50;
+    }
+    .results-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 6px 0;
+      font-size: 0.84rem;
+      border-bottom: 1px solid #2d3f50;
+    }
+    .results-row:last-child { border-bottom: none; }
+    .results-label { color: #94a3b8; }
+    .results-value { color: #67e0ff; font-weight: 600; }
+    .results-value.good { color: #16a34a; }
+    .results-value.warn { color: #ef4444; }
+    .results-feedback {
+      background: #1f2937;
+      border-radius: 10px;
+      padding: 14px 16px;
+      margin-bottom: 12px;
+      border: 1px solid #2d3f50;
+    }
+    .feedback-title {
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: #f59e0b;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+    .feedback-item {
+      font-size: 0.82rem;
+      padding: 5px 0;
+      border-bottom: 1px solid #2d3f50;
+    }
+    .feedback-item:last-child { border-bottom: none; }
+    .feedback-item.good { color: #16a34a; }
+    .feedback-item.warn { color: #ef4444; }
+
+    body.light .student-inner { background: #f1f5f9; }
+    body.light .student-header h3 { color: #1e40af; }
+    body.light .student-header p { color: #64748b; }
+    body.light .student-timer { color: #1e40af; }
+    body.light .student-timer.prep { color: #d97706; }
+    body.light .student-question-card { background: #e2e8f0; }
+    body.light .student-question-label { color: #1e40af; }
+    body.light .student-question-text { color: #1e2937; }
+    body.light .test-preview { background: #e2e8f0; }
+    body.light .test-preview-part { color: #1e40af; }
+    body.light .test-preview-topic { color: #475569; }
+    body.light .test-preview-item { border-bottom-color: #cbd5e1; }
+    body.light .results-timing { background: #e2e8f0; }
+    body.light .results-label { color: #475569; }
+    body.light .results-value { color: #1e40af; }
+    body.exam .results-value { color: #ffffff; }
+    body.exam #r-total { color: #f59e0b; }
+    body.light #r-total { color: #1e3a5f; }
+    #r-total { color: #f59e0b; }
+    body.light .results-feedback { background: #e2e8f0; }
+    body.light .student-notes { background: #f8fafc; color: #1e2937; }
+    body.light .student-btn-secondary { background: #cbd5e1; color: #475569; }
+    body.light #p1-arrow, body.light #p3-arrow,
+    body.light #p1-back, body.light #p3-back { background: rgba(0,0,0,0.15) !important; color: #1e2937 !important; }
+    body.light .cue-card { background: #ffffff; }
+    body.light .cue-card-points { color: #334155; }
+    body.light .cue-card-instruction { color: #64748b; }
+
+    body.exam .student-inner { background: #000000; border: 1px solid #ffffff; }
+    body.exam .student-header h3 { color: #ffffff; }
+    body.exam .student-header p { color: #888888; }
+    body.exam .student-timer { color: #ffffff; }
+    body.exam .student-timer.prep { color: #f59e0b; }
+    body.exam .student-question-card { background: #111111; }
+    body.exam .student-question-label { color: #ffffff; }
+    body.exam .student-question-text { color: #ffffff; }
+    body.exam .test-preview { background: #111111; }
+    body.exam .test-preview-item { border-bottom-color: #333333; }
+    body.exam .test-preview-part { color: #ffffff; }
+    body.exam .results-timing { background: #111111; }
+    body.exam .results-feedback { background: #111111; }
+    body.exam .student-notes { background: #000000; color: #ffffff; border: 1px solid #333333; }
+    body.exam .student-btn-secondary { background: #222222; color: #888888; }
+    body.exam .cue-card { background: #111111; }
+    body.exam .cue-card-header { background: #1e3a5f; }
+    body.exam .cue-card-topic { color: #ffffff; }
+    body.exam .cue-card-points { color: #cccccc; }
+    body.exam .cue-card-instruction { color: #888888; }
+
+    .generate-test-btn {
+      width: 100%;
+      padding: 7px;
+      background: transparent;
+      border: 1px solid #475569;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      color: #94a3b8;
+      cursor: pointer;
+      text-align: center;
+
+    }
+    .regenerate-btn {
+      width: 100%;
+      padding: 7px;
+      background: transparent;
+      border: 1px solid #475569;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      color: #94a3b8;
+      cursor: pointer;
+      text-align: center;
+
+    }
+    body.light .generate-test-btn { border-color: #94a3b8; color: #64748b; }
+    body.light .regenerate-btn { border-color: #94a3b8; color: #64748b; }
+    body.exam .generate-test-btn { border-color: #444444; color: #888888; }
+    body.exam .regenerate-btn { border-color: #444444; color: #888888; }
+
+    /* --- Teacher Test Content --- */
+    .teacher-test-label {
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: #f59e0b;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    .teacher-test-question {
+      font-size: 0.78rem;
+      color: #94a3b8;
+      line-height: 1.8;
+      padding-left: 4px;
+    }
+    .teacher-cue-card {
+      background: #f8fafc;
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 8px;
+    }
+    .teacher-cue-header {
+      background: #1e3a5f;
+      padding: 6px 12px;
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: white;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+    .teacher-cue-body {
+      padding: 10px 12px;
+    }
+    .teacher-cue-topic {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: #1e3a5f;
+      margin-bottom: 6px;
+      line-height: 1.4;
+    }
+    .teacher-cue-points {
+      font-size: 0.75rem;
+      color: #475569;
+      line-height: 1.8;
+    }
+    .teacher-cue-instruction {
+      font-size: 0.72rem;
+      color: #94a3b8;
+      font-style: italic;
+      margin-top: 6px;
+      padding-top: 6px;
+      border-top: 1px solid #e2e8f0;
+    }
+    .teacher-share-btn {
+      width: 100%;
+      padding: 7px;
+      background: #3b82f6;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 8px;
+      text-align: center;
+    }
+    
+
+    body.light .teacher-test-label { color: #1e40af; }
+    body.light .teacher-test-question { color: #475569; }
+    body.light .teacher-cue-card { background: #ffffff; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+    body.light .teacher-cue-header { background: #1e3a5f; }
+    body.light .teacher-cue-topic { color: #1e3a5f; }
+    body.light .teacher-cue-points { color: #334155; }
+    body.light .teacher-cue-instruction { color: #64748b; border-top-color: #e2e8f0; }
+    body.light .teacher-share-btn { background: #1e3a5f; color: white; }
+
+    body.exam .teacher-test-label { color: #ffffff; }
+    body.exam .teacher-test-question { color: #888888; }
+    body.exam .teacher-cue-card { background: #111111; }
+    body.exam .teacher-cue-header { background: #1e3a5f; }
+    body.exam .teacher-cue-topic { color: #ffffff; }
+    body.exam .teacher-cue-points { color: #cccccc; }
+    body.exam .teacher-cue-instruction { color: #888888; border-top-color: #333333; }
+    body.exam .teacher-share-btn { background: #3b82f6; }
 
     /* --- About Modal --- */
     .about-modal {
@@ -677,7 +1107,7 @@
       .footer-line2 { display: block; text-align: center; }
       .footer-hyphen { display: none; }
       .footer-icons { gap: 10px; width: 100%; justify-content: center; }
-      .theme-btn, .email-btn, .teacher-btn, .criteria-btn, .tips-btn, .about-btn { width: 34px; height: 34px; font-size: 1rem; }
+      .theme-btn, .email-btn, .teacher-btn, .criteria-btn, .tips-btn, .about-btn, .student-btn { width: 34px; height: 34px; font-size: 1rem; }
       .criteria-grid { font-size: 0.62rem; }
       .teacher-panel { width: 100%; }
       .teacher-panel textarea { font-size: 0.85rem; }
@@ -739,6 +1169,46 @@
     <textarea id="teacherNotes1" class="notes-area active-area" rows="4" placeholder="Part 1 notes…"></textarea>
     <textarea id="teacherNotes2" class="notes-area" rows="4" placeholder="Part 2 notes…" style="display:none;"></textarea>
     <textarea id="teacherNotes3" class="notes-area" rows="4" placeholder="Part 3 notes…" style="display:none;"></textarea>
+
+    <!-- Test content area — only shown if test generated -->
+    <div id="teacherTestArea" style="display:none; margin-top:10px;">
+      <div style="height:1px; background:#374151; margin-bottom:10px;"></div>
+      <div id="teacherTestContent"></div>
+    </div>
+
+    <!-- Generate test button -->
+    <div style="margin-top:10px;">
+      <button id="generateTestBtn" onclick="teacherGenerateTest()" class="generate-test-btn">🎓 Generate Practice Test (optional)</button>
+    </div>
+    <div style="margin-top:6px;">
+      <button onclick="toggleTeacherMode()" class="generate-test-btn">Close</button>
+    </div>
+  </div>
+
+  <!-- Cue Card Share Overlay -->
+  <div id="cueCardOverlay" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:#0f172a; z-index:2000; align-items:center; justify-content:center; padding:20px;">
+    <div style="background:white; border-radius:12px; max-width:500px; width:100%; overflow:hidden; box-shadow:0 20px 60px rgba(0,0,0,0.5);">
+      <div style="background:#1e3a5f; padding:14px 20px; display:flex; justify-content:space-between; align-items:center;" id="cueCardHeader">
+        <div id="cueCardTitle" style="font-size:0.7rem; font-weight:700; color:#f59e0b; letter-spacing:1.5px; text-transform:uppercase;">Cue Card</div>
+        <div id="cuePrepTimer" style="font-size:1.2rem; font-weight:700; color:#67e0ff; display:none; letter-spacing:2px;">1:00</div>
+      </div>
+      <div style="padding:20px;">
+        <div id="shareCueTopic" style="font-size:1rem; font-weight:700; color:#1e3a5f; margin-bottom:14px; line-height:1.4;"></div>
+        <div style="font-size:0.82rem; color:#475569; margin-bottom:6px;">You should say:</div>
+        <div id="shareCuePoints" style="font-size:0.85rem; color:#334155; line-height:2; margin-bottom:12px;"></div>
+        <div id="shareCueInstruction" style="font-size:0.8rem; color:#94a3b8; font-style:italic; padding-top:10px; border-top:1px solid #e2e8f0;"></div>
+      </div>
+      <div style="padding:0 20px 16px;">
+        <div style="font-size:0.72rem; color:#94a3b8; text-align:center; margin-bottom:10px;">Ask your student to take a screenshot or photo of the cue card for reference during their long turn.</div>
+        <div id="cuePrepBtnWrap">
+          <button id="cueCardPrepBtn" onclick="startCuePrepTimer()" style="width:100%; padding:10px; background:#f59e0b; color:#1e3a5f; border:none; border-radius:8px; font-size:0.85rem; font-weight:700; cursor:pointer; margin-bottom:8px;">Start 1 Minute Preparation</button>
+        </div>
+        <div id="cueTimerRunning" style="display:none; text-align:center; margin-bottom:8px;">
+          <div style="font-size:0.72rem; color:#64748b;">Preparation time running — close when ready to start speaking</div>
+        </div>
+        <button id="cueCardCloseBtn" onclick="closeCueCardOverlay()" style="width:100%; padding:10px; background:#1e3a5f; color:white; border:none; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer;">Close</button>
+      </div>
+    </div>
   </div>
 
   <div class="toast" id="toast"></div>
@@ -756,21 +1226,20 @@
         <path d="M14 46 Q14 54 23 56" fill="none" stroke="#f59e0b" stroke-width="3" stroke-linecap="round"/>
         <ellipse cx="27" cy="56" rx="5" ry="3" fill="#f59e0b"/>
       </svg>
-      <span class="footer-line1">Free tool for IELTS Speaking <span class="footer-hyphen">-</span></span>
+      <span class="footer-line1">Free platform for IELTS Speaking <span class="footer-hyphen">-</span></span>
       <a href="https://www.linkedin.com/in/emosscappaturaproust" target="_blank" class="footer-link footer-line2">Emos Scappatura Proust</a>
     </span>
     <div class="footer-icons">
       <button class="about-btn" onclick="showAbout()" title="About" style="display:flex;align-items:center;justify-content:center;">
         <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
           <circle cx="8" cy="8" r="7.5" fill="#3b82f6"/>
-          <!-- i dot -->
           <circle cx="8" cy="4.5" r="1" fill="white"/>
-          <!-- i stem -->
           <rect x="7.1" y="6.5" width="1.8" height="5" rx="0.5" fill="white"/>
         </svg>
       </button>
       <!-- criteria button hidden pending IDP approval -->
       <button class="teacher-btn" id="teacherBtn" onclick="toggleTeacherMode()" title="Teacher Mode">✏️</button>
+      <button class="student-btn" onclick="showStudentMode()" title="Student Practice">🎓</button>
       <button class="tips-btn" id="tipsBtn" onclick="showTips()" title="Tips">💡</button>
       <button class="theme-btn" onclick="toggleTheme()" title="Toggle theme">☀️</button>
       <button class="email-btn" onclick="showFeedbackModal()" title="Send feedback">✉️</button>
@@ -800,6 +1269,190 @@
     </div>
   </div>
 
+  <!-- Student Practice Modal -->
+  <div class="student-modal" id="studentModal">
+    <div class="student-inner">
+
+      <!-- Screen 0: Home -->
+      <div class="student-screen active" id="s-screen-0">
+        <div class="student-header">
+          <h3>🎓 Student Practice</h3>
+          <p>Simulate a full IELTS Speaking test</p>
+        </div>
+        <div class="test-preview" id="testPreview" style="display:none;">
+          <div class="test-preview-label">Your Test</div>
+          <div id="previewItems"></div>
+        </div>
+        <button class="student-btn-gold" style="width:100%; padding:12px; font-size:0.95rem; margin-bottom:10px;" onclick="generateTest()">🎓 Generate Practice Test</button>
+        <div id="startBtnWrap" style="display:none;">
+          <button class="student-btn-primary" style="width:100%;" onclick="startTest()">Start Test</button>
+        </div>
+        <div style="margin-top:10px;">
+          <button class="student-btn-secondary" style="width:100%;" onclick="closeStudentMode()">Close</button>
+        </div>
+      </div>
+
+      <!-- Screen 1: Part 1 -->
+      <div class="student-screen" id="s-screen-1">
+        <div class="progress-dots">
+          <div class="progress-dot active" id="pd1"></div>
+          <div class="progress-dot" id="pd2"></div>
+          <div class="progress-dot" id="pd3"></div>
+        </div>
+        <div style="text-align:center; font-size:0.7rem; color:#475569; margin-bottom:2px; margin-top:-8px;">Part 1 of 3</div>
+        <div class="student-timer" id="s-timer-1">5:00</div>
+        <div class="student-phase-label" id="s-phase-label-1">Part 1 - Accommodation</div>
+        <div style="position:relative;">
+          <div class="student-question-card">
+            <div class="student-question-label" id="s-q-label">Question 1 of 12</div>
+            <div class="student-question-text" id="s-q-text">Loading...</div>
+          </div>
+          <button id="p1-back" onclick="prevQuestionSeamless()" style="position:absolute; left:-16px; top:0; bottom:0; width:32px; height:32px; margin:auto; background:rgba(255,255,255,0.15); border:none; border-radius:50%; font-size:1.2rem; color:white; cursor:pointer; display:none; align-items:center; justify-content:center;">‹</button>
+          <button id="p1-arrow" onclick="nextQuestionSeamless()" style="position:absolute; right:-16px; top:0; bottom:0; width:32px; height:32px; margin:auto; background:rgba(255,255,255,0.15); border:none; border-radius:50%; font-size:1.2rem; color:white; cursor:pointer; display:flex; align-items:center; justify-content:center;">›</button>
+        </div>
+        <div class="recording-indicator" style="margin-top:10px;">
+          <div class="rec-dot" id="rec-dot-1"></div>
+          <span class="rec-label" id="rec-label-1">Recording</span>
+          <button onclick="togglePause(1)" id="pause-btn-1" style="margin-left:auto; background:transparent; border:1px solid #475569; border-radius:6px; color:#94a3b8; font-size:0.75rem; padding:3px 10px; cursor:pointer;">Pause</button>
+        </div>
+        <canvas id="waveform-1" height="36" style="width:100%; border-radius:8px; background:#1e2937; display:block; margin-top:8px;"></canvas>
+        <div id="mic-error" style="display:none; font-size:0.72rem; color:#ef4444; text-align:center; margin-top:6px;">Microphone unavailable - recording disabled</div>
+        <button class="student-btn-gold" id="p1-move-btn" style="width:100%; margin-top:8px;" onclick="moveToPart2()">Move to Part 2</button>
+        <div style="margin-top:8px;"><button class="student-btn-secondary" style="width:100%;" onclick="closeStudentMode()">Close</button></div>
+      </div>
+
+      <!-- Screen 2: Part 2 Prep -->
+      <div class="student-screen" id="s-screen-2">
+        <div class="progress-dots">
+          <div class="progress-dot" id="pd4"></div>
+          <div class="progress-dot active" id="pd5"></div>
+          <div class="progress-dot" id="pd6"></div>
+        </div>
+        <div style="text-align:center; font-size:0.7rem; color:#475569; margin-bottom:4px; margin-top:-8px;">Part 2 of 3 - Preparation</div>
+        <div class="student-timer prep" id="s-timer-2">1:00</div>
+        <div class="student-phase-label" id="s-prep-label">Read the cue card carefully</div>
+        <div id="prep-time-up" style="display:none; text-align:center; font-size:0.78rem; color:#f59e0b; margin-bottom:8px; font-weight:600;">Preparation time is up - start speaking when ready</div>
+        <div class="cue-card" id="cueCard">
+          <div class="cue-card-header">CUE CARD</div>
+          <div class="cue-card-body">
+            <div class="cue-card-topic" id="cue-topic"></div>
+            <div class="cue-card-points" id="cue-points"></div>
+            <div class="cue-card-instruction" id="cue-instruction"></div>
+          </div>
+        </div>
+        <textarea class="student-notes" id="prepNotes" rows="3" placeholder="Your preparation notes..."></textarea>
+        <div id="prep-start-wrap">
+          <button class="student-btn-gold" style="width:100%; margin-bottom:8px;" onclick="startPrepCountdown()">Start Preparation Time</button>
+        </div>
+        <div id="prep-speak-wrap" style="display:none;">
+          <button class="student-btn-primary" style="width:100%;" onclick="startSpeaking()">Start Speaking</button>
+        </div>
+        <div style="margin-top:8px;"><button class="student-btn-secondary" style="width:100%;" onclick="closeStudentMode()">Close</button></div>
+      </div>
+
+      <!-- Screen 3: Part 2 Speaking -->
+      <div class="student-screen" id="s-screen-3">
+        <div class="progress-dots">
+          <div class="progress-dot" id="pd7"></div>
+          <div class="progress-dot active" id="pd8"></div>
+          <div class="progress-dot" id="pd9"></div>
+        </div>
+        <div style="text-align:center; font-size:0.7rem; color:#475569; margin-bottom:4px; margin-top:-8px;">Part 2 of 3 - Long Turn</div>
+        <div class="student-timer" id="s-timer-3">2:00</div>
+        <div class="student-phase-label">Long Turn - speak for up to 2 minutes</div>
+        <div class="student-question-card">
+          <div class="student-question-label">YOUR TOPIC</div>
+          <div class="student-question-text" id="s-longturn-topic"></div>
+          <div style="margin-top:10px; font-size:0.8rem; color:#94a3b8; line-height:1.8;" id="s-longturn-points"></div>
+          <div style="margin-top:8px; font-size:0.78rem; color:#64748b; font-style:italic;" id="s-longturn-instruction"></div>
+        </div>
+        <div id="prepNotesDisplay" style="background:#1f2937; border-radius:8px; padding:10px 12px; font-size:0.8rem; color:#94a3b8; margin-bottom:10px; display:none;"></div>
+        <div class="recording-indicator" style="margin-top:10px;">
+          <div class="rec-dot" id="rec-dot-3"></div>
+          <span class="rec-label" id="rec-label-3">Recording</span>
+          <button onclick="togglePause(3)" id="pause-btn-3" style="margin-left:auto; background:transparent; border:1px solid #475569; border-radius:6px; color:#94a3b8; font-size:0.75rem; padding:3px 10px; cursor:pointer;">Pause</button>
+        </div>
+        <canvas id="waveform-3" height="36" style="width:100%; border-radius:8px; background:#1e2937; display:block; margin-top:8px;"></canvas>
+        <button class="student-btn-gold" style="width:100%; margin-top:8px;" onclick="moveToPart3()">Move to Extended Discussion</button>
+        <div style="margin-top:8px;"><button class="student-btn-secondary" style="width:100%;" onclick="closeStudentMode()">Close</button></div>
+      </div>
+
+      <!-- Screen 4: Part 3 -->
+      <div class="student-screen" id="s-screen-4">
+        <div class="progress-dots">
+          <div class="progress-dot" id="pd10"></div>
+          <div class="progress-dot" id="pd11"></div>
+          <div class="progress-dot active" id="pd12"></div>
+        </div>
+        <div style="text-align:center; font-size:0.7rem; color:#475569; margin-bottom:4px; margin-top:-8px;">Part 3 of 3</div>
+        <div class="student-timer" id="s-timer-4">5:00</div>
+        <div class="student-phase-label" id="s-phase-label-4">Extended Discussion - speak for up to 5 minutes</div>
+        <div style="text-align:center; font-size:0.7rem; color:#475569; margin-bottom:8px;">Focus on answering naturally rather than covering all questions</div>
+        <div style="position:relative;">
+          <div class="student-question-card">
+            <div class="student-question-label" id="s-p3-label">DISCUSSION QUESTION 1 OF 6</div>
+            <div class="student-question-text" id="s-p3-text">Loading...</div>
+          </div>
+          <button id="p3-back" onclick="prevP3Question()" style="position:absolute; left:-16px; top:0; bottom:0; width:32px; height:32px; margin:auto; background:rgba(255,255,255,0.15); border:none; border-radius:50%; font-size:1.2rem; color:white; cursor:pointer; display:none; align-items:center; justify-content:center;">‹</button>
+          <button id="p3-arrow" onclick="nextP3Question()" style="position:absolute; right:-16px; top:0; bottom:0; width:32px; height:32px; margin:auto; background:rgba(255,255,255,0.15); border:none; border-radius:50%; font-size:1.2rem; color:white; cursor:pointer; display:flex; align-items:center; justify-content:center;">›</button>
+        </div>
+        <div class="recording-indicator" style="margin-top:10px;">
+          <div class="rec-dot" id="rec-dot-4"></div>
+          <span class="rec-label" id="rec-label-4">Recording</span>
+          <button onclick="togglePause(4)" id="pause-btn-4" style="margin-left:auto; background:transparent; border:1px solid #475569; border-radius:6px; color:#94a3b8; font-size:0.75rem; padding:3px 10px; cursor:pointer;">Pause</button>
+        </div>
+        <canvas id="waveform-4" height="36" style="width:100%; border-radius:8px; background:#1e2937; display:block; margin-top:8px;"></canvas>
+        <button class="student-btn-primary" id="p3-end-btn" style="width:100%; margin-top:8px;" onclick="endTest()">End Test</button>
+        <div style="margin-top:8px;"><button class="student-btn-secondary" style="width:100%;" onclick="closeStudentMode()">Close</button></div>
+      </div>
+
+      <!-- Screen 5: Results -->
+      <div class="student-screen" id="s-screen-5">
+        <div class="student-header">
+          <div style="font-size:2rem; margin-bottom:8px;">✅</div>
+          <h3>Practice Complete</h3>
+          <p>Here is how your session went</p>
+        </div>
+        <div class="results-timing">
+          <div class="test-preview-label" style="margin-bottom:8px;">Session Timing</div>
+          <div class="results-row"><span class="results-label">Part 1</span><span class="results-value" id="r-p1">—</span></div>
+          <div class="results-row"><span class="results-label">1 min Prep</span><span class="results-value" id="r-prep">—</span></div>
+          <div class="results-row"><span class="results-label">Long Turn</span><span class="results-value" id="r-lt">—</span></div>
+          <div class="results-row"><span class="results-label">Part 3</span><span class="results-value" id="r-p3">—</span></div>
+          <div class="results-row" style="border-top:1px solid #374151; margin-top:6px; padding-top:6px;">
+            <span class="results-label" style="font-weight:700;">Total</span>
+            <span class="results-value" id="r-total">—</span>
+          </div>
+        </div>
+        <div class="results-feedback">
+          <div class="feedback-title">Timing Feedback</div>
+          <div id="feedbackItems"></div>
+        </div>
+        <button class="student-btn-secondary" style="width:100%; margin-bottom:8px;" id="downloadBtn" onclick="downloadRecording()">Download Recording</button>
+        <button class="student-btn-secondary" style="width:100%; margin-bottom:8px;" onclick="downloadSessionReport()">Download Session Report</button>
+        <button class="student-btn-gold" style="width:100%; margin-bottom:8px;" onclick="resetStudentMode()">🎓 New Practice Test</button>
+        <button class="student-btn-secondary" style="width:100%;" onclick="closeStudentMode()">Close</button>
+      </div>
+
+    </div>
+  </div>
+
+    </div>
+  </div>
+
+  <!-- Student Close Confirmation -->
+  <div id="studentCloseConfirm" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.8); z-index:3000; align-items:center; justify-content:center; padding:20px;">
+    <div style="background:#1f2937; border-radius:12px; padding:24px; max-width:320px; width:100%; text-align:center;">
+      
+      <div style="font-size:0.95rem; font-weight:700; color:#ffffff; margin-bottom:8px;">End session?</div>
+      <div style="font-size:0.8rem; color:#94a3b8; margin-bottom:20px;">Closing will end your current session and recording.</div>
+      <div style="display:flex; gap:10px;">
+        <button onclick="document.getElementById('studentCloseConfirm').style.display='none'" style="flex:1; padding:10px; background:#374151; color:#94a3b8; border:none; border-radius:8px; font-size:0.85rem; cursor:pointer;">Cancel</button>
+        <button onclick="doCloseStudentMode()" style="flex:1; padding:10px; background:#ef4444; color:white; border:none; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer;">Close</button>
+      </div>
+    </div>
+  </div>
+
   <!-- About Modal -->
   <div class="about-modal" id="aboutModal">
     <div class="about-inner">
@@ -812,7 +1465,7 @@
           <rect x="7.1" y="6.5" width="1.8" height="5" rx="0.5" fill="white"/>
         </svg>
       </h3>
-      <p class="about-subtitle">Free browser-based tool for IELTS Speaking</p>
+      <p class="about-subtitle">Free platform for IELTS Speaking - for teachers and students.</p>
 
       <div class="about-section">
         <h4>How it works</h4>
@@ -835,15 +1488,16 @@
 
       <div class="about-section">
         <h4>Features</h4>
-        <p>✏️ Teacher Mode - per-part notes, candidate name, export and PDF report</p>
-        <p>💡 Tips - recommended setup for remote sessions</p>
-        <p>☀️ Three display modes - dark, light and exam</p>
+        <p>✏️ Teacher Mode - per-part notes, candidate name, export and PDF report. Optional test generation with cue card sharing.</p>
+        <p>🎓 Student Mode - full IELTS Speaking practice with timer, recording and feedback.</p>
+        <p>💡 Tips - recommended setup for remote sessions.</p>
+        <p>☀️ Three display modes - dark, light and exam.</p>
       </div>
 
       <hr class="about-divider"/>
 
       <p class="about-free" style="text-align:center; font-size:0.72rem;">Free to use. No login. No download.</p>
-      <p class="about-version">Version 1.0 - Last updated: May 2026</p>
+      <p class="about-version">Version 2.0 - Last updated: May 2026</p>
 
       <div class="about-close">
         <button onclick="closeAbout()" class="about-close-btn" style="padding:9px 28px; width:auto; height:auto;">Close</button>
@@ -876,7 +1530,17 @@
 
       <div class="tip-section">
         <h4>🎧 Suggested Screen Layout</h4>
-        <p>Video call on your main screen, timer pinned as a small window in the corner. Use Teacher Mode (✏️) for notes. Notes save automatically.</p>
+        <p>Video call on your main screen, timer pinned as a small window in the corner. Use Teacher Mode (✏️) for notes. Notes save automatically. Use Generate Practice Test in Teacher Mode to run a full structured mock exam: questions, cue card and discussion topics all in one view.</p>
+      </div>
+
+      <hr class="tip-divider"/>
+
+      <div class="tip-section">
+        <h4>🎓 Student Practice Tips</h4>
+        <p>Use headphones to avoid echo in your recording. Find a quiet room as background noise affects focus and audio quality.</p>
+        <p>Treat the countdown as a target, not a deadline. In the real exam the examiner controls the timing. Aim to fill the time naturally.</p>
+        <p>For Part 2, actually write notes during the preparation minute. Do not just read the cue card. Jot down key ideas and structure your answer.</p>
+        <p>After each practice, download your recording and listen back. You will notice things about your speaking that you cannot hear in the moment. Note that recording requires microphone access in your browser.</p>
       </div>
 
       <div class="tips-close">
@@ -1096,6 +1760,12 @@
         else if (part2Clicked) switchTab(2);
         else switchTab(1);
         document.getElementById("teacherNotes" + activeTab).focus();
+      } else {
+        // Reset teacher test on close
+        teacherTest = null;
+        document.getElementById("teacherTestArea").style.display = "none";
+        document.getElementById("teacherTestContent").innerHTML = "";
+        document.getElementById("generateTestBtn").textContent = "🎓 Generate Practice Test (optional)";
       }
     }
 
@@ -1277,8 +1947,31 @@
     <p>${p3.replace(/\n/g, "<br>")}</p>
   </div>
 
+  ${teacherTest ? `
+  <hr class="divider"/>
+  <div class="label" style="margin-bottom:10px;">Test Questions Used</div>
+  ${teacherTest.topics.map((t, i) => `
+    <div class="notes-section">
+      <div class="n-label">Part 1 - Topic ${i+1}: ${t.name}</div>
+      <p>${t.questions.map((q, qi) => `${qi+1}. ${q}`).join('<br>')}</p>
+    </div>
+  `).join('<hr class="divider"/>')}
+  <hr class="divider"/>
+  <div class="notes-section">
+    <div class="n-label">Part 2 - Cue Card</div>
+    <p style="font-weight:700; color:#1e3a5f;">${teacherTest.cueCard.topic}</p>
+    <p style="margin-top:4px;">${teacherTest.cueCard.points.join('<br>')}</p>
+    <p style="margin-top:4px; font-style:italic; color:#94a3b8;">${teacherTest.cueCard.instruction}</p>
+  </div>
+  <hr class="divider"/>
+  <div class="notes-section">
+    <div class="n-label">Part 3 - Discussion Questions</div>
+    <p>${teacherTest.p3set.map((q, i) => `${i+1}. ${q}${i===3 ? '<br>' : ''}`).join('<br>')}</p>
+  </div>
+  ` : ''}
+
   <div class="footer">
-    <p>Generated by ieltstimer.com - Free tool for IELTS Speaking</p>
+    <p>ieltstimer.com - Free platform for IELTS Speaking</p>
     <p>Emos Scappatura Proust</p>
   </div>
   <div class="gold-bar-bottom"></div>
@@ -1353,6 +2046,1036 @@
     candidateEl.addEventListener("input", () => {
       localStorage.setItem("ielts-candidate", candidateEl.value);
     });
+
+    // ===== STUDENT MODE =====
+
+    const INTRO_TOPICS = [
+      { name: "Accommodation", questions: ["Do you live in a house or a flat?", "What do you like most about where you live?", "Have you always lived in the same place?", "Would you like to move somewhere different in the future?"] },
+      { name: "Hometown", questions: ["Where are you from originally?", "What do you like most about your hometown?", "Has your hometown changed much since you were a child?", "Would you like to stay in your hometown in the future?"] },
+      { name: "Accommodation", questions: ["Do you live alone or with other people?", "How long have you lived in your current home?", "What would you change about where you live if you could?", "Would you prefer to live in the city or the countryside in the future?"] },
+      { name: "Work and Study", questions: ["Do you work or are you a student?", "What do you enjoy most about your work or studies?", "How long have you been doing your current job or course?", "Would you like to change your job or area of study in the future?"] },
+      { name: "Where You Live", questions: ["How long have you lived in your current city?", "What do you like most about living there?", "Has the area changed much since you moved there?", "Would you like to continue living there in the future?"] }
+    ];
+
+    const PART1_TOPICS = [
+      { name: "Music", questions: ["Do you enjoy listening to music?", "What kind of music do you like?", "Did you learn to play an instrument when you were younger?", "Would you like to learn to play an instrument in the future?"] },
+      { name: "Transport", questions: ["How do you usually get around your city?", "Do you prefer travelling by public transport or by car?", "Did you use public transport much when you were a child?", "Do you think people will travel differently in the future?"] },
+      { name: "Reading", questions: ["Do you enjoy reading?", "What kind of books or articles do you prefer to read?", "Did you read a lot when you were a child?", "Do you think people will read more or less in the future?"] },
+      { name: "Cooking", questions: ["Do you enjoy cooking?", "What is your favourite dish to cook?", "Did you help with cooking at home when you were younger?", "Would you like to learn to cook a new type of cuisine in the future?"] },
+      { name: "Sport", questions: ["Do you do any sport or physical activity?", "What sport or activity do you enjoy most?", "Did you play any sports when you were at school?", "Would you like to try any new sport or activity in the future?"] },
+      { name: "Shopping", questions: ["Do you enjoy shopping?", "Do you prefer shopping online or in person?", "Did you go shopping with your family when you were a child?", "Do you think you will do more shopping online in the future?"] },
+      { name: "Travel", questions: ["Do you enjoy travelling?", "What is your favourite type of destination?", "Where did you go on holiday when you were younger?", "Is there a place you would particularly like to visit in the future?"] },
+      { name: "Technology", questions: ["How important is technology in your daily life?", "What device do you use most?", "Did you use technology a lot when you were at school?", "Is there a new piece of technology you would like to own in the future?"] },
+      { name: "Friends", questions: ["Do you prefer spending time with a large group of friends or a small group?", "How do you usually keep in touch with your friends?", "Did you have a best friend when you were a child?", "Do you think it is easy to make new friends as an adult?"] },
+      { name: "Weather", questions: ["What is the weather like where you live?", "What is your favourite type of weather?", "Did the weather affect what you did as a child?", "Would you like to live somewhere with a different climate in the future?"] },
+      { name: "Weekends", questions: ["What do you usually do at weekends?", "Do you prefer relaxing or doing activities at the weekend?", "How did you spend your weekends when you were younger?", "Is there something you would like to do more of at weekends in the future?"] },
+      { name: "Food", questions: ["Do you enjoy trying new foods?", "What is your favourite type of cuisine?", "Did you have a favourite meal when you were a child?", "Would you like to try cooking food from a different country in the future?"] },
+      { name: "Films", questions: ["Do you enjoy watching films?", "What type of films do you prefer?", "Did you watch a lot of films when you were younger?", "Is there a film you would particularly like to see in the future?"] },
+      { name: "Hobbies", questions: ["Do you have any hobbies or interests outside of work or study?", "How much time do you spend on your hobbies?", "Did you have the same hobbies when you were a child?", "Would you like to take up a new hobby in the future?"] },
+      { name: "Health", questions: ["Do you think you lead a healthy lifestyle?", "What do you do to stay healthy?", "Did you do much exercise when you were younger?", "Do you think you will make any changes to your lifestyle in the future?"] },
+      { name: "Nature", questions: ["Do you enjoy spending time in nature?", "What is your favourite type of natural environment?", "Did you spend much time outdoors when you were a child?", "Would you like to live closer to nature in the future?"] },
+      { name: "Social Media", questions: ["Do you use social media much?", "Which social media platform do you use most?", "Did you use social media when you were at school?", "Do you think social media will become more or less popular in the future?"] },
+      { name: "Art", questions: ["Are you interested in art?", "What type of art do you enjoy most?", "Did you do much art or drawing when you were a child?", "Would you like to learn more about art in the future?"] },
+      { name: "Languages", questions: ["How many languages do you speak?", "How did you learn the languages you know?", "Did you enjoy studying languages at school?", "Would you like to learn another language in the future?"] },
+      { name: "Celebrations", questions: ["Do you enjoy celebrating special occasions?", "What is your favourite type of celebration?", "What celebrations did you enjoy most when you were a child?", "Is there a celebration you would particularly like to attend in the future?"] },
+      { name: "Clothes and Fashion", questions: ["Do you pay much attention to fashion?", "What kind of clothes do you usually wear?", "Did you have a school uniform when you were younger?", "Do you think your style will change in the future?"] },
+      { name: "Neighbours", questions: ["Do you know your neighbours well?", "How often do you spend time with your neighbours?", "Did you have good neighbours when you were growing up?", "Do you think it is important to have a good relationship with your neighbours?"] },
+      { name: "Public Transport", questions: ["Do you use public transport often?", "What type of public transport do you use most?", "Did you use public transport much when you were a child?", "Do you think public transport in your city will improve in the future?"] },
+      { name: "Parks and Outdoor Spaces", questions: ["Are there many parks or outdoor spaces where you live?", "How often do you visit parks or outdoor spaces?", "Did you spend much time in parks when you were a child?", "Do you think cities should invest more in parks and green spaces?"] },
+      { name: "Gifts", questions: ["Do you enjoy giving gifts to people?", "What kind of gifts do you usually give?", "What is the best gift you received when you were younger?", "Do you think the way people give gifts has changed in recent years?"] },
+      { name: "Concentration", questions: ["Do you find it easy to concentrate?", "What helps you concentrate when you are studying or working?", "Did you find it easy to concentrate at school?", "Do you think it will become harder for people to concentrate in the future?"] },
+      { name: "Photographs", questions: ["Do you take many photographs?", "What do you usually take photographs of?", "Did you take many photographs when you were younger?", "Do you think people will continue to print photographs in the future?"] },
+      { name: "Mornings", questions: ["Are you a morning person?", "What do you usually do in the morning before work or study?", "Did you find it easy to get up in the morning when you were a child?", "Do you think your morning routine will change in the future?"] },
+      { name: "Maps", questions: ["Do you use maps often?", "Do you prefer using a paper map or a digital map?", "Did you learn to read maps when you were at school?", "Do you think people will still use maps in the future?"] },
+      { name: "Patience", questions: ["Do you consider yourself a patient person?", "In what situations do you find it hardest to be patient?", "Were you a patient child?", "Do you think patience is an important quality in the modern world?"] }
+    ];
+
+    const CUE_CARDS = [
+      {
+        topic: "Describe a journey you have taken that you particularly enjoyed.",
+        points: ["• where you went", "• who you travelled with", "• how you got there"],
+        instruction: "and explain why you enjoyed it so much.",
+        part3: [
+          ["Do you think people travel more now than they did in the past?", "What are the advantages and disadvantages of travelling alone?", "Do you think travelling abroad helps people understand other cultures?", "How important is it for young people to experience different cultures?"],
+          ["How has technology changed the way people plan their trips?", "Do you think it is better to travel to many different places or return to the same place?", "Should governments do more to encourage people to travel within their own country?", "Do you think attitudes towards tourism will change in the future?"]
+        ]
+      },
+      {
+        topic: "Describe a person who has had a positive influence on your life.",
+        points: ["• who this person is", "• how long you have known them", "• what they have done that influenced you"],
+        instruction: "and explain why their influence has been so important to you.",
+        part3: [
+          ["Do you think family members or friends have a greater influence on young people?", "How important is it for children to have positive role models?", "Can famous people be effective role models? Why or why not?", "Do you think schools do enough to help young people develop strong values?"],
+          ["Do you think the influence of social media on young people is mostly positive or negative?", "How can schools help children develop into positive influences on others?", "Do you think people's values change as they get older?", "Who do you think has the greatest influence on children in modern society?"]
+        ]
+      },
+      {
+        topic: "Describe an object that is important to you.",
+        points: ["• what the object is", "• how long you have had it", "• where it came from"],
+        instruction: "and explain why it is so important to you.",
+        part3: [
+          ["Do you think people today place too much importance on material possessions?", "Why do you think some objects have sentimental value for people?", "Has the way people feel about their possessions changed over time?", "Do you think it is important to pass objects down through generations?"],
+          ["Do you think it is better to have a few high quality possessions or many cheaper ones?", "How do you think attitudes towards possessions differ between generations?", "Should people be encouraged to own fewer things? Why or why not?", "How has online shopping changed the way people think about buying things?"]
+        ]
+      },
+      {
+        topic: "Describe a time when you learned something new.",
+        points: ["• what you learned", "• when and where you learned it", "• how you learned it"],
+        instruction: "and explain how this experience made you feel.",
+        part3: [
+          ["Do you think the way people learn has changed significantly in recent years?", "Is it better to learn from personal experience or from formal education?", "Do you think it is important to keep learning throughout your life?", "What do you think makes a good teacher?"],
+          ["How important is it for schools to teach practical life skills alongside academic subjects?", "Do you think online learning is as effective as learning in a classroom?", "How might education look different in the future?", "Do you think governments invest enough in education?"]
+        ]
+      },
+      {
+        topic: "Describe a celebration or special event you attended.",
+        points: ["• what the event was", "• who you celebrated with", "• what happened during the event"],
+        instruction: "and explain why it was memorable for you.",
+        part3: [
+          ["Do you think traditional celebrations are still important in modern society?", "How do celebrations differ between cultures?", "Do you think the way people celebrate special events has changed over time?", "Is it important for communities to celebrate events together?"],
+          ["Should governments do more to preserve cultural traditions and celebrations?", "Do you think large public celebrations bring communities together?", "How might celebrations change in the future?", "Do you think commercialisation has affected the way people celebrate?"]
+        ]
+      },
+      {
+        topic: "Describe a book or film that had a strong effect on you.",
+        points: ["• what the book or film was about", "• when you read or watched it", "• who recommended it to you or how you found it"],
+        instruction: "and explain why it had such a strong effect on you.",
+        part3: [
+          ["Do you think reading books is more beneficial than watching films?", "How has the internet changed the way people access books and films?", "Do you think governments should do more to promote reading among young people?", "How important is it for children to develop a love of reading early in life?"],
+          ["Do you think films are an effective way of educating people about important issues?", "How do you think streaming services have changed people's viewing habits?", "Should schools use more films and media in the classroom?", "Do you think local films and literature deserve more recognition than international ones?"]
+        ]
+      },
+      {
+        topic: "Describe a time when you helped someone.",
+        points: ["• who you helped and why they needed help", "• what you did to help them", "• how long it took"],
+        instruction: "and explain how you felt about helping them.",
+        part3: [
+          ["Do you think people are less willing to help strangers today than in the past?", "How important is it for communities to support people who are in need?", "Do you think volunteering should be made compulsory for young people?", "What do you think motivates people to help others?"],
+          ["Do you think governments have a responsibility to help people who are struggling financially?", "How has social media changed the way people offer and receive help?", "Do you think it is better to help people directly or donate to charities?", "Should companies be required to contribute more to their local communities?"]
+        ]
+      },
+      {
+        topic: "Describe a place in your country that you would recommend to a visitor.",
+        points: ["• where the place is", "• what it is known for", "• what a visitor can do there"],
+        instruction: "and explain why you would recommend it.",
+        part3: [
+          ["Do you think tourism has a positive or negative effect on local communities?", "How important is it for countries to preserve their historical sites?", "Do you think mass tourism is damaging to the environment?", "Should governments invest more in promoting domestic tourism?"],
+          ["How has tourism changed in your country over the past few decades?", "Do you think it is better for tourists to experience local culture or visit famous landmarks?", "Should tourists be required to follow stricter rules when visiting sensitive sites?", "How might tourism change in the future with the rise of sustainable travel?"]
+        ]
+      },
+      {
+        topic: "Describe a skill you would like to learn in the future.",
+        points: ["• what the skill is", "• why you would like to learn it", "• how you would go about learning it"],
+        instruction: "and explain how this skill would benefit your life.",
+        part3: [
+          ["Do you think it is easier to learn new skills today than it was in the past?", "How important is it to keep developing new skills throughout your working life?", "Do you think schools prepare young people well for the skills needed in the workplace?", "Should employers be responsible for providing ongoing training for their staff?"],
+          ["Do you think practical skills are valued as highly as academic qualifications?", "How has technology changed the way people learn new skills?", "Do you think some skills will become less relevant in the future because of automation?", "Should governments invest more in vocational training programmes?"]
+        ]
+      },
+      {
+        topic: "Describe an ambition or goal you have for the future.",
+        points: ["• what the ambition or goal is", "• how long you have had this ambition", "• what steps you are taking to achieve it"],
+        instruction: "and explain why this goal is important to you.",
+        part3: [
+          ["Do you think young people today have higher or lower ambitions than previous generations?", "How important is it for people to set long-term goals in life?", "Do you think society puts too much pressure on people to be successful?", "How can parents and teachers help young people develop realistic ambitions?"],
+          ["Do you think financial success is the most common ambition among young people today?", "How has globalisation affected the kinds of ambitions people have?", "Do you think it is better to have one main goal in life or several smaller ones?", "Should schools do more to help students identify and pursue their ambitions?"]
+        ]
+      },
+      {
+        topic: "Describe a time when you had to make an important decision.",
+        points: ["• what the decision was", "• how long you took to make it", "• who you asked for advice"],
+        instruction: "and explain how you felt about making this decision.",
+        part3: [
+          ["Do you think young people today find it harder to make decisions than previous generations?", "How important is it to seek advice from others before making a major decision?", "Do you think schools should teach students how to make better decisions?", "Should governments make certain decisions on behalf of their citizens? Why or why not?"],
+          ["Do you think people are too influenced by others when making personal decisions?", "How has social media affected the way people make decisions?", "Do you think it is better to make decisions quickly or take a long time to consider them?", "How might the way people make decisions change in the future?"]
+        ]
+      },
+      {
+        topic: "Describe a piece of technology you find particularly useful.",
+        points: ["• what it is", "• how long you have been using it", "• how often you use it"],
+        instruction: "and explain why you find it so useful.",
+        part3: [
+          ["Do you think people have become too dependent on technology in their daily lives?", "How has technology changed the way people communicate with each other?", "Do you think technology has made people's lives easier or more complicated?", "Should governments regulate the way technology companies collect personal data?"],
+          ["Do you think children should be taught how to use technology from a young age?", "How do you think technology will change the workplace in the future?", "Do you think there are any aspects of life that technology should not be involved in?", "How has technology changed the way people access information?"]
+        ]
+      },
+      {
+        topic: "Describe an outdoor activity you enjoy or would like to try.",
+        points: ["• what the activity is", "• where you do it or would like to do it", "• who you do it with or would like to do it with"],
+        instruction: "and explain why you enjoy or would like to try this activity.",
+        part3: [
+          ["Do you think people spend enough time outdoors in modern society?", "How important is it for children to have access to outdoor spaces?", "Do you think governments should do more to encourage people to be active outdoors?", "How has urbanisation affected people's relationship with the natural environment?"],
+          ["Do you think outdoor activities are becoming more or less popular?", "How has the way people spend their leisure time changed over the past few decades?", "Should employers give their staff more time for physical activity during the working day?", "Do you think people living in cities have enough opportunities to connect with nature?"]
+        ]
+      },
+      {
+        topic: "Describe a historical figure you find interesting.",
+        points: ["• who the person is", "• what they are known for", "• how you first learned about them"],
+        instruction: "and explain why you find them interesting.",
+        part3: [
+          ["Do you think it is important for young people to learn about historical figures?", "How do you think history should be taught in schools?", "Do you think the way we remember historical figures is always accurate?", "Should countries do more to preserve the memory of important historical figures?"],
+          ["Do you think modern society produces figures who will be remembered historically?", "How has the internet changed the way people learn about history?", "Do you think it is important to have national heroes? Why or why not?", "How might the way we record and remember history change in the future?"]
+        ]
+      },
+      {
+        topic: "Describe a time when you worked as part of a team.",
+        points: ["• what the task or project was", "• who you worked with", "• what your role was"],
+        instruction: "and explain what you learned from the experience.",
+        part3: [
+          ["Do you think teamwork is more important in some professions than others?", "How important is it for schools to encourage students to work collaboratively?", "Do you think remote working has made teamwork more difficult?", "What qualities do you think make a good team leader?"],
+          ["Do you think people generally prefer working alone or in a team?", "How has technology changed the way teams work together?", "Do you think international teams face particular challenges compared to local ones?", "Should companies invest more in team-building activities for their employees?"]
+        ]
+      }
+    ];
+
+    let studentTest = null;
+    let studentTimers = {};
+    let studentStartTimes = {};
+    let studentRecorder = null;
+    let studentChunks = [];
+    let studentBlob = null;
+    let currentQuestionIndex = 0;
+    let currentTopicIndex = 0;
+    let currentP3Index = 0;
+
+    function showStudentMode() {
+      document.getElementById("studentModal").style.display = "flex";
+    }
+
+    function closeStudentMode() {
+      const activeScreen = document.querySelector(".student-screen.active");
+      const activeId = activeScreen ? activeScreen.id : "";
+      const safeScreens = ["s-screen-0", "s-screen-5"];
+      if (studentTest && !safeScreens.includes(activeId)) {
+        showCloseConfirm();
+        return;
+      }
+      doCloseStudentMode();
+    }
+
+    function showCloseConfirm() {
+      document.getElementById("studentCloseConfirm").style.display = "flex";
+    }
+
+    function doCloseStudentMode() {
+      document.getElementById("studentCloseConfirm").style.display = "none";
+      document.getElementById("studentModal").style.display = "none";
+      stopAllStudentTimers();
+      stopWaveform("waveform-1");
+      stopWaveform("waveform-3");
+      stopWaveform("waveform-4");
+      if (studentRecorder && studentRecorder.state !== "inactive") {
+        studentRecorder.stop();
+        studentRecorder.stream.getTracks().forEach(t => t.stop());
+      }
+      studentTest = null;
+      studentBlob = null;
+      studentChunks = [];
+      currentQuestionIndex = 0;
+      currentTopicIndex = 0;
+      currentP3Index = 0;
+      p1QuestionIndex = 0;
+      isPaused = false;
+      totalPausedTime = 0;
+      document.getElementById("testPreview").style.display = "none";
+      document.getElementById("startBtnWrap").style.display = "none";
+      document.getElementById("prepNotes").value = "";
+      document.getElementById("prep-time-up").style.display = "none";
+      document.getElementById("prep-start-wrap").style.display = "block";
+      document.getElementById("prep-speak-wrap").style.display = "none";
+      showStudentScreen(0);
+    }
+
+    function stopAllStudentTimers() {
+      Object.values(studentTimers).forEach(t => clearInterval(t));
+      studentTimers = {};
+    }
+
+    function shuffle(arr) {
+      return [...arr].sort(() => Math.random() - 0.5);
+    }
+
+    function generateTest() {
+      const intro = INTRO_TOPICS[Math.floor(Math.random() * INTRO_TOPICS.length)];
+      const others = shuffle(PART1_TOPICS).slice(0, 2); // PART1_TOPICS never contains intro topics
+      const cueCard = CUE_CARDS[Math.floor(Math.random() * CUE_CARDS.length)];
+      const p3set = [...cueCard.part3[0], ...cueCard.part3[1]];
+
+      studentTest = { topics: [intro, ...others], cueCard, p3set };
+
+      const preview = document.getElementById("previewItems");
+      preview.innerHTML = "";
+      studentTest.topics.forEach((t, i) => {
+        preview.innerHTML += `<div class="test-preview-item"><span class="test-preview-part">Part 1 - Topic ${i+1}</span><span class="test-preview-topic">${t.name}</span></div>`;
+      });
+      preview.innerHTML += `<div class="test-preview-item"><span class="test-preview-part">Part 2</span><span class="test-preview-topic">Long Turn</span></div>`;
+      preview.innerHTML += `<div class="test-preview-item"><span class="test-preview-part">Part 3</span><span class="test-preview-topic">Extended Discussion</span></div>`;
+
+      document.getElementById("testPreview").style.display = "block";
+      document.getElementById("startBtnWrap").style.display = "block";
+    }
+
+    function startTest() {
+      currentTopicIndex = 0;
+      currentQuestionIndex = 0;
+      p1QuestionIndex = 0;
+      isPaused = false;
+      totalPausedTime = 0;
+      stopAllStudentTimers();
+      // Reset all timer displays before showing screen
+      const t1 = document.getElementById("s-timer-1");
+      const t3 = document.getElementById("s-timer-3");
+      const t4 = document.getElementById("s-timer-4");
+      if (t1) { t1.textContent = "5:00"; t1.style.color = timerColor(); }
+      if (t3) { t3.textContent = "2:00"; t3.style.color = timerColor(); }
+      if (t4) { t4.textContent = "5:00"; t4.style.color = timerColor(); }
+      showStudentScreen(1);
+      loadTopic();
+      startStudentTimer("1", "s-timer-1");
+      startRecording();
+    }
+
+    // Flatten all Part 1 questions into one seamless list
+    let allP1Questions = [];
+    let p1QuestionIndex = 0;
+
+    function buildP1Questions() {
+      allP1Questions = [];
+      studentTest.topics.forEach(t => {
+        t.questions.forEach(q => allP1Questions.push({ question: q, topic: t.name }));
+      });
+    }
+
+    function loadTopic() {
+      buildP1Questions();
+      p1QuestionIndex = 0;
+      showP1Question();
+    }
+
+    function showP1Question() {
+      const total = allP1Questions.length;
+      const current = allP1Questions[p1QuestionIndex];
+      document.getElementById("s-phase-label-1").textContent = `Part 1 - ${current.topic}`;
+      document.getElementById("s-q-label").textContent = `Question ${p1QuestionIndex + 1} of ${total}`;
+      document.getElementById("s-q-text").textContent = current.question;
+      const isLast = p1QuestionIndex >= total - 1;
+      const isFirst = p1QuestionIndex === 0;
+      document.getElementById("p1-arrow").style.display = isLast ? "none" : "flex";
+      document.getElementById("p1-back").style.display = isFirst ? "none" : "flex";
+    }
+
+    function nextQuestionSeamless() {
+      if (p1QuestionIndex < allP1Questions.length - 1) {
+        p1QuestionIndex++;
+        showP1Question();
+      }
+    }
+
+    function moveToPart2() {
+      studentStartTimes.p1 = studentStartTimes["1"];
+      studentStartTimes.p1end = Date.now();
+      stopAllStudentTimers();
+      showStudentScreen(2);
+      const cc = studentTest.cueCard;
+      document.getElementById("cue-topic").textContent = cc.topic;
+      document.getElementById("cue-points").innerHTML = cc.points.join("<br>");
+      document.getElementById("cue-instruction").textContent = cc.instruction;
+      // Reset prep screen state
+      document.getElementById("s-timer-2").textContent = "1:00";
+      document.getElementById("s-prep-label").textContent = "Read the cue card carefully";
+      document.getElementById("prep-time-up").style.display = "none";
+      document.getElementById("prep-start-wrap").style.display = "block";
+      document.getElementById("prep-speak-wrap").style.display = "none";
+    }
+
+    function startPrepCountdown() {
+      document.getElementById("prep-start-wrap").style.display = "none";
+      document.getElementById("prep-speak-wrap").style.display = "block";
+      document.getElementById("s-prep-label").textContent = "Preparation time - 1 minute";
+      studentStartTimes.prepStart = Date.now();
+      startCountdown("s-timer-2", 60, () => {
+        document.getElementById("prep-time-up").style.display = "block";
+        document.getElementById("s-prep-label").textContent = "Preparation time is up";
+      });
+    }
+
+    function startSpeaking() {
+      stopAllStudentTimers();
+      studentStartTimes.prepEnd = Date.now();
+      const t3 = document.getElementById("s-timer-3");
+      if (t3) { t3.textContent = "2:00"; t3.style.color = timerColor(); }
+      showStudentScreen(3);
+      document.getElementById("s-longturn-topic").textContent = studentTest.cueCard.topic;
+      document.getElementById("s-longturn-points").innerHTML = studentTest.cueCard.points.join("<br>");
+      document.getElementById("s-longturn-instruction").textContent = studentTest.cueCard.instruction;
+      const notes = document.getElementById("prepNotes").value.trim();
+      const notesDisplay = document.getElementById("prepNotesDisplay");
+      if (notes) {
+        notesDisplay.innerHTML = "<div style='font-size:0.65rem; font-weight:700; color:#f59e0b; letter-spacing:1px; text-transform:uppercase; margin-bottom:6px;'>YOUR NOTES</div>" + notes.replace(/\n/g, "<br>");
+        notesDisplay.style.display = "block";
+      } else {
+        notesDisplay.style.display = "none";
+      }
+      document.getElementById("s-timer-3").style.color = timerColor();
+      studentStartTimes.ltStart = Date.now();
+      startCountdownTimer("3", "s-timer-3", 120);
+      stopWaveform("waveform-1");
+      startWaveform("waveform-3");
+    }
+
+    function moveToPart3() {
+      studentStartTimes.ltEnd = Date.now();
+      stopAllStudentTimers();
+      const t4 = document.getElementById("s-timer-4");
+      if (t4) { t4.textContent = "5:00"; t4.style.color = timerColor(); }
+      currentP3Index = 0;
+      showStudentScreen(4);
+      loadP3Question();
+      document.getElementById("s-timer-4").style.color = timerColor();
+      studentStartTimes.p3Start = Date.now();
+      startCountdownTimer("4", "s-timer-4", 300);
+      stopWaveform("waveform-3");
+      startWaveform("waveform-4");
+    }
+
+
+    function prevQuestionSeamless() {
+      if (p1QuestionIndex > 0) {
+        p1QuestionIndex--;
+        showP1Question();
+      }
+    }
+
+    function prevP3Question() {
+      if (currentP3Index > 0) {
+        currentP3Index--;
+        loadP3Question();
+      }
+    }
+
+    let isPaused = false;
+    let pauseStartTime = null;
+    let totalPausedTime = 0;
+
+    function togglePause(screen) {
+      isPaused = !isPaused;
+      const btn = document.getElementById("pause-btn-" + screen);
+      const dot = document.getElementById("rec-dot-" + screen);
+      const label = document.getElementById("rec-label-" + screen);
+
+      if (isPaused) {
+        pauseStartTime = Date.now();
+        stopAllStudentTimers();
+        if (btn) btn.textContent = "Resume";
+        if (dot) dot.style.animationPlayState = "paused";
+        if (label) label.style.opacity = "0.4";
+        if (studentRecorder && studentRecorder.state === "recording") studentRecorder.pause();
+      } else {
+        const pausedDuration = Date.now() - pauseStartTime;
+        totalPausedTime += pausedDuration;
+        // Adjust start times
+        Object.keys(studentStartTimes).forEach(k => {
+          if (typeof studentStartTimes[k] === 'number') studentStartTimes[k] += pausedDuration;
+        });
+        if (btn) btn.textContent = "Pause";
+        if (dot) dot.style.animationPlayState = "running";
+        if (label) label.style.opacity = "1";
+        if (studentRecorder && studentRecorder.state === "paused") studentRecorder.resume();
+        // Restart the appropriate timer
+        if (screen === 1) resumeStudentTimer("1", "s-timer-1");
+        if (screen === 3) resumeCountdownTimer("3", "s-timer-3", 120);
+        if (screen === 4) resumeCountdownTimer("4", "s-timer-4", 300);
+      }
+    }
+    function loadP3Question() {
+      if (document.getElementById("s-p3-label")) {
+        document.getElementById("s-p3-label").textContent = `DISCUSSION QUESTION ${currentP3Index + 1} OF ${studentTest.p3set.length}`;
+      }
+      document.getElementById("s-p3-text").textContent = studentTest.p3set[currentP3Index];
+      const isLast = currentP3Index >= studentTest.p3set.length - 1;
+      const isFirst = currentP3Index === 0;
+      document.getElementById("p3-arrow").style.display = isLast ? "none" : "flex";
+      document.getElementById("p3-back").style.display = isFirst ? "none" : "flex";
+    }
+
+    function nextP3Question() {
+      if (currentP3Index < studentTest.p3set.length - 1) {
+        currentP3Index++;
+        loadP3Question();
+      }
+    }
+
+    function endTest() {
+      studentStartTimes.p3End = Date.now();
+      stopAllStudentTimers();
+      stopWaveform("waveform-1");
+      stopWaveform("waveform-3");
+      stopWaveform("waveform-4");
+      stopRecording();
+      showStudentScreen(5);
+      showResults();
+    }
+
+    function showResults() {
+      const fmt = ms => { const s = Math.floor(ms/1000); return Math.floor(s/60) + ":" + (s%60).toString().padStart(2,"0"); };
+      const p1 = studentStartTimes.p1end - studentStartTimes["1"];
+      const prep = studentStartTimes.prepEnd - studentStartTimes.prepStart;
+      const lt = studentStartTimes.ltEnd - studentStartTimes.ltStart;
+      const p3 = studentStartTimes.p3End - studentStartTimes.p3Start;
+      const total = p1 + prep + lt + p3;
+
+      document.getElementById("r-p1").textContent = fmt(p1);
+      document.getElementById("r-prep").textContent = fmt(prep);
+      document.getElementById("r-lt").textContent = fmt(lt);
+      document.getElementById("r-p3").textContent = fmt(p3);
+      document.getElementById("r-total").textContent = fmt(total);
+
+      const ltSecs = lt/1000;
+      const p1Secs = p1/1000;
+      const p3Secs = p3/1000;
+      const prepSecs = prep/1000;
+
+      const fb = [];
+      fb.push({ text: p1Secs >= 240 ? "Part 1: good length" : "Part 1: a little short - aim for 4-5 minutes", good: p1Secs >= 240 });
+      fb.push({ text: prepSecs <= 65 ? "Prep time: well used" : "Prep time: slightly over - aim for 1 minute", good: prepSecs <= 65 });
+      fb.push({ text: ltSecs >= 60 && ltSecs <= 130 ? "Long turn: good length" : ltSecs < 60 ? "Long turn: too short - aim for 1-2 minutes" : "Long turn: slightly long - aim for 1-2 minutes", good: ltSecs >= 60 && ltSecs <= 130 });
+      fb.push({ text: p3Secs >= 240 ? "Part 3: good length" : "Part 3: a little short - aim for 4-5 minutes", good: p3Secs >= 240 });
+
+      const fbEl = document.getElementById("feedbackItems");
+      fbEl.innerHTML = fb.map(f => `<div class="feedback-item ${f.good ? 'good' : 'warn'}">${f.text}</div>`).join("");
+    }
+
+    function timerColor() {
+      if (document.body.classList.contains("light")) return "#1e40af";
+      if (document.body.classList.contains("exam")) return "#ffffff";
+      return "#67e0ff";
+    }
+
+    function startStudentTimer(key, elId) {
+      studentStartTimes[key] = Date.now();
+      const targetSecs = key === "1" ? 300 : 0; // Part 1 = 5 min countdown
+      studentTimers[key] = setInterval(() => {
+        const el = document.getElementById(elId);
+        if (!el) return;
+        const elapsed = Math.floor((Date.now() - studentStartTimes[key]) / 1000);
+        if (key === "1") {
+          const remaining = targetSecs - elapsed;
+          const label = document.getElementById("s-phase-label-1");
+          if (remaining <= 0) {
+            el.textContent = "0:00";
+            el.style.color = "#22c55e";
+            if (label) label.textContent = "Good - move on when ready";
+          } else {
+            el.textContent = Math.floor(remaining/60) + ":" + (remaining%60).toString().padStart(2,"0");
+            if (remaining <= 60) {
+              el.style.color = "#f59e0b";
+              if (label) label.textContent = "Almost there...";
+            } else {
+              el.style.color = timerColor();
+              const current = allP1Questions[p1QuestionIndex];
+              if (label && current) label.textContent = "Part 1 - " + current.topic;
+            }
+          }
+        } else {
+          el.textContent = Math.floor(elapsed/60) + ":" + (elapsed%60).toString().padStart(2,"0");
+        }
+      }, 500);
+    }
+
+    function resumeStudentTimer(key, elId) {
+      if (studentTimers[key]) clearInterval(studentTimers[key]);
+      const targetSecs = key === "1" ? 300 : 0;
+      studentTimers[key] = setInterval(() => {
+        const el = document.getElementById(elId);
+        if (!el) return;
+        const elapsed = Math.floor((Date.now() - studentStartTimes[key]) / 1000);
+        if (key === "1") {
+          const remaining = targetSecs - elapsed;
+          const label = document.getElementById("s-phase-label-1");
+          if (remaining <= 0) {
+            el.textContent = "0:00";
+            el.style.color = "#22c55e";
+            if (label) label.textContent = "Good - move on when ready";
+          } else {
+            el.textContent = Math.floor(remaining/60) + ":" + (remaining%60).toString().padStart(2,"0");
+            if (remaining <= 60) {
+              el.style.color = "#f59e0b";
+              if (label) label.textContent = "Almost there...";
+            } else {
+              el.style.color = timerColor();
+            }
+          }
+        } else {
+          el.textContent = Math.floor(elapsed/60) + ":" + (elapsed%60).toString().padStart(2,"0");
+        }
+      }, 500);
+    }
+
+    function startCountdownTimer(key, elId, seconds) {
+      studentStartTimes[key] = Date.now();
+      studentTimers[key] = setInterval(() => {
+        const el = document.getElementById(elId);
+        if (!el) return;
+        const elapsed = Math.floor((Date.now() - studentStartTimes[key]) / 1000);
+        const remaining = seconds - elapsed;
+        const labelId = key === "3" ? null : "s-phase-label-4";
+        const label = labelId ? document.getElementById(labelId) : null;
+        if (remaining <= 0) {
+          el.textContent = "0:00";
+          el.style.color = "#22c55e";
+          if (label) label.textContent = "Good - move on when ready";
+          return;
+        }
+        el.textContent = Math.floor(remaining/60) + ":" + (remaining%60).toString().padStart(2,"0");
+        if (remaining <= 60) {
+          el.style.color = "#f59e0b";
+          if (key === "3") {
+            const ltLabel = document.querySelector("#s-screen-3 .student-phase-label");
+            if (ltLabel) ltLabel.textContent = "Almost there...";
+          }
+          if (label) label.textContent = "Almost there...";
+        } else {
+          el.style.color = timerColor();
+          if (key === "3") {
+            const ltLabel = document.querySelector("#s-screen-3 .student-phase-label");
+            if (ltLabel) ltLabel.textContent = "Long Turn - speak for up to 2 minutes";
+          }
+          if (label) label.textContent = "Extended Discussion - speak for up to 5 minutes";
+        }
+      }, 500);
+    }
+
+    function resumeCountdownTimer(key, elId, seconds) {
+      if (studentTimers[key]) clearInterval(studentTimers[key]);
+      studentTimers[key] = setInterval(() => {
+        const el = document.getElementById(elId);
+        if (!el) return;
+        const elapsed = Math.floor((Date.now() - studentStartTimes[key]) / 1000);
+        const remaining = seconds - elapsed;
+        const labelId = key === "3" ? null : "s-phase-label-4";
+        const label = labelId ? document.getElementById(labelId) : null;
+        if (remaining <= 0) {
+          el.textContent = "0:00";
+          el.style.color = "#22c55e";
+          if (label) label.textContent = "Good - move on when ready";
+          return;
+        }
+        el.textContent = Math.floor(remaining/60) + ":" + (remaining%60).toString().padStart(2,"0");
+        if (remaining <= 60) {
+          el.style.color = "#f59e0b";
+          if (key === "3") {
+            const ltLabel = document.querySelector("#s-screen-3 .student-phase-label");
+            if (ltLabel) ltLabel.textContent = "Almost there...";
+          }
+          if (label) label.textContent = "Almost there...";
+        } else {
+          el.style.color = timerColor();
+        }
+      }, 500);
+    }
+
+    function startCountdown(elId, seconds, callback) {
+      let remaining = seconds;
+      const el = document.getElementById(elId);
+      const update = () => { el.textContent = Math.floor(remaining/60) + ":" + (remaining%60).toString().padStart(2,"0"); };
+      update();
+      const t = setInterval(() => {
+        remaining--;
+        update();
+        if (remaining <= 0) { clearInterval(t); if (callback) callback(); }
+      }, 1000);
+      studentTimers["countdown"] = t;
+    }
+
+    function showStudentScreen(n) {
+      document.querySelectorAll(".student-screen").forEach(s => s.classList.remove("active"));
+      document.getElementById("s-screen-" + n).classList.add("active");
+      // Resize any visible waveform canvases now that they have proper dimensions
+      setTimeout(() => {
+        ["waveform-1","waveform-3","waveform-4"].forEach(id => {
+          const c = document.getElementById(id);
+          if (c && c.offsetWidth > 0) c.width = c.offsetWidth;
+        });
+      }, 50);
+    }
+
+    function resetStudentMode() {
+      stopAllStudentTimers();
+      studentTest = null;
+      studentBlob = null;
+      studentChunks = [];
+      currentQuestionIndex = 0;
+      currentTopicIndex = 0;
+      currentP3Index = 0;
+      isPaused = false;
+      totalPausedTime = 0;
+      document.getElementById("testPreview").style.display = "none";
+      document.getElementById("startBtnWrap").style.display = "none";
+      document.getElementById("prepNotes").value = "";
+      document.getElementById("prep-time-up").style.display = "none";
+      document.getElementById("prep-start-wrap").style.display = "block";
+      document.getElementById("prep-speak-wrap").style.display = "none";
+      showStudentScreen(0);
+    }
+
+    let waveformAnimations = {};
+    let analyser = null;
+    let audioContext = null;
+
+    function startWaveform(canvasId) {
+      const canvas = document.getElementById(canvasId);
+      if (!canvas) return;
+      canvas.width = canvas.offsetWidth || 300;
+
+      // If no analyser available, draw a static flat line gracefully
+      if (!analyser) {
+        const ctx = canvas.getContext("2d");
+        ctx.fillStyle = "#1e2937";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.strokeStyle = "rgba(103,224,255,0.3)";
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.moveTo(0, canvas.height / 2);
+        ctx.lineTo(canvas.width, canvas.height / 2);
+        ctx.stroke();
+        return;
+      }
+
+      const ctx = canvas.getContext("2d");
+      const bufferLength = analyser.frequencyBinCount;
+      const dataArray = new Uint8Array(bufferLength);
+
+      function draw() {
+        waveformAnimations[canvasId] = requestAnimationFrame(draw);
+        try {
+          analyser.getByteTimeDomainData(dataArray);
+        } catch(e) {
+          stopWaveform(canvasId);
+          return;
+        }
+        ctx.fillStyle = "#1e2937";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = "#67e0ff";
+        ctx.beginPath();
+        const sliceWidth = canvas.width / bufferLength;
+        let x = 0;
+        for (let i = 0; i < bufferLength; i++) {
+          const v = dataArray[i] / 128.0;
+          const y = v * canvas.height / 2;
+          i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+          x += sliceWidth;
+        }
+        ctx.lineTo(canvas.width, canvas.height / 2);
+        ctx.stroke();
+      }
+      draw();
+    }
+
+    function stopWaveform(canvasId) {
+      if (waveformAnimations[canvasId]) {
+        cancelAnimationFrame(waveformAnimations[canvasId]);
+        delete waveformAnimations[canvasId];
+      }
+    }
+
+    async function startRecording() {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        studentChunks = [];
+        const mimeType = MediaRecorder.isTypeSupported('audio/wav') ? 'audio/wav' :
+                         MediaRecorder.isTypeSupported('audio/webm') ? 'audio/webm' : 'audio/ogg';
+        studentRecorder = new MediaRecorder(stream, { mimeType });
+        studentRecorder.ondataavailable = e => studentChunks.push(e.data);
+        studentRecorder.onstop = () => {
+          studentBlob = new Blob(studentChunks, { type: mimeType });
+        };
+        studentRecorder.start();
+
+        // Set up audio analyser for waveform
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        analyser = audioContext.createAnalyser();
+        analyser.fftSize = 256;
+        const source = audioContext.createMediaStreamSource(stream);
+        source.connect(analyser);
+        startWaveform("waveform-1");
+      } catch(e) {
+        console.log("Microphone not available:", e);
+        const errEl = document.getElementById("mic-error");
+        if (errEl) errEl.style.display = "block";
+        const dots = document.querySelectorAll(".rec-dot");
+        dots.forEach(d => d.style.background = "#475569");
+        const labels = document.querySelectorAll(".rec-label");
+        labels.forEach(l => { l.textContent = "No microphone"; l.style.color = "#475569"; });
+      }
+    }
+
+    function stopRecording() {
+      if (studentRecorder && studentRecorder.state !== "inactive") {
+        studentRecorder.stop();
+        studentRecorder.stream.getTracks().forEach(t => t.stop());
+      }
+    }
+
+    function downloadSessionReport() {
+      if (!studentTest) return;
+      const fmt = ms => { const s = Math.floor(ms/1000); return Math.floor(s/60) + ":" + (s%60).toString().padStart(2,"0"); };
+      const p1 = studentStartTimes.p1end - studentStartTimes["1"];
+      const prep = studentStartTimes.prepEnd - studentStartTimes.prepStart;
+      const lt = studentStartTimes.ltEnd - studentStartTimes.ltStart;
+      const p3 = studentStartTimes.p3End - studentStartTimes.p3Start;
+      const total = p1 + prep + lt + p3;
+
+      const now = new Date();
+      const dateStr = now.toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
+      const timeStr = now.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" });
+
+      const p1Topics = studentTest.topics.map((t, i) =>
+        `<div class="section-label">Part 1 - Topic ${i+1}: ${t.name}</div>
+         <ol class="q-list">${t.questions.map(q => `<li>${q}</li>`).join("")}</ol>`
+      ).join("");
+
+      const cueCard = studentTest.cueCard;
+      const p3questions = studentTest.p3set.map((q, i) => `<li>${q}</li>`).join("");
+
+      const html = `<!DOCTYPE html><html><head><meta charset="UTF-8">
+      <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background:#fff; color:#334155; padding:40px; }
+        .header { background:#1e3a5f; color:white; padding:16px 24px; border-radius:8px 8px 0 0; display:grid; grid-template-columns:40px 1fr 40px; align-items:center; }
+        .header-logo { width:32px; height:32px; }
+        .header-center { text-align:center; }
+        .header-center h1 { font-size:15px; font-weight:700; }
+        .header-center p { font-size:9px; color:#94a3b8; margin-top:2px; }
+        .header-right { font-size:9px; color:#94a3b8; text-align:right; }
+        .gold-bar { height:3px; background:#f59e0b; margin-bottom:20px; }
+        .label { font-size:8px; font-weight:700; color:#94a3b8; letter-spacing:1px; text-transform:uppercase; margin-bottom:6px; text-align:center; }
+        .timing-row { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-bottom:16px; }
+        .timing-box { background:#f1f5f9; border-radius:5px; padding:6px 8px; text-align:center; }
+        .timing-box .t-label { font-size:7px; color:#94a3b8; font-weight:700; text-transform:uppercase; }
+        .timing-box .t-time { font-size:10px; font-weight:700; color:#1e3a5f; margin-top:3px; }
+        .divider { border:none; border-top:1px solid #e2e8f0; margin:14px 0; }
+        .section-label { font-size:8px; font-weight:700; color:#94a3b8; letter-spacing:1px; text-transform:uppercase; margin:10px 0 6px 0; }
+        .q-list { padding-left:16px; }
+        .q-list li { font-size:10px; color:#334155; line-height:1.8; }
+        .cue-card { background:#f8fafc; border-radius:8px; overflow:hidden; margin-bottom:14px; }
+        .cue-card-header { background:#1e3a5f; padding:8px 14px; font-size:8px; font-weight:700; color:white; letter-spacing:1px; text-transform:uppercase; }
+        .cue-card-body { padding:12px 14px; }
+        .cue-card-topic { font-size:10px; font-weight:700; color:#1e3a5f; margin-bottom:8px; }
+        .cue-card-points { font-size:9px; color:#475569; line-height:1.8; }
+        .cue-card-instruction { font-size:9px; color:#94a3b8; font-style:italic; margin-top:8px; padding-top:6px; border-top:1px solid #e2e8f0; }
+        .footer { margin-top:20px; padding-top:10px; border-top:1px solid #e2e8f0; display:flex; justify-content:space-between; }
+        .footer p { font-size:8px; color:#94a3b8; }
+        .gold-bar-bottom { height:3px; background:#f59e0b; margin-top:8px; border-radius:0 0 8px 8px; }
+        .total-row { display:flex; justify-content:space-between; padding:6px 8px; background:#f1f5f9; border-radius:5px; font-size:10px; font-weight:700; color:#1e3a5f; margin-top:4px; }
+        @media print { body { padding:0; } }
+      </style></head><body>
+      <div class="header">
+        <svg class="header-logo" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+          <rect width="64" height="64" rx="10" fill="#1e3a5f"/>
+          <path d="M14 32 Q14 8 32 8 Q50 8 50 32" fill="none" stroke="#f59e0b" stroke-width="5" stroke-linecap="round"/>
+          <circle cx="14" cy="38" r="9" fill="#1e3a5f" stroke="#f59e0b" stroke-width="3"/>
+          <circle cx="50" cy="38" r="9" fill="#1e3a5f" stroke="#f59e0b" stroke-width="3"/>
+          <circle cx="50" cy="38" r="2.5" fill="#f59e0b"/>
+          <path d="M14 46 Q14 54 23 56" fill="none" stroke="#f59e0b" stroke-width="3" stroke-linecap="round"/>
+          <ellipse cx="27" cy="56" rx="5" ry="3" fill="#f59e0b"/>
+        </svg>
+        <div class="header-center"><h1>IELTS Speaking</h1><p>Student Session Report - ieltstimer.com</p></div>
+        <div class="header-right"><div>${dateStr}</div><div>${timeStr}</div></div>
+      </div>
+      <div class="gold-bar"></div>
+
+      <div class="label">Session Timing</div>
+      <div class="timing-row">
+        <div class="timing-box"><div class="t-label">Part 1</div><div class="t-time">${fmt(p1)}</div></div>
+        <div class="timing-box"><div class="t-label">1 min Prep</div><div class="t-time">${fmt(prep)}</div></div>
+        <div class="timing-box"><div class="t-label">Long Turn</div><div class="t-time">${fmt(lt)}</div></div>
+        <div class="timing-box"><div class="t-label">Part 3</div><div class="t-time">${fmt(p3)}</div></div>
+      </div>
+      <div class="total-row"><span>Total Session</span><span>${fmt(total)}</span></div>
+
+      <hr class="divider"/>
+      <div class="label" style="margin-bottom:10px;">Part 1 Questions</div>
+      ${p1Topics}
+
+      <hr class="divider"/>
+      <div class="label" style="margin-bottom:10px;">Part 2 - Long Turn</div>
+      <div class="cue-card">
+        <div class="cue-card-header">Cue Card</div>
+        <div class="cue-card-body">
+          <div class="cue-card-topic">${cueCard.topic}</div>
+          <div class="cue-card-points">${cueCard.points.join("<br>")}</div>
+          <div class="cue-card-instruction">${cueCard.instruction}</div>
+        </div>
+      </div>
+
+      <hr class="divider"/>
+      <div class="label" style="margin-bottom:10px;">Extended Discussion Questions</div>
+      <ol class="q-list">${p3questions}</ol>
+
+      <div class="footer">
+        <p>ieltstimer.com - Free platform for IELTS Speaking</p>
+        <p>Emos Scappatura Proust</p>
+      </div>
+      <div class="gold-bar-bottom"></div>
+      </body></html>`;
+
+      const blob = new Blob([html], { type: "text/html" });
+      const url = URL.createObjectURL(blob);
+      const win = window.open(url, "_blank");
+      setTimeout(() => URL.revokeObjectURL(url), 10000);
+    }
+
+    function downloadRecording() {
+      if (!studentBlob) {
+        const btn = document.getElementById("downloadBtn");
+        if (btn) { btn.textContent = "Recording not available"; btn.disabled = true; btn.style.opacity = "0.5"; }
+        return; 
+      }
+      const ext = studentBlob.type.includes('wav') ? 'wav' : studentBlob.type.includes('webm') ? 'webm' : 'ogg';
+      const url = URL.createObjectURL(studentBlob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `ielts-practice-recording.${ext}`;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function showStudentMode() {
+      document.getElementById("studentModal").style.display = "flex";
+    }
+
+    document.getElementById("studentModal").addEventListener("click", e => {
+      if (e.target === document.getElementById("studentModal")) closeStudentMode();
+    });
+
+    // ===== END STUDENT MODE =====
+
+    // ===== TEACHER TEST GENERATION =====
+    let teacherTest = null;
+    let currentTeacherTab = 1;
+
+    function teacherGenerateTest() {
+      const intro = INTRO_TOPICS[Math.floor(Math.random() * INTRO_TOPICS.length)];
+      const others = shuffle(PART1_TOPICS).slice(0, 2);
+      const cueCard = CUE_CARDS[Math.floor(Math.random() * CUE_CARDS.length)];
+      const p3set = [...cueCard.part3[0], ...cueCard.part3[1]];
+      teacherTest = { topics: [intro, ...others], cueCard, p3set };
+      document.getElementById("teacherTestArea").style.display = "block";
+      document.getElementById("generateTestBtn").textContent = "Regenerate Test";
+      updateTeacherTestContent(currentTeacherTab);
+    }
+
+    function updateTeacherTestContent(part) {
+      if (!teacherTest) return;
+      const el = document.getElementById("teacherTestContent");
+      if (part === 1) {
+        let html = '';
+        teacherTest.topics.forEach((t, i) => {
+          html += `<div class="teacher-test-label" style="margin-top:${i>0?'10px':'0'};">Part 1 - Topic ${i+1}: ${t.name}</div>`;
+          t.questions.forEach((q, qi) => {
+            html += `<div class="teacher-test-question">${qi+1}. ${q}</div>`;
+          });
+        });
+        el.innerHTML = html;
+      } else if (part === 2) {
+        const cc = teacherTest.cueCard;
+        el.innerHTML = `
+          <div class="teacher-test-label">Part 2 - Cue Card</div>
+          <div class="teacher-cue-card">
+            <div class="teacher-cue-header">Cue Card</div>
+            <div class="teacher-cue-body">
+              <div class="teacher-cue-topic">${cc.topic}</div>
+              <div class="teacher-cue-points">${cc.points.join('<br>')}</div>
+              <div class="teacher-cue-instruction">${cc.instruction}</div>
+            </div>
+          </div>
+          <button class="teacher-share-btn" onclick="shareCueCard()">Share Cue Card (screen share)</button>`;
+      } else if (part === 3) {
+        let html = '<div class="teacher-test-label">Part 3 - Discussion Questions</div>';
+        teacherTest.p3set.forEach((q, i) => {
+          if (i === 4) html += `<div style="height:1px; background:#374151; margin:6px 0;"></div>`;
+          html += `<div class="teacher-test-question">${i+1}. ${q}</div>`;
+        });
+        el.innerHTML = html;
+      }
+    }
+
+    function shareCueCard() {
+      if (!teacherTest) return;
+      const cc = teacherTest.cueCard;
+      document.getElementById("shareCueTopic").textContent = cc.topic;
+      document.getElementById("shareCuePoints").innerHTML = cc.points.join("<br>");
+      document.getElementById("shareCueInstruction").textContent = cc.instruction;
+      // Reset prep state
+      document.getElementById("cuePrepTimer").style.display = "none";
+      document.getElementById("cuePrepTimer").textContent = "1:00";
+      document.getElementById("cuePrepBtnWrap").style.display = "block";
+      document.getElementById("cueTimerRunning").style.display = "none";
+      // Same appearance in all themes - always professional white card
+      const header = document.getElementById("cueCardHeader");
+      const title = document.getElementById("cueCardTitle");
+      const closeBtn = document.getElementById("cueCardCloseBtn");
+      const prepBtn2 = document.getElementById("cueCardPrepBtn");
+      header.style.background = "#1e3a5f";
+      title.style.color = "#ffffff";
+      closeBtn.style.background = "#1e3a5f";
+      closeBtn.style.color = "#ffffff";
+      prepBtn2.style.background = "#1e3a5f";
+      prepBtn2.style.color = "#ffffff";
+      document.getElementById("cueCardOverlay").style.display = "flex";
+    }
+
+    let cuePrepInterval = null;
+
+    function startCuePrepTimer() {
+      document.getElementById("cuePrepBtnWrap").style.display = "none";
+      document.getElementById("cueTimerRunning").style.display = "block";
+      document.getElementById("cuePrepTimer").style.display = "block";
+      // Also stamp 1 min prep on main timer
+      const prepBtn = document.getElementById("btn-prep");
+      if (prepBtn && !prepBtn.classList.contains("clicked")) {
+        recordFixed("1 min Prep", 3);
+      }
+      let remaining = 60;
+      const timerEl = document.getElementById("cuePrepTimer");
+      const update = () => {
+        timerEl.textContent = Math.floor(remaining/60) + ":" + (remaining%60).toString().padStart(2,"0");
+        timerEl.style.color = remaining <= 10 ? "#f59e0b" : timerColor();
+      };
+      update();
+      cuePrepInterval = setInterval(() => {
+        remaining--;
+        update();
+        if (remaining <= 0) {
+          clearInterval(cuePrepInterval);
+          timerEl.textContent = "0:00";
+          timerEl.style.color = "#22c55e";
+          document.getElementById("cueTimerRunning").innerHTML = "<div style='font-size:0.72rem; color:#22c55e; font-weight:600;'>Preparation time is up — close when ready</div>";
+        }
+      }, 1000);
+    }
+
+    function closeCueCardOverlay() {
+      if (cuePrepInterval) { clearInterval(cuePrepInterval); cuePrepInterval = null; }
+      document.getElementById("cueCardOverlay").style.display = "none";
+    }
+
+    // Override switchTab to also update test content
+    const _originalSwitchTab = window.switchTab || switchTab;
+    window.switchTab = function(n) {
+      currentTeacherTab = n;
+      // Call original directly by its logic
+      document.querySelectorAll(".notes-tab").forEach(t => t.classList.remove("active"));
+      document.querySelectorAll(".notes-area").forEach(a => { a.style.display = "none"; a.classList.remove("active-area"); });
+      const tab = document.getElementById("tab-" + n);
+      const area = document.getElementById("teacherNotes" + n);
+      if (tab) tab.classList.add("active");
+      if (area) { area.style.display = "block"; area.classList.add("active-area"); }
+      if (teacherTest) updateTeacherTestContent(n);
+    };
+
+    // ===== END TEACHER TEST GENERATION =====
 
     function showAbout() {
       document.getElementById("aboutModal").style.display = "flex";
