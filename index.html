@@ -35,10 +35,11 @@
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       background: #111827;
       color: #f1f5f9;
-      height: 100vh;
+      min-height: 100vh;
+      height: auto;
       display: flex;
       flex-direction: column;
-      overflow: hidden;
+      overflow-y: auto;
     }
     body.light { background: #f8fafc; color: #1e2937; }
     body.exam { background: #000000; color: #ffffff; }
@@ -1318,7 +1319,7 @@
     <div style="background:white; border-radius:12px; max-width:500px; width:100%; overflow:hidden; box-shadow:0 20px 60px rgba(0,0,0,0.5);">
       <div style="background:#1e3a5f; padding:14px 20px; display:flex; justify-content:space-between; align-items:center;" id="cueCardHeader">
         <div id="cueCardTitle" style="font-size:0.7rem; font-weight:700; color:#f59e0b; letter-spacing:1.5px; text-transform:uppercase;">Cue Card</div>
-        <div id="cuePrepTimer" style="font-size:1.2rem; font-weight:700; color:#67e0ff; display:none; letter-spacing:2px;">1:00</div>
+        <div id="cuePrepTimer" style="font-size:1.2rem; font-weight:700; color:#ffffff; display:none; letter-spacing:2px;">1:00</div>
       </div>
       <div style="padding:20px;">
         <div id="shareCueTopic" style="font-size:1rem; font-weight:700; color:#1e3a5f; margin-bottom:14px; line-height:1.4;"></div>
@@ -1332,7 +1333,7 @@
           <button id="cueCardPrepBtn" onclick="startCuePrepTimer()" style="width:100%; padding:10px; background:#f59e0b; color:#1e3a5f; border:none; border-radius:8px; font-size:0.85rem; font-weight:700; cursor:pointer; margin-bottom:8px;">Start 1 Minute Preparation</button>
         </div>
         <div id="cueTimerRunning" style="display:none; text-align:center; margin-bottom:8px;">
-          <div style="font-size:0.72rem; color:#64748b;">Preparation time running — close when ready to start speaking</div>
+          <div style="font-size:0.72rem; color:#64748b;">Preparation time running - close when ready to start speaking</div>
         </div>
         <button id="cueCardCloseBtn" onclick="closeCueCardOverlay()" style="width:100%; padding:10px; background:#1e3a5f; color:white; border:none; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer;">Close</button>
       </div>
@@ -1568,14 +1569,12 @@
   </div>
 
   <!-- Student Close Confirmation -->
-  <div id="studentCloseConfirm" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.8); z-index:3000; align-items:center; justify-content:center; padding:20px;">
-    <div style="background:#1f2937; border-radius:12px; padding:24px; max-width:320px; width:100%; text-align:center;">
-      
-      <div style="font-size:0.95rem; font-weight:700; color:#ffffff; margin-bottom:8px;">End session?</div>
-      <div style="font-size:0.8rem; color:#94a3b8; margin-bottom:20px;">Closing will end your current session and recording.</div>
-      <div style="display:flex; gap:10px;">
-        <button onclick="document.getElementById('studentCloseConfirm').style.display='none'" style="flex:1; padding:10px; background:#374151; color:#94a3b8; border:none; border-radius:8px; font-size:0.85rem; cursor:pointer;">Cancel</button>
-        <button onclick="doCloseStudentMode()" style="flex:1; padding:10px; background:#ef4444; color:white; border:none; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer;">Close</button>
+  <div id="studentCloseConfirm" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.85); z-index:3000; align-items:center; justify-content:center;">
+    <div style="background:#1f2937; padding:24px; border-radius:12px; width:90%; max-width:360px; text-align:center;">
+      <p style="margin:0 0 20px 0; font-size:1rem; color:#f1f5f9;">Closing will end your current session and recording.</p>
+      <div style="display:flex; gap:10px; justify-content:center;">
+        <button onclick="document.getElementById('studentCloseConfirm').style.display='none'" style="background:#3b82f6; color:white; padding:9px 24px; width:auto; height:auto;">Cancel</button>
+        <button onclick="doCloseStudentMode()" style="background:#475569; color:white; padding:9px 24px; width:auto; height:auto;">Close</button>
       </div>
     </div>
   </div>
@@ -1616,7 +1615,7 @@
       <div class="about-section">
         <h4>Features</h4>
         <p>✏️ Teacher Mode - per-part notes, candidate name, export and PDF report. Optional test generation with cue card sharing.</p>
-        <p>🎓 Student Mode - full IELTS Speaking practice with timer, recording and feedback.</p>
+        <p>🎓 Student Mode - four practice modes (Full Test, Part 1, Part 2 or Part 3 Only) with timer, recording and timing feedback.</p>
         <p>💡 Tips - recommended setup for remote sessions.</p>
         <p>☀️ Three display modes - dark, light and exam.</p>
       </div>
@@ -1624,7 +1623,7 @@
       <hr class="about-divider"/>
 
       <p class="about-free" style="text-align:center; font-size:0.72rem;">Free to use. No login. No download.</p>
-      <p class="about-version">Version 2.0 - Last updated: May 2026</p>
+      <p class="about-version">Version 2.1 - Last updated: May 2026</p>
 
       <div class="about-close">
         <button onclick="closeAbout()" class="about-close-btn" style="padding:9px 28px; width:auto; height:auto;">Close</button>
@@ -1664,6 +1663,7 @@
 
       <div class="tip-section">
         <h4>🎓 Student Practice Tips</h4>
+        <p>Use the practice mode selector to focus on a specific part. Part 2 Only is ideal for dedicated cue card practice, and Part 3 Only for discussion skills.</p>
         <p>Use headphones to avoid echo in your recording. Find a quiet room as background noise affects focus and audio quality.</p>
         <p>Treat the countdown as a target, not a deadline. In the real exam the examiner controls the timing. Aim to fill the time naturally.</p>
         <p>For Part 2, actually write notes during the preparation minute. Do not just read the cue card. Jot down key ideas and structure your answer.</p>
@@ -2065,17 +2065,17 @@
 
   <div class="notes-section">
     <div class="n-label">Part 1 Notes</div>
-    <p>${p1.replace(/\n/g, "<br>")}</p>
+    <p>${p1 ? p1.replace(/\n/g, "<br>") : "<span style='color:#94a3b8;'>N/A</span>"}</p>
   </div>
   <hr class="divider"/>
   <div class="notes-section">
     <div class="n-label">Part 2 Notes</div>
-    <p>${p2.replace(/\n/g, "<br>")}</p>
+    <p>${p2 ? p2.replace(/\n/g, "<br>") : "<span style='color:#94a3b8;'>N/A</span>"}</p>
   </div>
   <hr class="divider"/>
   <div class="notes-section">
     <div class="n-label">Part 3 Notes</div>
-    <p>${p3.replace(/\n/g, "<br>")}</p>
+    <p>${p3 ? p3.replace(/\n/g, "<br>") : "<span style='color:#94a3b8;'>N/A</span>"}</p>
   </div>
 
   ${teacherTest ? `
@@ -2996,7 +2996,9 @@
         analyser.fftSize = 256;
         const source = audioContext.createMediaStreamSource(stream);
         source.connect(analyser);
-        startWaveform("waveform-1");
+        if (currentPreset === "p3") startWaveform("waveform-4");
+        else if (currentPreset === "p2") startWaveform("waveform-3");
+        else startWaveform("waveform-1");
       } catch(e) {
         console.log("Microphone not available:", e);
         const errEl = document.getElementById("mic-error");
@@ -3017,12 +3019,21 @@
 
     function downloadSessionReport() {
       if (!studentTest) return;
-      const fmt = ms => { const s = Math.floor(ms/1000); return Math.floor(s/60) + ":" + (s%60).toString().padStart(2,"0"); };
-      const p1 = studentStartTimes.p1end - studentStartTimes["1"];
-      const prep = studentStartTimes.prepEnd - studentStartTimes.prepStart;
-      const lt = studentStartTimes.ltEnd - studentStartTimes.ltStart;
-      const p3 = studentStartTimes.p3End - studentStartTimes.p3Start;
-      const total = p1 + prep + lt + p3;
+      const fmt = ms => {
+        if (!ms || isNaN(ms) || ms < 0) return "N/A";
+        const s = Math.floor(ms/1000);
+        return Math.floor(s/60) + ":" + (s%60).toString().padStart(2,"0");
+      };
+      const hasP1 = currentPreset === 'full' || currentPreset === 'p1';
+      const hasP2 = currentPreset === 'full' || currentPreset === 'p2';
+      const hasP3 = currentPreset === 'full' || currentPreset === 'p3';
+
+      const p1 = hasP1 && studentStartTimes.p1end && studentStartTimes["1"] ? studentStartTimes.p1end - studentStartTimes["1"] : null;
+      const prep = hasP2 && studentStartTimes.prepEnd && studentStartTimes.prepStart ? studentStartTimes.prepEnd - studentStartTimes.prepStart : null;
+      const lt = hasP2 && studentStartTimes.ltEnd && studentStartTimes.ltStart ? studentStartTimes.ltEnd - studentStartTimes.ltStart : null;
+      const p3 = hasP3 && studentStartTimes.p3End && studentStartTimes.p3Start ? studentStartTimes.p3End - studentStartTimes.p3Start : null;
+      const parts = [p1, prep, lt, p3].filter(v => v !== null);
+      const total = parts.length ? parts.reduce((a,b) => a+b, 0) : null;
 
       const now = new Date();
       const dateStr = now.toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
@@ -3239,7 +3250,7 @@
       const timerEl = document.getElementById("cuePrepTimer");
       const update = () => {
         timerEl.textContent = Math.floor(remaining/60) + ":" + (remaining%60).toString().padStart(2,"0");
-        timerEl.style.color = remaining <= 10 ? "#f59e0b" : timerColor();
+        timerEl.style.color = remaining <= 10 ? "#f59e0b" : "#ffffff";
       };
       update();
       cuePrepInterval = setInterval(() => {
