@@ -407,6 +407,7 @@
       padding: 16px 20px;
       margin: auto;
       box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+      min-height: min-content;
     }
     .student-header {
       text-align: center;
@@ -427,6 +428,31 @@
     }
     .student-screen { display: none; }
     .student-screen.active { display: block; }
+
+    .preset-btn {
+      background: #1f2937;
+      border: 1px solid #374151;
+      border-radius: 8px;
+      padding: 10px 8px;
+      cursor: pointer;
+      text-align: center;
+      width: 100%;
+    }
+    .preset-btn.active-preset { background: #3b82f6; border-color: #3b82f6; }
+    .preset-btn-title { font-size: 0.8rem; font-weight: 600; color: #94a3b8; margin-bottom: 2px; }
+    .preset-btn.active-preset .preset-btn-title { color: #ffffff; }
+    .preset-btn-sub { font-size: 0.68rem; color: #475569; }
+    .preset-btn.active-preset .preset-btn-sub { color: #bfdbfe; }
+    body.light .preset-btn { background: #e2e8f0; border-color: #cbd5e1; }
+    body.light .preset-btn.active-preset { background: #1e40af; border-color: #1e40af; }
+    body.light .preset-btn-title { color: #475569; }
+    body.light .preset-btn.active-preset .preset-btn-title { color: #ffffff; }
+    body.light .preset-btn-sub { color: #94a3b8; }
+    body.exam .preset-btn { background: #111111; border-color: #333333; }
+    body.exam .preset-btn.active-preset { background: #1e3a5f; border-color: #3b82f6; }
+    body.exam .preset-btn-title { color: #888888; }
+    body.exam .preset-btn.active-preset .preset-btn-title { color: #ffffff; }
+
     .student-timer {
       font-size: 2.8rem;
       font-weight: 700;
@@ -867,6 +893,27 @@
     body.exam .teacher-cue-instruction { color: #888888; border-top-color: #333333; }
     body.exam .teacher-share-btn { background: #3b82f6; }
 
+    .your-notes-label {
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: #f59e0b;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    body.light .your-notes-label { color: #1e40af; }
+    body.exam .your-notes-label { color: #ffffff; }
+
+    .prep-notes-display {
+      background: #1f2937;
+      border-radius: 8px;
+      padding: 10px 12px;
+      font-size: 0.8rem;
+      color: #94a3b8;
+    }
+    body.light .prep-notes-display { background: #e2e8f0; color: #475569; }
+    body.exam .prep-notes-display { background: #111111; color: #cccccc; border: 1px solid #333333; }
+
     /* --- About Modal --- */
     .about-modal {
       display: none;
@@ -1177,7 +1224,7 @@
 </head>
 <body class="dark">
 
-  <p class="desktop-note">Best experienced on desktop</p>
+  
 
   <div class="timer-row">
     <button class="icon-btn start-btn" onclick="startMainTimer()" title="Start timer">
@@ -1335,6 +1382,30 @@
           <h3>🎓 Student Practice</h3>
           <p>Simulate a full IELTS Speaking test</p>
         </div>
+
+        <!-- Practice mode selector -->
+        <div style="margin-bottom:12px;">
+          <div style="font-size:0.65rem; font-weight:700; color:#64748b; letter-spacing:1px; text-transform:uppercase; margin-bottom:8px; text-align:center;">Select Practice Mode</div>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; max-width:320px; margin:0 auto;">
+            <button class="preset-btn active-preset" id="preset-full" onclick="selectPreset('full')">
+              <div class="preset-btn-title">Full Test</div>
+              <div class="preset-btn-sub">Parts 1, 2 &amp; 3</div>
+            </button>
+            <button class="preset-btn" id="preset-p1" onclick="selectPreset('p1')">
+              <div class="preset-btn-title">Part 1 Only</div>
+              <div class="preset-btn-sub">Interview</div>
+            </button>
+            <button class="preset-btn" id="preset-p2" onclick="selectPreset('p2')">
+              <div class="preset-btn-title">Part 2 Only</div>
+              <div class="preset-btn-sub">Cue Card</div>
+            </button>
+            <button class="preset-btn" id="preset-p3" onclick="selectPreset('p3')">
+              <div class="preset-btn-title">Part 3 Only</div>
+              <div class="preset-btn-sub">Discussion</div>
+            </button>
+          </div>
+        </div>
+
         <div class="test-preview" id="testPreview" style="display:none;">
           <div class="test-preview-label">Your Test</div>
           <div id="previewItems"></div>
@@ -1422,7 +1493,7 @@
           <div style="margin-top:10px; font-size:0.8rem; color:#94a3b8; line-height:1.8;" id="s-longturn-points"></div>
           <div style="margin-top:8px; font-size:0.78rem; color:#64748b; font-style:italic;" id="s-longturn-instruction"></div>
         </div>
-        <div id="prepNotesDisplay" style="background:#1f2937; border-radius:8px; padding:10px 12px; font-size:0.8rem; color:#94a3b8; margin-bottom:10px; display:none;"></div>
+        <div id="prepNotesDisplay" class="prep-notes-display" style="margin-bottom:10px; display:none;"></div>
         <div class="recording-indicator" style="margin-top:10px;">
           <div class="rec-dot" id="rec-dot-3"></div>
           <span class="rec-label" id="rec-label-3">Recording</span>
@@ -2355,9 +2426,21 @@
       return [...arr].sort(() => Math.random() - 0.5);
     }
 
+    let currentPreset = 'full';
+
+    function selectPreset(preset) {
+      currentPreset = preset;
+      document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active-preset'));
+      document.getElementById('preset-' + preset).classList.add('active-preset');
+      // Reset preview when preset changes
+      document.getElementById('testPreview').style.display = 'none';
+      document.getElementById('startBtnWrap').style.display = 'none';
+      studentTest = null;
+    }
+
     function generateTest() {
       const intro = INTRO_TOPICS[Math.floor(Math.random() * INTRO_TOPICS.length)];
-      const others = shuffle(PART1_TOPICS).slice(0, 2); // PART1_TOPICS never contains intro topics
+      const others = shuffle(PART1_TOPICS).slice(0, 2);
       const cueCard = CUE_CARDS[Math.floor(Math.random() * CUE_CARDS.length)];
       const p3set = [...cueCard.part3[0], ...cueCard.part3[1]];
 
@@ -2365,11 +2448,18 @@
 
       const preview = document.getElementById("previewItems");
       preview.innerHTML = "";
-      studentTest.topics.forEach((t, i) => {
-        preview.innerHTML += `<div class="test-preview-item"><span class="test-preview-part">Part 1 - Topic ${i+1}</span><span class="test-preview-topic">${t.name}</span></div>`;
-      });
-      preview.innerHTML += `<div class="test-preview-item"><span class="test-preview-part">Part 2</span><span class="test-preview-topic">Long Turn</span></div>`;
-      preview.innerHTML += `<div class="test-preview-item"><span class="test-preview-part">Part 3</span><span class="test-preview-topic">Extended Discussion</span></div>`;
+
+      if (currentPreset === 'full' || currentPreset === 'p1') {
+        studentTest.topics.forEach((t, i) => {
+          preview.innerHTML += `<div class="test-preview-item"><span class="test-preview-part">Part 1 - Topic ${i+1}</span><span class="test-preview-topic">${t.name}</span></div>`;
+        });
+      }
+      if (currentPreset === 'full' || currentPreset === 'p2') {
+        preview.innerHTML += `<div class="test-preview-item"><span class="test-preview-part">Part 2</span><span class="test-preview-topic">Long Turn</span></div>`;
+      }
+      if (currentPreset === 'full' || currentPreset === 'p3') {
+        preview.innerHTML += `<div class="test-preview-item"><span class="test-preview-part">Part 3</span><span class="test-preview-topic">Extended Discussion</span></div>`;
+      }
 
       document.getElementById("testPreview").style.display = "block";
       document.getElementById("startBtnWrap").style.display = "block";
@@ -2382,17 +2472,41 @@
       isPaused = false;
       totalPausedTime = 0;
       stopAllStudentTimers();
-      // Reset all timer displays before showing screen
       const t1 = document.getElementById("s-timer-1");
       const t3 = document.getElementById("s-timer-3");
       const t4 = document.getElementById("s-timer-4");
       if (t1) { t1.textContent = "5:00"; t1.style.color = timerColor(); }
       if (t3) { t3.textContent = "2:00"; t3.style.color = timerColor(); }
       if (t4) { t4.textContent = "5:00"; t4.style.color = timerColor(); }
-      showStudentScreen(1);
-      loadTopic();
-      startStudentTimer("1", "s-timer-1");
-      startRecording();
+
+      if (currentPreset === 'p2') {
+        // Start directly at Part 2 prep — load cue card
+        showStudentScreen(2);
+        const cc = studentTest.cueCard;
+        document.getElementById("cue-topic").textContent = cc.topic;
+        document.getElementById("cue-points").innerHTML = cc.points.join("<br>");
+        document.getElementById("cue-instruction").textContent = cc.instruction;
+        document.getElementById("s-timer-2").textContent = "1:00";
+        document.getElementById("s-prep-label").textContent = "Read the cue card carefully";
+        document.getElementById("prep-time-up").style.display = "none";
+        document.getElementById("prep-start-wrap").style.display = "block";
+        document.getElementById("prep-speak-wrap").style.display = "none";
+        startRecording();
+      } else if (currentPreset === 'p3') {
+        // Start directly at Part 3
+        currentP3Index = 0;
+        studentStartTimes.p3Start = Date.now();
+        showStudentScreen(4);
+        loadP3Question();
+        startStudentTimer("4", "s-timer-4");
+        startRecording();
+      } else {
+        // Full test or Part 1 only — start at Part 1
+        showStudentScreen(1);
+        loadTopic();
+        startStudentTimer("1", "s-timer-1");
+        startRecording();
+      }
     }
 
     // Flatten all Part 1 questions into one seamless list
@@ -2435,6 +2549,7 @@
       studentStartTimes.p1 = studentStartTimes["1"];
       studentStartTimes.p1end = Date.now();
       stopAllStudentTimers();
+      if (currentPreset === 'p1') { endTest(); return; }
       showStudentScreen(2);
       const cc = studentTest.cueCard;
       document.getElementById("cue-topic").textContent = cc.topic;
@@ -2471,7 +2586,7 @@
       const notes = document.getElementById("prepNotes").value.trim();
       const notesDisplay = document.getElementById("prepNotesDisplay");
       if (notes) {
-        notesDisplay.innerHTML = "<div style='font-size:0.65rem; font-weight:700; color:#f59e0b; letter-spacing:1px; text-transform:uppercase; margin-bottom:6px;'>YOUR NOTES</div>" + notes.replace(/\n/g, "<br>");
+        notesDisplay.innerHTML = "<div class='your-notes-label'>YOUR NOTES</div>" + notes.replace(/\n/g, "<br>");
         notesDisplay.style.display = "block";
       } else {
         notesDisplay.style.display = "none";
@@ -2486,6 +2601,7 @@
     function moveToPart3() {
       studentStartTimes.ltEnd = Date.now();
       stopAllStudentTimers();
+      if (currentPreset === 'p2') { endTest(); return; }
       const t4 = document.getElementById("s-timer-4");
       if (t4) { t4.textContent = "5:00"; t4.style.color = timerColor(); }
       currentP3Index = 0;
@@ -2567,6 +2683,7 @@
 
     function endTest() {
       studentStartTimes.p3End = Date.now();
+      if (!studentStartTimes.p3Start) studentStartTimes.p3Start = studentStartTimes.p3End;
       stopAllStudentTimers();
       stopWaveform("waveform-1");
       stopWaveform("waveform-3");
@@ -2577,29 +2694,46 @@
     }
 
     function showResults() {
-      const fmt = ms => { const s = Math.floor(ms/1000); return Math.floor(s/60) + ":" + (s%60).toString().padStart(2,"0"); };
-      const p1 = studentStartTimes.p1end - studentStartTimes["1"];
-      const prep = studentStartTimes.prepEnd - studentStartTimes.prepStart;
-      const lt = studentStartTimes.ltEnd - studentStartTimes.ltStart;
-      const p3 = studentStartTimes.p3End - studentStartTimes.p3Start;
-      const total = p1 + prep + lt + p3;
+      const fmt = ms => {
+        if (!ms || isNaN(ms) || ms < 0) return "N/A";
+        const s = Math.floor(ms/1000);
+        return Math.floor(s/60) + ":" + (s%60).toString().padStart(2,"0");
+      };
 
-      document.getElementById("r-p1").textContent = fmt(p1);
-      document.getElementById("r-prep").textContent = fmt(prep);
-      document.getElementById("r-lt").textContent = fmt(lt);
-      document.getElementById("r-p3").textContent = fmt(p3);
-      document.getElementById("r-total").textContent = fmt(total);
+      const hasP1 = currentPreset === 'full' || currentPreset === 'p1';
+      const hasP2 = currentPreset === 'full' || currentPreset === 'p2';
+      const hasP3 = currentPreset === 'full' || currentPreset === 'p3';
 
-      const ltSecs = lt/1000;
-      const p1Secs = p1/1000;
-      const p3Secs = p3/1000;
-      const prepSecs = prep/1000;
+      const p1 = hasP1 && studentStartTimes.p1end && studentStartTimes["1"] ? studentStartTimes.p1end - studentStartTimes["1"] : null;
+      const prep = hasP2 && studentStartTimes.prepEnd && studentStartTimes.prepStart ? studentStartTimes.prepEnd - studentStartTimes.prepStart : null;
+      const lt = hasP2 && studentStartTimes.ltEnd && studentStartTimes.ltStart ? studentStartTimes.ltEnd - studentStartTimes.ltStart : null;
+      const p3 = hasP3 && studentStartTimes.p3End && studentStartTimes.p3Start ? studentStartTimes.p3End - studentStartTimes.p3Start : null;
+      const parts = [p1, prep, lt, p3].filter(v => v !== null);
+      const total = parts.length ? parts.reduce((a,b) => a+b, 0) : null;
+
+      document.getElementById("r-p1").textContent = p1 !== null ? fmt(p1) : "N/A";
+      document.getElementById("r-prep").textContent = prep !== null ? fmt(prep) : "N/A";
+      document.getElementById("r-lt").textContent = lt !== null ? fmt(lt) : "N/A";
+      document.getElementById("r-p3").textContent = p3 !== null ? fmt(p3) : "N/A";
+      document.getElementById("r-total").textContent = total !== null ? fmt(total) : "N/A";
 
       const fb = [];
-      fb.push({ text: p1Secs >= 240 ? "Part 1: good length" : "Part 1: a little short - aim for 4-5 minutes", good: p1Secs >= 240 });
-      fb.push({ text: prepSecs <= 65 ? "Prep time: well used" : "Prep time: slightly over - aim for 1 minute", good: prepSecs <= 65 });
-      fb.push({ text: ltSecs >= 60 && ltSecs <= 130 ? "Long turn: good length" : ltSecs < 60 ? "Long turn: too short - aim for 1-2 minutes" : "Long turn: slightly long - aim for 1-2 minutes", good: ltSecs >= 60 && ltSecs <= 130 });
-      fb.push({ text: p3Secs >= 240 ? "Part 3: good length" : "Part 3: a little short - aim for 4-5 minutes", good: p3Secs >= 240 });
+      if (hasP1 && p1 !== null) {
+        const p1Secs = p1/1000;
+        fb.push({ text: p1Secs >= 240 ? "Part 1: good length" : "Part 1: a little short - aim for 4-5 minutes", good: p1Secs >= 240 });
+      }
+      if (hasP2 && prep !== null) {
+        const prepSecs = prep/1000;
+        fb.push({ text: prepSecs <= 65 ? "Prep time: well used" : "Prep time: slightly over - aim for 1 minute", good: prepSecs <= 65 });
+      }
+      if (hasP2 && lt !== null) {
+        const ltSecs = lt/1000;
+        fb.push({ text: ltSecs >= 60 && ltSecs <= 130 ? "Long turn: good length" : ltSecs < 60 ? "Long turn: too short - aim for 1-2 minutes" : "Long turn: slightly long - aim for 1-2 minutes", good: ltSecs >= 60 && ltSecs <= 130 });
+      }
+      if (hasP3 && p3 !== null) {
+        const p3Secs = p3/1000;
+        fb.push({ text: p3Secs >= 240 ? "Part 3: good length" : "Part 3: a little short - aim for 4-5 minutes", good: p3Secs >= 240 });
+      }
 
       const fbEl = document.getElementById("feedbackItems");
       fbEl.innerHTML = fb.map(f => `<div class="feedback-item ${f.good ? 'good' : 'warn'}">${f.text}</div>`).join("");
@@ -2775,6 +2909,10 @@
       document.getElementById("prep-time-up").style.display = "none";
       document.getElementById("prep-start-wrap").style.display = "block";
       document.getElementById("prep-speak-wrap").style.display = "none";
+      currentPreset = 'full';
+      document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active-preset'));
+      const pfull = document.getElementById('preset-full');
+      if (pfull) pfull.classList.add('active-preset');
       showStudentScreen(0);
     }
 
