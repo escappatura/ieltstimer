@@ -915,7 +915,117 @@
     body.light .prep-notes-display { background: #e2e8f0; color: #475569; }
     body.exam .prep-notes-display { background: #111111; color: #cccccc; border: 1px solid #333333; }
 
-    /* --- About Modal --- */
+    /* ===== ZEN MODE ===== */
+    body.zen { background: #f5f0e8; color: #2d3142; }
+    body.zen .master-timer { color: #4a9e7f; }
+    body.zen button { background: #ede8df; color: #2d3142; border: 1px solid #d8d1c6; }
+    body.zen button:hover { filter: brightness(0.96); }
+    body.zen button.clicked { background: #c4913a; color: white; border-color: #c4913a; }
+    body.zen .start-btn, body.zen .reset-btn { border: none; }
+    body.zen .icon-btn { background: transparent !important; border: none !important; }
+    body.zen .phase-btn { background: #ede8df; color: #8a8070; border: 1px solid #d8d1c6; }
+    body.zen .phase-btn.clicked { background: #c4913a; color: white; border-color: #c4913a; }
+    body.zen .teacher-panel { background: #ede8df; border-color: #d8d1c6; }
+    body.zen .teacher-panel label { color: #4a9e7f; }
+    body.zen .notes-tab { background: #e0d9cd; color: #8a8070; }
+    body.zen .notes-tab.active { background: #4a9e7f; color: white; }
+    body.zen .notes-area { background: #f5f0e8; color: #2d3142; border-color: #d8d1c6; }
+    body.zen .copy-notes-btn { background: #e0d9cd; color: #2d3142; border-color: #d8d1c6; }
+    body.zen #candidateName { background: #f5f0e8; color: #2d3142; border: 1px solid #d8d1c6; }
+    body.zen .footer { color: #8a8070; border-top-color: #d8d1c6; }
+    body.zen .footer-link { color: #4a9e7f; }
+    body.zen .footer-icons button { background: #ede8df; border-color: #d8d1c6; }
+    body.zen .theme-btn, body.zen .email-btn, body.zen .teacher-btn,
+    body.zen .tips-btn, body.zen .about-btn, body.zen .student-btn { background: #ede8df; color: #2d3142; }
+    body.zen .teacher-btn.active { background: #4a9e7f; color: white; }
+    body.zen .tips-btn.active { background: #4a9e7f; color: white; }
+    body.zen .email-btn.active { background: #4a9e7f; color: white; }
+    body.zen .tips-modal, body.zen .about-modal { background: rgba(245,240,232,0.95); color: #2d3142; }
+    body.zen .tips-inner, body.zen .about-inner { background: #f5f0e8; color: #2d3142; border: 1px solid #d8d1c6; }
+    body.zen .about-section h4 { color: #4a9e7f; }
+    body.zen .about-section p { color: #5a5570; }
+    body.zen .about-subtitle { color: #8a8070; }
+    body.zen .about-version { color: #8a8070; }
+    body.zen .about-divider { border-color: #d8d1c6; }
+    body.zen .tips-inner h3, body.zen .about-inner h3 { color: #2d3142; }
+    body.zen .tips-inner h4 { color: #4a9e7f; }
+    body.zen .tips-inner p { color: #5a5570; }
+    body.zen .tips-inner hr { border-color: #d8d1c6; }
+    body.zen .about-free { color: #8a8070; }
+    body.zen .results-timing { background: #ede8df; border: 1px solid #d8d1c6; }
+    body.zen .results-feedback { background: #ede8df; border: 1px solid #d8d1c6; }
+    body.zen .feedback-title { color: #4a9e7f; }
+    body.zen .feedback-item.good { color: #4a9e7f; }
+    body.zen .feedback-item.warn { color: #c4913a; }
+    body.zen .results-row { border-bottom-color: #d8d1c6; }
+    body.zen .results-row > div[style*="border-top"] { border-top-color: #d8d1c6 !important; }
+    body.zen .teacher-panel { border: 1px solid #d8d1c6; }
+    body.zen .feedback-panel-inner { border: 1px solid #d8d1c6; }
+    body.zen .student-inner { border: 1px solid #d8d1c6; }
+    body.zen .teacher-cue-header { background: #4a9e7f; }
+    body.zen canvas { background: #ede8df !important; }
+    body.zen .btn-restart { background: #ede8df; border-color: #d8d1c6; color: #2d3142; }
+    body.zen #restartModal > div { background: #f5f0e8; }
+    body.zen #restartModalInner { background: #f5f0e8 !important; border: 1px solid #d8d1c6; }
+    body.zen #restartModalInner p { color: #2d3142 !important; }
+    body.zen #restartModalInner button { background: #4a9e7f !important; color: white !important; border: none !important; }
+    body.zen #restartModalInner button:last-child { background: #ede8df !important; color: #2d3142 !important; border: 1px solid #d8d1c6 !important; }
+    body.zen #studentCloseConfirmInner { background: #f5f0e8 !important; border: 1px solid #d8d1c6; }
+    body.zen #studentCloseConfirmInner p { color: #2d3142 !important; }
+    body.zen .teacher-test-label { color: #4a9e7f; }
+    body.zen .teacher-test-question { color: #5a5570; }
+    body.zen .teacher-cue-card { background: #ffffff; }
+    body.zen .teacher-cue-topic { color: #2d3142; }
+    body.zen .teacher-cue-points { color: #5a5570; }
+    body.zen .teacher-cue-instruction { color: #8a8070; border-top-color: #d8d1c6; }
+    body.zen .teacher-share-btn { background: #4a9e7f; color: white; }
+    body.zen .generate-test-btn { border-color: #d8d1c6; color: #8a8070; }
+    body.zen .regenerate-btn { border-color: #d8d1c6; color: #8a8070; }
+    body.zen .feedback-panel-inner { background: #ede8df; border-color: #d8d1c6; }
+    body.zen .feedback-panel-title { color: #4a9e7f; }
+    body.zen .feedback-send-btn { background: #4a9e7f; color: white; }
+    body.zen .feedback-cancel-btn { background: #d8d1c6; color: #2d3142; }
+    body.zen .feedback-textarea { background: #f5f0e8; color: #2d3142; border-color: #d8d1c6; }
+    body.zen .student-inner { background: #f5f0e8; }
+    body.zen .student-header h3 { color: #2d3142; }
+    body.zen .student-header p { color: #8a8070; }
+    body.zen .student-timer { color: #4a9e7f; }
+    body.zen .student-timer.prep { color: #c4913a; }
+    body.zen .student-question-card { background: #ede8df; border-color: #d8d1c6; }
+    body.zen .student-question-label { color: #4a9e7f; }
+    body.zen .student-question-text { color: #2d3142; }
+    body.zen .student-btn-gold { background: #c4913a; color: white; border: none; }
+    body.zen .student-btn-primary { background: #4a9e7f; color: white; border: none; }
+    body.zen .student-btn-secondary { background: #ede8df; color: #8a8070; border: 1px solid #d8d1c6; }
+    body.zen .student-notes { background: #ede8df; color: #2d3142; border-color: #d8d1c6; }
+    body.zen .results-card { background: #ede8df; }
+    body.zen .results-label { color: #5a5570; }
+    body.zen .results-value { color: #4a9e7f; }
+    body.zen #r-total { color: #c4913a; }
+    body.zen .results-section-label { color: #4a9e7f; }
+    body.zen .progress-dot { background: #d8d1c6; }
+    body.zen .progress-dot.active { background: #4a9e7f; }
+    body.zen .test-preview { background: #ede8df; border-color: #d8d1c6; }
+    body.zen .test-preview-part { color: #4a9e7f; }
+    body.zen .test-preview-topic { color: #8a8070; }
+    body.zen .test-preview-item { border-bottom-color: #d8d1c6; }
+    body.zen .cue-card { background: #ffffff; }
+    body.zen .cue-card-header { background: #4a9e7f; }
+    body.zen .cue-card-topic { color: #2d3142; }
+    body.zen .cue-card-points { color: #5a5570; }
+    body.zen .cue-card-instruction { color: #8a8070; border-top-color: #d8d1c6; }
+    body.zen .prep-notes-display { background: #ede8df; color: #5a5570; }
+    body.zen .your-notes-label { color: #4a9e7f; }
+    body.zen .preset-btn { background: #ede8df; border-color: #d8d1c6; }
+    body.zen .preset-btn.active-preset { background: #4a9e7f; border-color: #4a9e7f; }
+    body.zen .preset-btn-title { color: #5a5570; }
+    body.zen .preset-btn.active-preset .preset-btn-title { color: white; }
+    body.zen .preset-btn-sub { color: #8a8070; }
+    body.zen .student-question-label { color: #4a9e7f; }
+    body.zen #studentCloseConfirm > div { background: #f5f0e8; }
+    body.zen .waveform-container canvas { background: #ede8df !important; }
+
+    /* ===== END ZEN MODE ===== */
     .about-modal {
       display: none;
       position: fixed;
@@ -1362,7 +1472,7 @@
 
   <!-- Restart / Reset Confirmation Modal -->
   <div id="restartModal" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.85); align-items:center; justify-content:center; z-index:1000;">
-    <div style="background:#1f2937; padding:24px; border-radius:12px; width:90%; max-width:360px; text-align:center;">
+    <div id="restartModalInner" style="background:#1f2937; padding:24px; border-radius:12px; width:90%; max-width:360px; text-align:center;">
       <p id="restartMsg" style="margin:0 0 20px 0; font-size:1rem; color:#f1f5f9;"></p>
       <div style="display:flex; gap:10px; justify-content:center;">
         <button id="restartConfirmBtn" style="background:#3b82f6; color:white; padding:9px 24px; width:auto; height:auto;">Restart</button>
@@ -1570,7 +1680,7 @@
 
   <!-- Student Close Confirmation -->
   <div id="studentCloseConfirm" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.85); z-index:3000; align-items:center; justify-content:center;">
-    <div style="background:#1f2937; padding:24px; border-radius:12px; width:90%; max-width:360px; text-align:center;">
+    <div id="studentCloseConfirmInner" style="background:#1f2937; padding:24px; border-radius:12px; width:90%; max-width:360px; text-align:center;">
       <p style="margin:0 0 20px 0; font-size:1rem; color:#f1f5f9;">Closing will end your current session and recording.</p>
       <div style="display:flex; gap:10px; justify-content:center;">
         <button onclick="document.getElementById('studentCloseConfirm').style.display='none'" style="background:#3b82f6 !important; color:white !important; border:none !important; padding:9px 24px; width:auto; height:auto; border-radius:8px; font-size:0.85rem; cursor:pointer;">Cancel</button>
@@ -1617,7 +1727,7 @@
         <p>✏️ Teacher Mode - per-part notes, candidate name, export and PDF report. Optional test generation with cue card sharing.</p>
         <p>🎓 Student Mode - four practice modes (Full Test, Part 1, Part 2 or Part 3 Only) with timer, recording and timing feedback.</p>
         <p>💡 Tips - recommended setup for remote sessions.</p>
-        <p>☀️ Three display modes - dark, light and exam.</p>
+        <p>☀️ Four display modes - dark, light, exam and zen.</p>
       </div>
 
       <hr class="about-divider"/>
@@ -1629,6 +1739,7 @@
         <p>📋 Cue Card Sharing - share the cue card cleanly via screen share with a built-in 1 minute preparation countdown.</p>
         <p>📄 Session Reports - download a PDF report at the end of each student practice session with timing and questions used.</p>
         <p>🎙️ Recording - record your practice session and download the audio file.</p>
+        <p>🌅 Zen Mode - a warm, calm display mode designed to reduce pressure during practice.</p>
       </div>
 
       <hr class="about-divider"/>
@@ -1869,17 +1980,21 @@
       document.getElementById("restartModal").style.display = "flex";
     }
 
-    let themeMode = 'dark'; // dark, light, exam
+    let themeMode = 'dark'; // dark, light, exam, zen
 
     function toggleTheme() {
-      body.classList.remove('light', 'exam');
+      body.classList.remove('light', 'exam', 'zen');
       if (themeMode === 'dark') {
         themeMode = 'light';
         body.classList.add('light');
-        document.querySelector(".theme-btn").textContent = "⚡";
+        document.querySelector(".theme-btn").textContent = "🖥️";
       } else if (themeMode === 'light') {
         themeMode = 'exam';
         body.classList.add('exam');
+        document.querySelector(".theme-btn").textContent = "🌅";
+      } else if (themeMode === 'exam') {
+        themeMode = 'zen';
+        body.classList.add('zen');
         document.querySelector(".theme-btn").textContent = "🌙";
       } else {
         themeMode = 'dark';
@@ -2066,6 +2181,7 @@ ${PDF_CSS}
     </div>
   </div>
   <div class="gold-bar"></div>
+  <div style="background:#eff6ff; border-bottom:1px solid #bfdbfe; padding:6px 32px; font-size:8px; color:#1e40af;">To save as PDF: File → Print → Save as PDF (or Ctrl+P / Cmd+P)</div>
 
   <div class="body">
     <div class="section-label">Session Timing</div>
@@ -2080,10 +2196,10 @@ ${PDF_CSS}
         <div class="t-time neutral">${getTime("btn-prep")}</div>
         <div class="t-badge">${getDuration("btn-prep")}</div>
       </div>
-      <div class="timing-box good">
+      <div class="timing-box neutral">
         <div class="t-label">Long Turn</div>
-        <div class="t-time good">${getTime("btn-long")}</div>
-        <div class="t-badge good">${getDuration("btn-long")}</div>
+        <div class="t-time neutral">${getTime("btn-long")}</div>
+        <div class="t-badge">${getDuration("btn-long")}</div>
       </div>
       <div class="timing-box neutral">
         <div class="t-label">Part 3</div>
@@ -2777,6 +2893,7 @@ ${PDF_CSS}
     function timerColor() {
       if (document.body.classList.contains("light")) return "#1e40af";
       if (document.body.classList.contains("exam")) return "#ffffff";
+      if (document.body.classList.contains("zen")) return "#4a9e7f";
       return "#67e0ff";
     }
 
@@ -2955,6 +3072,19 @@ ${PDF_CSS}
     let analyser = null;
     let audioContext = null;
 
+    function waveformBg() {
+      if (document.body.classList.contains("zen")) return "#ede8df";
+      if (document.body.classList.contains("light")) return "#e2e8f0";
+      if (document.body.classList.contains("exam")) return "#111111";
+      return "#1e2937";
+    }
+    function waveformStroke() {
+      if (document.body.classList.contains("zen")) return "#ffffff";
+      if (document.body.classList.contains("light")) return "#3b82f6";
+      if (document.body.classList.contains("exam")) return "#ffffff";
+      return "#67e0ff";
+    }
+
     function startWaveform(canvasId) {
       const canvas = document.getElementById(canvasId);
       if (!canvas) return;
@@ -2963,9 +3093,9 @@ ${PDF_CSS}
       // If no analyser available, draw a static flat line gracefully
       if (!analyser) {
         const ctx = canvas.getContext("2d");
-        ctx.fillStyle = "#1e2937";
+        ctx.fillStyle = waveformBg();
         ctx.fillRect(0, 0, canvas.width, canvas.height);
-        ctx.strokeStyle = "rgba(103,224,255,0.3)";
+        ctx.strokeStyle = waveformStroke().replace(")", ",0.3)").replace("rgb", "rgba");
         ctx.lineWidth = 1.5;
         ctx.beginPath();
         ctx.moveTo(0, canvas.height / 2);
@@ -2986,10 +3116,10 @@ ${PDF_CSS}
           stopWaveform(canvasId);
           return;
         }
-        ctx.fillStyle = "#1e2937";
+        ctx.fillStyle = waveformBg();
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         ctx.lineWidth = 2;
-        ctx.strokeStyle = "#67e0ff";
+        ctx.strokeStyle = waveformStroke();
         ctx.beginPath();
         const sliceWidth = canvas.width / bufferLength;
         let x = 0;
@@ -3121,6 +3251,7 @@ ${PDF_CSS}
     </div>
   </div>
   <div class="gold-bar"></div>
+  <div style="background:#eff6ff; border-bottom:1px solid #bfdbfe; padding:6px 32px; font-size:8px; color:#1e40af;">To save as PDF: File → Print → Save as PDF (or Ctrl+P / Cmd+P)</div>
 
   <div class="body">
     <div class="section-label">Session Timing</div>
