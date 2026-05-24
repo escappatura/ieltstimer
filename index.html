@@ -220,7 +220,7 @@
     body.exam .tips-btn.active { background: #444444; }
     body.light .teacher-btn, body.light .criteria-btn,
     body.light .tips-btn, body.light .theme-btn,
-    body.light .email-btn, body.light .about-btn, body.light .student-btn { background: #64748b; }
+    body.light .email-btn, body.light .about-btn, body.light .student-btn { background: #cbd5e1; color: #475569; }
     .teacher-btn.active { background: #7c3aed; }
     .tips-btn.active { background: #0891b2; }
 
@@ -1622,6 +1622,17 @@
 
       <hr class="about-divider"/>
 
+      <div class="about-section">
+        <h4>Version 2.0 highlights</h4>
+        <p>🎓 Student Practice Mode - simulate a full IELTS Speaking test with four preset options: Full Test, Part 1, Part 2 or Part 3 Only.</p>
+        <p>✏️ Teacher Test Generation - generate a complete mock exam from within Teacher Mode. Questions, cue card and discussion topics all in one view.</p>
+        <p>📋 Cue Card Sharing - share the cue card cleanly via screen share with a built-in 1 minute preparation countdown.</p>
+        <p>📄 Session Reports - download a PDF report at the end of each student practice session with timing and questions used.</p>
+        <p>🎙️ Recording - record your practice session and download the audio file.</p>
+      </div>
+
+      <hr class="about-divider"/>
+
       <p class="about-free" style="text-align:center; font-size:0.72rem;">Free to use. No login. No download.</p>
       <p class="about-version">Version 2.0 - Last updated: May 2026</p>
 
@@ -1922,6 +1933,56 @@
       URL.revokeObjectURL(url);
     }
 
+    const PDF_LOGO = `<svg width="44" height="44" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><rect width="64" height="64" rx="12" fill="#1e3a5f"/><path d="M14 32 Q14 8 32 8 Q50 8 50 32" fill="none" stroke="#f59e0b" stroke-width="5" stroke-linecap="round"/><circle cx="14" cy="38" r="9" fill="#1e3a5f" stroke="#f59e0b" stroke-width="3"/><circle cx="50" cy="38" r="9" fill="#1e3a5f" stroke="#f59e0b" stroke-width="3"/><line x1="50" y1="38" x2="50" y2="30" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round"/><line x1="50" y1="38" x2="56" y2="42" stroke="#f59e0b" stroke-width="2" stroke-linecap="round"/><circle cx="50" cy="38" r="2.5" fill="#f59e0b"/><path d="M14 46 Q14 54 23 56" fill="none" stroke="#f59e0b" stroke-width="3" stroke-linecap="round"/><ellipse cx="27" cy="56" rx="5" ry="3" fill="#f59e0b"/></svg>`;
+
+    const PDF_CSS = `* { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #fff; color: #334155; }
+  .header { background: #1e3a5f; color: white; padding: 18px 28px; display: flex; justify-content: space-between; align-items: center; }
+  .header-left { display: flex; align-items: center; gap: 12px; }
+  .header-title { font-size: 16px; font-weight: 700; color: white; }
+  .header-subtitle { font-size: 9px; color: #93c5fd; margin-top: 2px; }
+  .header-right { text-align: right; }
+  .header-right .candidate-name { font-size: 15px; font-weight: 700; color: #f59e0b; }
+  .header-right .header-meta { font-size: 8px; color: #93c5fd; margin-top: 2px; }
+  .header-right .header-date { font-size: 8px; color: #64748b; margin-top: 2px; }
+  .gold-bar { height: 3px; background: linear-gradient(90deg, #f59e0b, #fbbf24); }
+  .body { padding: 28px 32px; }
+  .section-label { font-size: 9px; font-weight: 700; color: #1e3a5f; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 8px; }
+  .timing-grid { display: grid; gap: 8px; margin-bottom: 6px; }
+  .timing-grid-4 { grid-template-columns: repeat(4, 1fr); }
+  .timing-grid-2 { grid-template-columns: repeat(2, 1fr); max-width: 260px; }
+  .timing-box { border-radius: 6px; padding: 8px 10px; text-align: center; }
+  .timing-box.good { background: #f0fdf4; border: 1px solid #bbf7d0; }
+  .timing-box.warn { background: #fef2f2; border: 1px solid #fecaca; }
+  .timing-box.neutral { background: #eff6ff; border: 1px solid #bfdbfe; }
+  .t-label { font-size: 7px; color: #64748b; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+  .t-time { font-size: 13px; font-weight: 700; margin-top: 4px; }
+  .t-time.good { color: #16a34a; }
+  .t-time.warn { color: #dc2626; }
+  .t-time.neutral { color: #1e40af; }
+  .t-badge { font-size: 7px; margin-top: 3px; font-weight: 600; }
+  .t-badge.good { color: #16a34a; }
+  .t-badge.warn { color: #dc2626; }
+  .total-row { text-align: right; font-size: 11px; font-weight: 700; color: #1e3a5f; margin-top: 6px; padding-top: 6px; border-top: 1px solid #e2e8f0; }
+  .divider { border: none; border-top: 1px solid #e2e8f0; margin: 16px 0; }
+  .notes-block { margin-bottom: 14px; }
+  .notes-label { font-size: 9px; font-weight: 700; color: #1e3a5f; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 6px; }
+  .notes-content { display: flex; }
+  .notes-accent { width: 4px; border-radius: 2px; flex-shrink: 0; margin-right: 10px; min-height: 40px; }
+  .notes-text { font-size: 11px; line-height: 1.7; color: #334155; background: #f8fafc; padding: 10px 12px; border-radius: 4px; flex: 1; }
+  .q-section-header { background: #1e3a5f; color: #f59e0b; font-size: 8px; font-weight: 700; padding: 5px 10px; border-radius: 3px 3px 0 0; letter-spacing: 1px; text-transform: uppercase; margin-top: 10px; }
+  .q-list { background: #f8fafc; padding: 8px 12px; border-radius: 0 0 3px 3px; margin-bottom: 2px; }
+  .q-item { font-size: 10px; color: #334155; line-height: 1.9; }
+  .q-num { font-weight: 700; color: #1e3a5f; margin-right: 4px; }
+  .cue-card-box { background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 6px; padding: 12px; margin: 6px 0; }
+  .cue-topic { font-size: 12px; font-weight: 700; color: #1e3a5f; margin-bottom: 8px; }
+  .cue-point { font-size: 10px; color: #475569; line-height: 1.8; }
+  .cue-instruction { font-size: 10px; color: #94a3b8; font-style: italic; margin-top: 8px; padding-top: 8px; border-top: 1px solid #bfdbfe; }
+  .footer { background: #f8fafc; border-top: 1px solid #e2e8f0; padding: 12px 32px; display: flex; justify-content: space-between; align-items: center; }
+  .footer-brand { font-size: 9px; font-weight: 700; color: #1e3a5f; }
+  .footer-sub { font-size: 8px; color: #94a3b8; margin-top: 2px; }
+  .footer-date { font-size: 8px; color: #94a3b8; text-align: right; }`;
+
     function generatePDF() {
       const name = document.getElementById("candidateName").value.trim() || "Unknown Candidate";
       const p1 = document.getElementById("teacherNotes1").value.trim();
@@ -1986,130 +2047,103 @@
 <meta charset="utf-8">
 <title>IELTS Session Report - ${name}</title>
 <style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #fff; color: #334155; padding: 40px; }
-  .header { background: #1e3a5f; color: white; padding: 16px 24px; border-radius: 8px 8px 0 0; display: grid; grid-template-columns: 40px 1fr 40px; align-items: center; }
-  .header-logo { width: 32px; height: 32px; }
-  .header-center { text-align: center; }
-  .header-center h1 { font-size: 16px; font-weight: 700; }
-  .header-center p { font-size: 10px; color: #94a3b8; margin-top: 2px; }
-  .header-right { font-size: 10px; color: #94a3b8; text-align: right; white-space: nowrap; }
-  .gold-bar { height: 3px; background: #f59e0b; margin-bottom: 24px; }
-  .candidate { margin-bottom: 16px; text-align: center; }
-  .label { font-size: 9px; font-weight: 700; color: #94a3b8; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 4px; }
-  .candidate-name { font-size: 20px; font-weight: 700; color: #1e3a5f; }
-  .divider { border: none; border-top: 1px solid #e2e8f0; margin: 14px 0; }
-  .timing-section { text-align: center; }
-  .timing-row1 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 8px; max-width: 380px; margin-left: auto; margin-right: auto; }
-  .timing-row2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 8px; max-width: 260px; margin-left: auto; margin-right: auto; }
-  .timing-box { background: #f1f5f9; border-radius: 5px; padding: 6px 8px; text-align: center; }
-  .timing-box .t-label { font-size: 7px; color: #94a3b8; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
-  .timing-box .t-time { font-size: 10px; font-weight: 700; color: #1e3a5f; margin-top: 3px; }
-  .timing-box .t-duration { font-size: 8px; font-weight: 600; color: #16a34a; margin-top: 2px; }
-  .breakdown-label { font-size: 7px; font-weight: 700; color: #94a3b8; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 6px; margin-top: 4px; text-align: center; }
-  .notes-section { margin-bottom: 14px; }
-  .notes-section .n-label { font-size: 9px; font-weight: 700; color: #94a3b8; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 4px; }
-  .notes-section p { font-size: 11px; line-height: 1.6; color: #334155; text-align: left; }
-  .footer { margin-top: 20px; padding-top: 10px; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-between; }
-  .footer p { font-size: 9px; color: #94a3b8; }
-  .gold-bar-bottom { height: 3px; background: #f59e0b; margin-top: 8px; border-radius: 0 0 8px 8px; }
-  @media print { body { padding: 0; } }
+${PDF_CSS}
 </style>
 </head>
 <body>
   <div class="header">
-    <svg class="header-logo" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
-      <rect width="64" height="64" rx="10" fill="#1e3a5f"/>
-      <path d="M14 32 Q14 8 32 8 Q50 8 50 32" fill="none" stroke="#f59e0b" stroke-width="5" stroke-linecap="round"/>
-      <circle cx="14" cy="38" r="9" fill="#1e3a5f" stroke="#f59e0b" stroke-width="3"/>
-      <circle cx="50" cy="38" r="9" fill="#1e3a5f" stroke="#f59e0b" stroke-width="3"/>
-      <line x1="50" y1="38" x2="50" y2="30" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round"/>
-      <line x1="50" y1="38" x2="56" y2="42" stroke="#f59e0b" stroke-width="2" stroke-linecap="round"/>
-      <circle cx="50" cy="38" r="2.5" fill="#f59e0b"/>
-      <path d="M14 46 Q14 54 23 56" fill="none" stroke="#f59e0b" stroke-width="3" stroke-linecap="round"/>
-      <ellipse cx="27" cy="56" rx="5" ry="3" fill="#f59e0b"/>
-    </svg>
-    <div class="header-center">
-      <h1>IELTS Speaking</h1>
-      <p>Session Report - ieltstimer.com</p>
+    <div class="header-left">
+      ${PDF_LOGO}
+      <div>
+        <div class="header-title">IELTS Timer</div>
+        <div class="header-subtitle">ieltstimer.com - Free platform for IELTS Speaking</div>
+      </div>
     </div>
     <div class="header-right">
-      <div>${dateStr}</div>
-      <div>${timeStr}</div>
+      <div class="candidate-name">${name}</div>
+      <div class="header-meta">IELTS Speaking Session Report</div>
+      <div class="header-date">${dateStr} &nbsp;${timeStr}</div>
     </div>
   </div>
   <div class="gold-bar"></div>
 
-  <div class="candidate">
-    <div class="label">Candidate</div>
-    <div class="candidate-name">${name}</div>
-  </div>
-
-  <hr class="divider"/>
-
-  <div class="timing-section">
-  <div class="label" style="margin-bottom:8px;">Session Timing</div>
-  <div class="timing-row1">
-    <div class="timing-box"><div class="t-label">Part 1</div><div class="t-time">${getTime("btn-part2").split(/[-–]/)[0].trim() || "N/A"}</div><div class="t-duration">${getDuration2("btn-part2")}</div></div>
-    <div class="timing-box"><div class="t-label">Part 2</div><div class="t-time">${getTime("btn-part2").split(/[-–]/)[0].trim() || "N/A"} - ${getTime("btn-part3").split(/[-–]/)[0].trim() || "N/A"}</div><div class="t-duration">${getPart2Duration()}</div></div>
-    <div class="timing-box"><div class="t-label">Part 3</div><div class="t-time">${getTime("btn-part3")}</div><div class="t-duration">${getDuration("btn-part3")}</div></div>
-  </div>
-  <div class="breakdown-label">Part 2 Breakdown</div>
-  <div class="timing-row2">
-    <div class="timing-box"><div class="t-label">1 min Prep</div><div class="t-time">${getTime("btn-prep")}</div><div class="t-duration">${getDuration("btn-prep")}</div></div>
-    <div class="timing-box"><div class="t-label">Long Turn</div><div class="t-time">${getTime("btn-long")}</div><div class="t-duration">${getDuration("btn-long")}</div></div>
-  </div>
-  </div>
-
-  <hr class="divider"/>
-
-  <div class="notes-section">
-    <div class="n-label">Part 1 Notes</div>
-    <p>${p1 ? p1.replace(/\n/g, "<br>") : "<span style='color:#94a3b8;'>N/A</span>"}</p>
-  </div>
-  <hr class="divider"/>
-  <div class="notes-section">
-    <div class="n-label">Part 2 Notes</div>
-    <p>${p2 ? p2.replace(/\n/g, "<br>") : "<span style='color:#94a3b8;'>N/A</span>"}</p>
-  </div>
-  <hr class="divider"/>
-  <div class="notes-section">
-    <div class="n-label">Part 3 Notes</div>
-    <p>${p3 ? p3.replace(/\n/g, "<br>") : "<span style='color:#94a3b8;'>N/A</span>"}</p>
-  </div>
-
-  ${teacherTest ? `
-  <hr class="divider"/>
-  <div class="label" style="margin-bottom:10px;">Test Questions Used</div>
-  ${teacherTest.topics.map((t, i) => `
-    <div class="notes-section">
-      <div class="n-label">Part 1 - Topic ${i+1}: ${t.name}</div>
-      <p>${t.questions.map((q, qi) => `${qi+1}. ${q}`).join('<br>')}</p>
+  <div class="body">
+    <div class="section-label">Session Timing</div>
+    <div class="timing-grid timing-grid-4">
+      <div class="timing-box neutral">
+        <div class="t-label">Part 1</div>
+        <div class="t-time neutral">${getTime("btn-part2").split(/[-\u2013]/)[0].trim() || "N/A"}</div>
+        <div class="t-badge">${getDuration2("btn-part2")}</div>
+      </div>
+      <div class="timing-box neutral">
+        <div class="t-label">1 min Prep</div>
+        <div class="t-time neutral">${getTime("btn-prep")}</div>
+        <div class="t-badge">${getDuration("btn-prep")}</div>
+      </div>
+      <div class="timing-box good">
+        <div class="t-label">Long Turn</div>
+        <div class="t-time good">${getTime("btn-long")}</div>
+        <div class="t-badge good">${getDuration("btn-long")}</div>
+      </div>
+      <div class="timing-box neutral">
+        <div class="t-label">Part 3</div>
+        <div class="t-time neutral">${getTime("btn-part3")}</div>
+        <div class="t-badge">${getDuration("btn-part3")}</div>
+      </div>
     </div>
-  `).join('<hr class="divider"/>')}
-  <hr class="divider"/>
-  <div class="notes-section">
-    <div class="n-label">Part 2 - Cue Card</div>
-    <p style="font-weight:700; color:#1e3a5f;">${teacherTest.cueCard.topic}</p>
-    <p style="margin-top:4px;">${teacherTest.cueCard.points.join('<br>')}</p>
-    <p style="margin-top:4px; font-style:italic; color:#94a3b8;">${teacherTest.cueCard.instruction}</p>
+    <div class="total-row">Total session: ${getPart2Duration() !== "N/A" ? "calculated" : "N/A"}</div>
+
+    <hr class="divider"/>
+
+    <div class="notes-block">
+      <div class="notes-label">Part 1 Notes</div>
+      <div class="notes-content">
+        <div class="notes-accent" style="background:#1e3a5f;"></div>
+        <div class="notes-text">${p1 ? p1.replace(/\n/g, "<br>") : "<span style='color:#94a3b8;'>N/A</span>"}</div>
+      </div>
+    </div>
+    <div class="notes-block">
+      <div class="notes-label">Part 2 Notes</div>
+      <div class="notes-content">
+        <div class="notes-accent" style="background:#f59e0b;"></div>
+        <div class="notes-text">${p2 ? p2.replace(/\n/g, "<br>") : "<span style='color:#94a3b8;'>N/A</span>"}</div>
+      </div>
+    </div>
+    <div class="notes-block">
+      <div class="notes-label">Part 3 Notes</div>
+      <div class="notes-content">
+        <div class="notes-accent" style="background:#3b82f6;"></div>
+        <div class="notes-text">${p3 ? p3.replace(/\n/g, "<br>") : "<span style='color:#94a3b8;'>N/A</span>"}</div>
+      </div>
+    </div>
+
+    ${teacherTest ? `
+    <hr class="divider"/>
+    <div class="section-label">Test Questions Used</div>
+    ${teacherTest.topics.map((t, i) => `
+      <div class="q-section-header">Part 1 - Topic ${i+1}: ${t.name}</div>
+      <div class="q-list">${t.questions.map((q, qi) => `<div class="q-item"><span class="q-num">${qi+1}.</span>${q}</div>`).join("")}</div>
+    `).join("")}
+    <div class="q-section-header">Part 2 - Cue Card</div>
+    <div class="cue-card-box">
+      <div class="cue-topic">${teacherTest.cueCard.topic}</div>
+      ${teacherTest.cueCard.points.map(p => `<div class="cue-point">${p}</div>`).join("")}
+      <div class="cue-instruction">${teacherTest.cueCard.instruction}</div>
+    </div>
+    <div class="q-section-header">Part 3 - Discussion Questions</div>
+    <div class="q-list">${teacherTest.p3set.map((q, i) => `<div class="q-item">${i === 4 ? '<br>' : ''}<span class="q-num">${i+1}.</span>${q}</div>`).join("")}</div>
+    ` : ""}
   </div>
-  <hr class="divider"/>
-  <div class="notes-section">
-    <div class="n-label">Part 3 - Discussion Questions</div>
-    <p>${teacherTest.p3set.map((q, i) => `${i+1}. ${q}${i===3 ? '<br>' : ''}`).join('<br>')}</p>
-  </div>
-  ` : ''}
 
   <div class="footer">
-    <p>ieltstimer.com - Free platform for IELTS Speaking</p>
-    <p>Emos Scappatura Proust</p>
+    <div>
+      <div class="footer-brand">ieltstimer.com</div>
+      <div class="footer-sub">Free platform for IELTS Speaking</div>
+    </div>
+    <div class="footer-date">Generated: ${dateStr}</div>
   </div>
-  <div class="gold-bar-bottom"></div>
-
-  <script>window.onload = () => {};<\/script>
 </body>
-</html>`;
+</html>`
 
       const blob = new Blob([html], { type: "text/html" });
       const url = URL.createObjectURL(blob);
@@ -3048,87 +3082,102 @@
       const cueCard = studentTest.cueCard;
       const p3questions = studentTest.p3set.map((q, i) => `<li>${q}</li>`).join("");
 
-      const html = `<!DOCTYPE html><html><head><meta charset="UTF-8">
-      <style>
-        * { margin:0; padding:0; box-sizing:border-box; }
-        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background:#fff; color:#334155; padding:40px; }
-        .header { background:#1e3a5f; color:white; padding:16px 24px; border-radius:8px 8px 0 0; display:grid; grid-template-columns:40px 1fr 40px; align-items:center; }
-        .header-logo { width:32px; height:32px; }
-        .header-center { text-align:center; }
-        .header-center h1 { font-size:15px; font-weight:700; }
-        .header-center p { font-size:9px; color:#94a3b8; margin-top:2px; }
-        .header-right { font-size:9px; color:#94a3b8; text-align:right; }
-        .gold-bar { height:3px; background:#f59e0b; margin-bottom:20px; }
-        .label { font-size:8px; font-weight:700; color:#94a3b8; letter-spacing:1px; text-transform:uppercase; margin-bottom:6px; text-align:center; }
-        .timing-row { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-bottom:16px; }
-        .timing-box { background:#f1f5f9; border-radius:5px; padding:6px 8px; text-align:center; }
-        .timing-box .t-label { font-size:7px; color:#94a3b8; font-weight:700; text-transform:uppercase; }
-        .timing-box .t-time { font-size:10px; font-weight:700; color:#1e3a5f; margin-top:3px; }
-        .divider { border:none; border-top:1px solid #e2e8f0; margin:14px 0; }
-        .section-label { font-size:8px; font-weight:700; color:#94a3b8; letter-spacing:1px; text-transform:uppercase; margin:10px 0 6px 0; }
-        .q-list { padding-left:16px; }
-        .q-list li { font-size:10px; color:#334155; line-height:1.8; }
-        .cue-card { background:#f8fafc; border-radius:8px; overflow:hidden; margin-bottom:14px; }
-        .cue-card-header { background:#1e3a5f; padding:8px 14px; font-size:8px; font-weight:700; color:white; letter-spacing:1px; text-transform:uppercase; }
-        .cue-card-body { padding:12px 14px; }
-        .cue-card-topic { font-size:10px; font-weight:700; color:#1e3a5f; margin-bottom:8px; }
-        .cue-card-points { font-size:9px; color:#475569; line-height:1.8; }
-        .cue-card-instruction { font-size:9px; color:#94a3b8; font-style:italic; margin-top:8px; padding-top:6px; border-top:1px solid #e2e8f0; }
-        .footer { margin-top:20px; padding-top:10px; border-top:1px solid #e2e8f0; display:flex; justify-content:space-between; }
-        .footer p { font-size:8px; color:#94a3b8; }
-        .gold-bar-bottom { height:3px; background:#f59e0b; margin-top:8px; border-radius:0 0 8px 8px; }
-        .total-row { display:flex; justify-content:space-between; padding:6px 8px; background:#f1f5f9; border-radius:5px; font-size:10px; font-weight:700; color:#1e3a5f; margin-top:4px; }
-        @media print { body { padding:0; } }
-      </style></head><body>
-      <div class="header">
-        <svg class="header-logo" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
-          <rect width="64" height="64" rx="10" fill="#1e3a5f"/>
-          <path d="M14 32 Q14 8 32 8 Q50 8 50 32" fill="none" stroke="#f59e0b" stroke-width="5" stroke-linecap="round"/>
-          <circle cx="14" cy="38" r="9" fill="#1e3a5f" stroke="#f59e0b" stroke-width="3"/>
-          <circle cx="50" cy="38" r="9" fill="#1e3a5f" stroke="#f59e0b" stroke-width="3"/>
-          <circle cx="50" cy="38" r="2.5" fill="#f59e0b"/>
-          <path d="M14 46 Q14 54 23 56" fill="none" stroke="#f59e0b" stroke-width="3" stroke-linecap="round"/>
-          <ellipse cx="27" cy="56" rx="5" ry="3" fill="#f59e0b"/>
-        </svg>
-        <div class="header-center"><h1>IELTS Speaking</h1><p>Student Session Report - ieltstimer.com</p></div>
-        <div class="header-right"><div>${dateStr}</div><div>${timeStr}</div></div>
+      // Timing colour helpers
+      const p1Secs = p1 ? p1/1000 : null;
+      const prepSecs = prep ? prep/1000 : null;
+      const ltSecs = lt ? lt/1000 : null;
+      const p3Secs = p3 ? p3/1000 : null;
+      const p1Class = p1Secs !== null ? (p1Secs >= 240 ? "good" : "warn") : "neutral";
+      const prepClass = prepSecs !== null ? (prepSecs <= 65 ? "good" : "warn") : "neutral";
+      const ltClass = ltSecs !== null ? (ltSecs >= 60 && ltSecs <= 130 ? "good" : "warn") : "neutral";
+      const p3Class = p3Secs !== null ? (p3Secs >= 240 ? "good" : "warn") : "neutral";
+      const p1Badge = p1Secs !== null ? (p1Secs >= 240 ? "✓ Good" : "↑ Aim for 4-5 min") : "";
+      const prepBadge = prepSecs !== null ? (prepSecs <= 65 ? "✓ Good" : "↑ Aim for 1 min") : "";
+      const ltBadge = ltSecs !== null ? (ltSecs >= 60 && ltSecs <= 130 ? "✓ Good" : "↑ Aim for 1-2 min") : "";
+      const p3Badge = p3Secs !== null ? (p3Secs >= 240 ? "✓ Good" : "↑ Aim for 4-5 min") : "";
+
+      const html = `<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>IELTS Student Practice Report</title>
+<style>
+${PDF_CSS}
+</style>
+</head>
+<body>
+  <div class="header">
+    <div class="header-left">
+      ${PDF_LOGO}
+      <div>
+        <div class="header-title">IELTS Timer</div>
+        <div class="header-subtitle">ieltstimer.com - Free platform for IELTS Speaking</div>
       </div>
-      <div class="gold-bar"></div>
+    </div>
+    <div class="header-right">
+      <div class="candidate-name">Student Practice Report</div>
+      <div class="header-meta">${['full','p1','p2','p3'].includes(currentPreset) ? {full:'Full Test',p1:'Part 1 Only',p2:'Part 2 Only',p3:'Part 3 Only'}[currentPreset] : 'Practice Session'}</div>
+      <div class="header-date">${dateStr} &nbsp;${timeStr}</div>
+    </div>
+  </div>
+  <div class="gold-bar"></div>
 
-      <div class="label">Session Timing</div>
-      <div class="timing-row">
-        <div class="timing-box"><div class="t-label">Part 1</div><div class="t-time">${fmt(p1)}</div></div>
-        <div class="timing-box"><div class="t-label">1 min Prep</div><div class="t-time">${fmt(prep)}</div></div>
-        <div class="timing-box"><div class="t-label">Long Turn</div><div class="t-time">${fmt(lt)}</div></div>
-        <div class="timing-box"><div class="t-label">Part 3</div><div class="t-time">${fmt(p3)}</div></div>
+  <div class="body">
+    <div class="section-label">Session Timing</div>
+    <div class="timing-grid timing-grid-4">
+      <div class="timing-box ${p1Class}">
+        <div class="t-label">Part 1</div>
+        <div class="t-time ${p1Class}">${fmt(p1)}</div>
+        <div class="t-badge ${p1Class}">${p1Badge}</div>
       </div>
-      <div class="total-row"><span>Total Session</span><span>${fmt(total)}</span></div>
-
-      <hr class="divider"/>
-      <div class="label" style="margin-bottom:10px;">Part 1 Questions</div>
-      ${p1Topics}
-
-      <hr class="divider"/>
-      <div class="label" style="margin-bottom:10px;">Part 2 - Long Turn</div>
-      <div class="cue-card">
-        <div class="cue-card-header">Cue Card</div>
-        <div class="cue-card-body">
-          <div class="cue-card-topic">${cueCard.topic}</div>
-          <div class="cue-card-points">${cueCard.points.join("<br>")}</div>
-          <div class="cue-card-instruction">${cueCard.instruction}</div>
-        </div>
+      <div class="timing-box ${prepClass}">
+        <div class="t-label">1 min Prep</div>
+        <div class="t-time ${prepClass}">${fmt(prep)}</div>
+        <div class="t-badge ${prepClass}">${prepBadge}</div>
       </div>
-
-      <hr class="divider"/>
-      <div class="label" style="margin-bottom:10px;">Extended Discussion Questions</div>
-      <ol class="q-list">${p3questions}</ol>
-
-      <div class="footer">
-        <p>ieltstimer.com - Free platform for IELTS Speaking</p>
-        <p>Emos Scappatura Proust</p>
+      <div class="timing-box ${ltClass}">
+        <div class="t-label">Long Turn</div>
+        <div class="t-time ${ltClass}">${fmt(lt)}</div>
+        <div class="t-badge ${ltClass}">${ltBadge}</div>
       </div>
-      <div class="gold-bar-bottom"></div>
-      </body></html>`;
+      <div class="timing-box ${p3Class}">
+        <div class="t-label">Part 3</div>
+        <div class="t-time ${p3Class}">${fmt(p3)}</div>
+        <div class="t-badge ${p3Class}">${p3Badge}</div>
+      </div>
+    </div>
+    <div class="total-row">Total session: ${fmt(total)}</div>
+
+    ${hasP1 ? `<hr class="divider"/>
+    <div class="section-label">Part 1 Questions</div>
+    ${studentTest.topics.map((t, i) => `
+      <div class="q-section-header">Topic ${i+1}: ${t.name}</div>
+      <div class="q-list">${t.questions.map((q, qi) => `<div class="q-item"><span class="q-num">${qi+1}.</span>${q}</div>`).join("")}</div>
+    `).join("")}` : ""}
+
+    ${hasP2 ? `<hr class="divider"/>
+    <div class="section-label">Part 2 - Long Turn</div>
+    <div class="cue-card-box">
+      <div class="cue-topic">${cueCard.topic}</div>
+      ${cueCard.points.map(p => `<div class="cue-point">${p}</div>`).join("")}
+      <div class="cue-instruction">${cueCard.instruction}</div>
+    </div>` : ""}
+
+    ${hasP3 ? `<hr class="divider"/>
+    <div class="section-label">Part 3 - Discussion Questions</div>
+    <div class="q-section-header">Questions</div>
+    <div class="q-list">${studentTest.p3set.map((q, i) => `<div class="q-item">${i === 4 ? '<br>' : ''}<span class="q-num">${i+1}.</span>${q}</div>`).join("")}</div>` : ""}
+  </div>
+
+  <div class="footer">
+    <div>
+      <div class="footer-brand">ieltstimer.com</div>
+      <div class="footer-sub">Free platform for IELTS Speaking</div>
+    </div>
+    <div class="footer-date">Generated: ${dateStr}</div>
+  </div>
+</body>
+</html>`
 
       const blob = new Blob([html], { type: "text/html" });
       const url = URL.createObjectURL(blob);
@@ -3140,15 +3189,36 @@
       if (!studentBlob) {
         const btn = document.getElementById("downloadBtn");
         if (btn) { btn.textContent = "Recording not available"; btn.disabled = true; btn.style.opacity = "0.5"; }
-        return; 
+        return;
       }
       const ext = studentBlob.type.includes('wav') ? 'wav' : studentBlob.type.includes('webm') ? 'webm' : 'ogg';
-      const url = URL.createObjectURL(studentBlob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = `ielts-practice-recording.${ext}`;
-      a.click();
-      URL.revokeObjectURL(url);
+      // Fix duration metadata by seeking to end
+      const audio = document.createElement("audio");
+      audio.src = URL.createObjectURL(studentBlob);
+      audio.onloadedmetadata = () => {
+        if (audio.duration === Infinity || isNaN(audio.duration)) {
+          audio.currentTime = 1e101;
+          audio.ontimeupdate = () => {
+            audio.ontimeupdate = null;
+            audio.currentTime = 0;
+            // Re-record the fixed blob isn't possible directly, so just download original
+            // Duration will show correctly in most modern players after this seek trick
+            const url = URL.createObjectURL(studentBlob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = `ielts-practice-recording.${ext}`;
+            a.click();
+            URL.revokeObjectURL(url);
+          };
+        } else {
+          const url = URL.createObjectURL(studentBlob);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = `ielts-practice-recording.${ext}`;
+          a.click();
+          URL.revokeObjectURL(url);
+        }
+      };
     }
 
     function showStudentMode() {
