@@ -920,11 +920,11 @@
     body.zen .master-timer { color: #4a9e7f; }
     body.zen button { background: #ede8df; color: #2d3142; border: 1px solid #d8d1c6; }
     body.zen button:hover { filter: brightness(0.96); }
-    body.zen button.clicked { background: #c4913a; color: white; border-color: #c4913a; }
+    body.zen button.clicked { background: #3a7d62; color: white; border-color: #3a7d62; }
     body.zen .start-btn, body.zen .reset-btn { border: none; }
     body.zen .icon-btn { background: transparent !important; border: none !important; }
     body.zen .phase-btn { background: #ede8df; color: #8a8070; border: 1px solid #d8d1c6; }
-    body.zen .phase-btn.clicked { background: #c4913a; color: white; border-color: #c4913a; }
+    body.zen .phase-btn.clicked { background: #3a7d62; color: white; border-color: #3a7d62; }
     body.zen .teacher-panel { background: #ede8df; border-color: #d8d1c6; }
     body.zen .teacher-panel label { color: #4a9e7f; }
     body.zen .notes-tab { background: #e0d9cd; color: #8a8070; }
@@ -951,6 +951,7 @@
     body.zen .tips-inner h4 { color: #4a9e7f; }
     body.zen .tips-inner p { color: #5a5570; }
     body.zen .tips-inner hr { border-color: #d8d1c6; }
+    body.zen .tips-inner a { color: #4a9e7f; }
     body.zen .about-free { color: #8a8070; }
     body.zen .results-timing { background: #ede8df; border: 1px solid #d8d1c6; }
     body.zen .results-feedback { background: #ede8df; border: 1px solid #d8d1c6; }
@@ -1685,6 +1686,85 @@
       <div style="display:flex; gap:10px; justify-content:center;">
         <button onclick="document.getElementById('studentCloseConfirm').style.display='none'" style="background:#3b82f6 !important; color:white !important; border:none !important; padding:9px 24px; width:auto; height:auto; border-radius:8px; font-size:0.85rem; cursor:pointer;">Cancel</button>
         <button onclick="doCloseStudentMode()" style="background:#475569 !important; color:white !important; border:none !important; padding:9px 24px; width:auto; height:auto; border-radius:8px; font-size:0.85rem; cursor:pointer;">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Welcome Modal -->
+  <div id="welcomeModal" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.85); z-index:2000; align-items:center; justify-content:center; padding:20px; overflow-y:auto;">
+    <div style="background:#1e3a5f; border-radius:14px; width:100%; max-width:480px; overflow:hidden; margin:auto;">
+      <!-- Header -->
+      <div style="background:#1e3a5f; padding:18px 24px; display:flex; align-items:center; gap:14px;">
+        <svg width="44" height="44" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0;">
+          <rect width="64" height="64" rx="12" fill="#1a3356"/>
+          <path d="M14 32 Q14 8 32 8 Q50 8 50 32" fill="none" stroke="#f59e0b" stroke-width="5" stroke-linecap="round"/>
+          <circle cx="14" cy="38" r="9" fill="#1a3356" stroke="#f59e0b" stroke-width="3"/>
+          <circle cx="50" cy="38" r="9" fill="#1a3356" stroke="#f59e0b" stroke-width="3"/>
+          <line x1="50" y1="38" x2="50" y2="30" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round"/>
+          <line x1="50" y1="38" x2="56" y2="42" stroke="#f59e0b" stroke-width="2" stroke-linecap="round"/>
+          <circle cx="50" cy="38" r="2.5" fill="#f59e0b"/>
+          <path d="M14 46 Q14 54 23 56" fill="none" stroke="#f59e0b" stroke-width="3" stroke-linecap="round"/>
+          <ellipse cx="27" cy="56" rx="5" ry="3" fill="#f59e0b"/>
+        </svg>
+        <div>
+          <div style="font-size:1.1rem; font-weight:700; color:#ffffff;">IELTS Timer</div>
+          <div style="font-size:0.75rem; color:#93c5fd; margin-top:2px;">Free platform for IELTS Speaking</div>
+        </div>
+      </div>
+      <div style="height:2px; background:linear-gradient(90deg, #f59e0b, #fbbf24);"></div>
+
+      <!-- Body -->
+      <div style="padding:20px 24px;">
+        <div style="font-size:0.85rem; font-weight:700; color:#ffffff; margin-bottom:12px; text-align:center;">Welcome - here is what you can do:</div>
+
+        <!-- Strip 1 -->
+        <div style="background:#1a3356; border-radius:8px; padding:10px 14px; margin-bottom:8px; display:flex; align-items:flex-start; gap:12px;">
+          <span style="font-size:1.2rem; flex-shrink:0;">⏱️</span>
+          <div>
+            <div style="font-size:0.8rem; font-weight:700; color:#f59e0b; margin-bottom:2px;">Timer</div>
+            <div style="font-size:0.75rem; color:#93c5fd; line-height:1.5;">Start the timer and stamp Part 2, Long Turn and Part 3 times.</div>
+          </div>
+        </div>
+
+        <!-- Strip 2 -->
+        <div style="background:#1a3356; border-radius:8px; padding:10px 14px; margin-bottom:8px; display:flex; align-items:flex-start; gap:12px;">
+          <span style="font-size:1.2rem; flex-shrink:0;">✏️</span>
+          <div>
+            <div style="font-size:0.8rem; font-weight:700; color:#f59e0b; margin-bottom:2px;">Teacher Mode</div>
+            <div style="font-size:0.75rem; color:#93c5fd; line-height:1.5;">Per-part notes, test generation, cue card sharing and PDF reports.</div>
+          </div>
+        </div>
+
+        <!-- Strip 3 -->
+        <div style="background:#1a3356; border-radius:8px; padding:10px 14px; margin-bottom:8px; display:flex; align-items:flex-start; gap:12px;">
+          <span style="font-size:1.2rem; flex-shrink:0;">🎓</span>
+          <div>
+            <div style="font-size:0.8rem; font-weight:700; color:#f59e0b; margin-bottom:2px;">Student Practice</div>
+            <div style="font-size:0.75rem; color:#93c5fd; line-height:1.5;">Simulate a full test - choose Full Test, Part 1, 2 or 3 Only.</div>
+          </div>
+        </div>
+
+        <!-- Strip 4 -->
+        <div style="background:#1a3356; border-radius:8px; padding:10px 14px; margin-bottom:16px; display:flex; align-items:flex-start; gap:12px;">
+          <span style="font-size:1.2rem; flex-shrink:0;">🌅</span>
+          <div>
+            <div style="font-size:0.8rem; font-weight:700; color:#f59e0b; margin-bottom:2px;">Display Modes</div>
+            <div style="font-size:0.75rem; color:#93c5fd; line-height:1.5;">Four themes - Dark, Light, Exam and Zen - toggle with the theme button.</div>
+          </div>
+        </div>
+
+        <hr style="border:none; border-top:1px solid #2a4a7f; margin-bottom:14px;"/>
+
+        <!-- Checkbox -->
+        <div style="display:flex; align-items:center; gap:8px; margin-bottom:12px;">
+          <input type="checkbox" id="welcomeDontShow" checked style="width:14px; height:14px; cursor:pointer; accent-color:#3b82f6;"/>
+          <label for="welcomeDontShow" style="font-size:0.75rem; color:#64748b; cursor:pointer;">Don't show this again</label>
+        </div>
+
+        <!-- CTA -->
+        <button onclick="closeWelcome()" style="width:100%; padding:12px; background:#f59e0b; color:#1e3a5f; border:none; border-radius:8px; font-size:0.9rem; font-weight:700; cursor:pointer;">Get Started</button>
+
+        <div style="text-align:center; margin-top:10px; font-size:0.7rem; color:#2a4a7f;">Version 2.0</div>
       </div>
     </div>
   </div>
@@ -3487,6 +3567,18 @@ ${PDF_CSS}
     };
 
     // ===== END TEACHER TEST GENERATION =====
+
+    function closeWelcome() {
+      if (document.getElementById("welcomeDontShow").checked) {
+        localStorage.setItem("ielts_welcome_seen", "1");
+      }
+      document.getElementById("welcomeModal").style.display = "none";
+    }
+
+    // Show welcome on first visit
+    if (!localStorage.getItem("ielts_welcome_seen")) {
+      document.getElementById("welcomeModal").style.display = "flex";
+    }
 
     function showAbout() {
       document.getElementById("aboutModal").style.display = "flex";
