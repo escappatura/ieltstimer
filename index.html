@@ -224,6 +224,40 @@
     .teacher-btn.active { background: #7c3aed; }
     .tips-btn.active { background: #0891b2; }
 
+    .toolbar-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+    }
+    .toolbar-label {
+      display: none;
+      font-size: 0.6rem;
+      color: rgba(255,255,255,0.5);
+      letter-spacing: 0.2px;
+      font-weight: 400;
+      text-align: center;
+    }
+    body.light .toolbar-label { color: #94a3b8; }
+    body.exam .toolbar-label { color: rgba(255,255,255,0.6); }
+    body.zen .toolbar-label { color: #a09688; }
+
+    /* Desktop toolbar — slightly larger with labels */
+    @media (min-width: 600px) {
+      .toolbar-btn {
+        width: 34px !important;
+        height: 34px !important;
+        font-size: 1rem !important;
+        border-radius: 6px !important;
+        background: rgba(255,255,255,0.05) !important;
+        border: 1px solid rgba(255,255,255,0.08) !important;
+      }
+      body.light .toolbar-btn { background: rgba(0,0,0,0.04) !important; border-color: rgba(0,0,0,0.08) !important; }
+      body.exam .toolbar-btn { background: transparent !important; border: 1px solid rgba(255,255,255,0.25) !important; }
+      body.zen .toolbar-btn { background: rgba(0,0,0,0.04) !important; border-color: rgba(0,0,0,0.08) !important; }
+      .toolbar-label { display: block; }
+    }
+
     /* --- Footer icons row (mobile) --- */
     .footer-icons {
       display: flex;
@@ -1360,19 +1394,37 @@
   </div>
 
   <!-- Toolbar -->
-  <div class="footer-icons" style="margin:12px 0; padding:8px 0; border-top:1px solid rgba(255,255,255,0.06); border-bottom:1px solid rgba(255,255,255,0.06); display:flex; justify-content:center; align-items:center;">
-    <button class="about-btn" onclick="showAbout()" title="About" style="display:flex;align-items:center;justify-content:center;">
-      <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="8" cy="8" r="7.5" fill="#3b82f6"/>
-        <circle cx="8" cy="4.5" r="1" fill="white"/>
-        <rect x="7.1" y="6.5" width="1.8" height="5" rx="0.5" fill="white"/>
-      </svg>
-    </button>
-    <button class="teacher-btn" id="teacherBtn" onclick="toggleTeacherMode()" title="Teacher Mode">✏️</button>
-    <button class="student-btn" onclick="showStudentMode()" title="Student Practice">🎓</button>
-    <button class="tips-btn" id="tipsBtn" onclick="showTips()" title="Tips">💡</button>
-    <button class="theme-btn" onclick="toggleTheme()" title="Toggle theme">☀️</button>
-    <button class="email-btn" onclick="toggleFeedbackPanel()" title="Send feedback">✉️</button>
+  <div class="footer-icons" style="margin:12px 0; padding:8px 0; border-top:1px solid rgba(255,255,255,0.06); border-bottom:1px solid rgba(255,255,255,0.06); display:flex; justify-content:center; align-items:flex-start;">
+    <div class="toolbar-item">
+      <button class="about-btn toolbar-btn" onclick="showAbout()" title="About" style="display:flex;align-items:center;justify-content:center;">
+        <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="8" cy="8" r="7.5" fill="#3b82f6"/>
+          <circle cx="8" cy="4.5" r="1" fill="white"/>
+          <rect x="7.1" y="6.5" width="1.8" height="5" rx="0.5" fill="white"/>
+        </svg>
+      </button>
+      <span class="toolbar-label">About</span>
+    </div>
+    <div class="toolbar-item">
+      <button class="teacher-btn toolbar-btn" id="teacherBtn" onclick="toggleTeacherMode()" title="Teacher Mode">✏️</button>
+      <span class="toolbar-label">Teacher</span>
+    </div>
+    <div class="toolbar-item">
+      <button class="student-btn toolbar-btn" onclick="showStudentMode()" title="Student Practice">🎓</button>
+      <span class="toolbar-label">Practice</span>
+    </div>
+    <div class="toolbar-item">
+      <button class="tips-btn toolbar-btn" id="tipsBtn" onclick="showTips()" title="Tips">💡</button>
+      <span class="toolbar-label">Tips</span>
+    </div>
+    <div class="toolbar-item">
+      <button class="theme-btn toolbar-btn" onclick="toggleTheme()" title="Toggle theme">☀️</button>
+      <span class="toolbar-label">Theme</span>
+    </div>
+    <div class="toolbar-item">
+      <button class="email-btn toolbar-btn" onclick="toggleFeedbackPanel()" title="Send feedback">✉️</button>
+      <span class="toolbar-label">Feedback</span>
+    </div>
   </div>
 
   <!-- Inline Feedback Panel -->
@@ -1758,7 +1810,7 @@
         <!-- Checkbox -->
         <div style="display:flex; align-items:center; gap:8px; margin-bottom:12px;">
           <input type="checkbox" id="welcomeDontShow" checked style="width:14px; height:14px; cursor:pointer; accent-color:#3b82f6;"/>
-          <label for="welcomeDontShow" style="font-size:0.75rem; color:#64748b; cursor:pointer;">Don't show this again</label>
+          <label for="welcomeDontShow" style="font-size:0.75rem; color:#64748b; cursor:pointer;">Do not show this again</label>
         </div>
 
         <!-- CTA -->
