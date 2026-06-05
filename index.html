@@ -498,7 +498,7 @@
       margin: 6px 0 2px 0;
       font-variant-numeric: tabular-nums;
     }
-    .student-timer.prep { color: #f59e0b; }
+    .student-timer.prep { color: #67e0ff; }
     .student-phase-label {
       text-align: center;
       font-size: 0.72rem;
@@ -719,7 +719,7 @@
     body.light .student-header h3 { color: #1e40af; }
     body.light .student-header p { color: #64748b; }
     body.light .student-timer { color: #1e40af; }
-    body.light .student-timer.prep { color: #d97706; }
+    body.light .student-timer.prep { color: #1e40af; }
     body.light .student-question-card { background: #e2e8f0; }
     body.light .student-question-label { color: #1e40af; }
     body.light .student-question-text { color: #1e2937; }
@@ -731,9 +731,10 @@
     body.light .results-label { color: #475569; }
     body.light .results-value { color: #1e40af; }
     body.exam .results-value { color: #ffffff; }
-    body.exam #r-total { color: #f59e0b; }
-    body.light #r-total { color: #1e3a5f; }
-    #r-total { color: #f59e0b; }
+    #r-total { color: #67e0ff; }
+    body.light #r-total { color: #1e40af; }
+    body.exam #r-total { color: #ffffff; }
+    body.zen #r-total { color: #4a9e7f; }
     body.light .results-feedback { background: #e2e8f0; }
     body.light .student-notes { background: #f8fafc; color: #1e2937; }
     body.light .student-btn-secondary { background: #cbd5e1; color: #475569; }
@@ -747,7 +748,7 @@
     body.exam .student-header h3 { color: #ffffff; }
     body.exam .student-header p { color: #888888; }
     body.exam .student-timer { color: #ffffff; }
-    body.exam .student-timer.prep { color: #f59e0b; }
+    body.exam .student-timer.prep { color: #ffffff; }
     body.exam .student-question-card { background: #111111; }
     body.exam .student-question-label { color: #ffffff; }
     body.exam .student-question-text { color: #ffffff; }
@@ -991,8 +992,8 @@
     body.zen .results-timing { background: #ede8df; border: 1px solid #d8d1c6; }
     body.zen .results-feedback { background: #ede8df; border: 1px solid #d8d1c6; }
     body.zen .feedback-title { color: #4a9e7f; }
-    body.zen .feedback-item.good { color: #4a9e7f; }
-    body.zen .feedback-item.warn { color: #c4913a; }
+    body.zen .feedback-item.good { color: #16a34a; }
+    body.zen .feedback-item.warn { color: #ef4444; }
     body.zen .results-row { border-bottom-color: #d8d1c6; }
     body.zen .results-row > div[style*="border-top"] { border-top-color: #d8d1c6 !important; }
     body.zen .teacher-panel { border: 1px solid #d8d1c6; }
@@ -1026,18 +1027,21 @@
     body.zen .student-header h3 { color: #2d3142; }
     body.zen .student-header p { color: #8a8070; }
     body.zen .student-timer { color: #4a9e7f; }
-    body.zen .student-timer.prep { color: #c4913a; }
+    body.zen .student-timer.prep { color: #4a9e7f; }
     body.zen .student-question-card { background: #ede8df; border-color: #d8d1c6; }
     body.zen .student-question-label { color: #4a9e7f; }
     body.zen .student-question-text { color: #2d3142; }
-    body.zen .student-btn-gold { background: #c4913a; color: white; border: none; }
+    body.light .student-btn-gold { background: #1e40af; color: white; }
+    body.light .student-btn-primary { background: #1e40af; color: white; }
+    /* Dark mode — gold buttons become blue */
+    body:not(.light):not(.exam):not(.zen) .student-btn-gold { background: #3b82f6; color: white; }
+    body.zen .student-btn-gold { background: #4a9e7f; color: white; border: none; }
     body.zen .student-btn-primary { background: #4a9e7f; color: white; border: none; }
     body.zen .student-btn-secondary { background: #ede8df; color: #8a8070; border: 1px solid #d8d1c6; }
     body.zen .student-notes { background: #ede8df; color: #2d3142; border-color: #d8d1c6; }
     body.zen .results-card { background: #ede8df; }
     body.zen .results-label { color: #5a5570; }
     body.zen .results-value { color: #4a9e7f; }
-    body.zen #r-total { color: #c4913a; }
     body.zen .results-section-label { color: #4a9e7f; }
     body.zen .progress-dot { background: #d8d1c6; }
     body.zen .progress-dot.active { background: #4a9e7f; }
@@ -1395,7 +1399,7 @@
   </div>
 
   <!-- Toolbar -->
-  <div class="footer-icons" style="margin:12px 0; padding:8px 0; border-top:1px solid rgba(255,255,255,0.06); border-bottom:1px solid rgba(255,255,255,0.06); display:flex; justify-content:center; align-items:flex-start;">
+  <div class="footer-icons" style="margin:12px 0; padding:8px 0; display:flex; justify-content:center; align-items:flex-start;">
     <div class="toolbar-item">
       <button class="about-btn toolbar-btn" onclick="showAbout()" title="About" style="display:flex;align-items:center;justify-content:center;">
         <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
@@ -1635,7 +1639,7 @@
         <div style="text-align:center; font-size:0.7rem; color:#475569; margin-bottom:4px; margin-top:-8px;">Part 2 of 3 - Preparation</div>
         <div class="student-timer prep" id="s-timer-2">1:00</div>
         <div class="student-phase-label" id="s-prep-label">Read the cue card carefully</div>
-        <div id="prep-time-up" style="display:none; text-align:center; font-size:0.78rem; color:#f59e0b; margin-bottom:8px; font-weight:600;">Preparation time is up - start speaking when ready</div>
+        <div id="prep-time-up" style="display:none; text-align:center; font-size:0.78rem; color:#22c55e; margin-bottom:8px; font-weight:600;">Preparation time is up - start speaking when ready</div>
         <div class="cue-card" id="cueCard">
           <div class="cue-card-header">CUE CARD</div>
           <div class="cue-card-body">
@@ -1724,7 +1728,7 @@
           <div class="results-row"><span class="results-label">Long Turn</span><span class="results-value" id="r-lt">—</span></div>
           <div class="results-row"><span class="results-label">Part 3</span><span class="results-value" id="r-p3">—</span></div>
           <div class="results-row" style="border-top:1px solid #374151; margin-top:6px; padding-top:6px;">
-            <span class="results-label" style="font-weight:700;">Total</span>
+            <span class="results-label">Total</span>
             <span class="results-value" id="r-total">—</span>
           </div>
         </div>
@@ -1829,7 +1833,7 @@
         <!-- CTA -->
         <button onclick="closeWelcome()" style="width:100%; padding:12px; background:#f59e0b; color:#1e3a5f; border:none; border-radius:8px; font-size:0.9rem; font-weight:700; cursor:pointer;">Get Started</button>
 
-        <div style="text-align:center; margin-top:10px; font-size:0.7rem; color:#2a4a7f;">Version 2.0</div>
+        <div style="text-align:center; margin-top:10px; font-size:0.7rem; color:rgba(255,255,255,0.4);">Version 2.0</div>
       </div>
     </div>
   </div>
