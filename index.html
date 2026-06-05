@@ -39,6 +39,7 @@
       height: auto;
       display: flex;
       flex-direction: column;
+      justify-content: flex-start;
       overflow-y: auto;
     }
     body.light { background: #f8fafc; color: #1e2937; }
@@ -184,8 +185,8 @@
       gap: 10px;
       font-size: 0.9rem;
       color: #94a3b8;
-      margin-top: auto;
-      padding: 9px 0 5px 0;
+      margin-top: 8px;
+      padding: 6px 0 4px 0;
       font-weight: 500;
       border-top: 1px solid #334155;
       flex-wrap: wrap;
@@ -1424,6 +1425,18 @@
     <div class="toolbar-item">
       <button class="email-btn toolbar-btn" onclick="toggleFeedbackPanel()" title="Send feedback">✉️</button>
       <span class="toolbar-label">Feedback</span>
+    </div>
+    <div class="toolbar-item">
+      <button class="about-btn toolbar-btn" id="shareBtn" onclick="shareLink()" title="Share">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="18" cy="5" r="3" stroke="currentColor" stroke-width="2"/>
+          <circle cx="18" cy="19" r="3" stroke="currentColor" stroke-width="2"/>
+          <circle cx="6" cy="12" r="3" stroke="currentColor" stroke-width="2"/>
+          <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </button>
+      <span class="toolbar-label">Share</span>
     </div>
   </div>
 
@@ -3630,6 +3643,26 @@ ${PDF_CSS}
     // Show welcome on first visit
     if (!localStorage.getItem("ielts_welcome_seen")) {
       document.getElementById("welcomeModal").style.display = "flex";
+    }
+
+    function shareLink() {
+      const shareData = {
+        title: 'IELTS Timer',
+        text: 'Free platform for IELTS Speaking — for teachers and students.',
+        url: 'https://www.ieltstimer.com'
+      };
+      if (navigator.share) {
+        navigator.share(shareData).catch(() => {});
+      } else {
+        navigator.clipboard.writeText("https://www.ieltstimer.com").then(() => {
+          toast("ieltstimer.com copied - ready to share!", 3000);
+          const btn = document.getElementById("shareBtn");
+          btn.style.color = "#22c55e";
+          setTimeout(() => { btn.style.color = ""; }, 3000);
+        }).catch(() => {
+          toast("ieltstimer.com copied - ready to share!", 3000);
+        });
+      }
     }
 
     function showAbout() {
