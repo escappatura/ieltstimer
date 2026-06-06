@@ -246,9 +246,9 @@
     /* Desktop toolbar — slightly larger with labels */
     @media (min-width: 600px) {
       .toolbar-btn {
-        width: 34px !important;
-        height: 34px !important;
-        font-size: 1rem !important;
+        width: 46px !important;
+        height: 46px !important;
+        font-size: 1.2rem !important;
         border-radius: 6px !important;
         background: rgba(255,255,255,0.05) !important;
         border: 1px solid rgba(255,255,255,0.08) !important;
@@ -1358,7 +1358,7 @@
       .footer-line1 { text-align: center; }
       .footer-line2 { display: block; text-align: center; }
       .footer-hyphen { display: none; }
-      .footer-icons { gap: 10px; width: 100%; justify-content: center; }
+      .footer-icons { gap: 10px; width: 100%; justify-content: space-between; }
       .theme-btn, .email-btn, .teacher-btn, .criteria-btn, .tips-btn, .about-btn, .student-btn { width: 34px; height: 34px; font-size: 1rem; }
       .criteria-grid { font-size: 0.62rem; }
       .teacher-panel { width: 100%; }
@@ -1393,7 +1393,7 @@
     </button>
   </div>
 
-  <div class="buttons">
+  <div class="buttons" id="phaseButtons">
     <button class="phase-btn" id="btn-part2" onclick="recordFixed('Part 2', 4)">Part 2</button>
     <button class="phase-btn" id="btn-prep" onclick="recordFixed('1 min Prep', 1)">1 min Prep</button>
     <button class="phase-btn" id="btn-long" onclick="recordFixed('Long Turn', 2)">Long Turn</button>
@@ -1401,7 +1401,7 @@
   </div>
 
   <!-- Toolbar -->
-  <div class="footer-icons" style="margin:12px 0; padding:8px 0; display:flex; justify-content:center; align-items:flex-start;">
+  <div class="footer-icons" style="margin:12px auto 20px auto; padding:4px 0; display:flex; justify-content:space-between; align-items:flex-start; width:447px; max-width:calc(100% - 40px);">
     <div class="toolbar-item">
       <button class="about-btn toolbar-btn" onclick="showAbout()" title="About" style="display:flex;align-items:center;justify-content:center;">
         <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
